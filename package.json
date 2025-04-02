@@ -1,0 +1,26 @@
+{
+  "name": "island",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@tweakpane/core": "^2.0.5",
+    "prettier": "^3.4.2",
+    "vite": "^6.0.11",
+    "vite-plugin-restart": "^0.4.1"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.9",
+    "@vercel/analytics": "^1.5.0",
+    "camera-controls": "^2.10.0",
+    "tailwindcss": "^4.0.9",
+    "three": "^0.175.0",
+    "tweakpane": "^4.0.5"
+  }
+}

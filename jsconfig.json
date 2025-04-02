@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@config/*": ["./src/config/*"],
+      "@experience": ["./src/experience/experience.js"],
+      "@utils/*": ["./src/utils/*"]
+    }
+  }
+}
