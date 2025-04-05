@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import glsl from 'vite-plugin-glsl'
 import restart from 'vite-plugin-restart'
 
 export default {
@@ -17,6 +18,7 @@ export default {
   plugins: [
     tailwindcss(),
     restart({ restart: ['../static/**'] }), // Restart server on static file change
+    glsl(),
   ],
   resolve: {
     alias: {
