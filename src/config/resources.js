@@ -1,37 +1,39 @@
 export default [
+  // blocks textures
   {
     name: 'colormap',
     type: 'texture',
-    path: 'textures/colormap.png',
+    path: 'blocks/Textures/colormap.png',
   },
   {
     name: 'colormapDesert',
     type: 'texture',
-    path: 'textures/colormap-desert.png',
+    path: 'blocks/Textures/colormap-desert.png',
   },
   {
     name: 'colormapSnow',
     type: 'texture',
-    path: 'textures/colormap-snow.png',
+    path: 'blocks/Textures/colormap-snow.png',
   },
+  // blocks models
   {
     name: 'bridge',
     type: 'gltfModel',
-    path: 'models/bridge.glb',
+    path: 'blocks/bridge.glb',
   },
   {
     name: 'buildingArchery',
     type: 'gltfModel',
-    path: 'models/building-archery.glb',
+    path: 'blocks/building-archery.glb',
   },
   {
     name: 'water',
     type: 'gltfModel',
-    path: 'models/water.glb',
+    path: 'blocks/water.glb',
   },
   {
     name: 'grass',
     type: 'gltfModel',
-    path: 'models/grass.glb',
+    path: 'blocks/grass.glb',
   },
 ]
