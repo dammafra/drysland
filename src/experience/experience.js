@@ -1,5 +1,5 @@
+import Debug from '@utils/debug'
 import { Scene, SRGBColorSpace } from 'three'
-import { Pane } from 'tweakpane'
 import Camera from './camera'
 import Environment from './environment'
 import Renderer from './renderer'
@@ -77,13 +77,13 @@ export default class Experience {
 
     const water = this.resources.items.water.scene.children.at(0)
     water.material.map = colormap
-    water.position.z = 0.8
+    water.position.z = 0.865
     water.position.x = 0.5
     this.scene.add(water)
 
     const water2 = water.clone()
     water2.material.map = colormap
-    water2.position.z = 0.8
+    water2.position.z = 0.865
     water2.position.x = -0.5
     this.scene.add(water2)
 
@@ -99,19 +99,20 @@ export default class Experience {
     this.scene.add(grass2)
 
     // GUI
-    const pane = new Pane()
-    pane.addBinding(bridge.rotation, 'y', {
-      label: 'rotation',
-      min: 0,
-      max: Math.PI * 2,
-      step: Math.PI / 3,
-    })
-    pane.addBinding(buildingArchery.rotation, 'y', {
-      label: 'rotation',
-      min: 0,
-      max: Math.PI * 2,
-      step: Math.PI / 3,
-    })
+    if (Debug.enabled) {
+      Debug.gui.root.addBinding(bridge.rotation, 'y', {
+        label: 'bridge rotation',
+        min: 0,
+        max: Math.PI * 2,
+        step: Math.PI / 3,
+      })
+      Debug.gui.root.addBinding(buildingArchery.rotation, 'y', {
+        label: 'archery rotation',
+        min: 0,
+        max: Math.PI * 2,
+        step: Math.PI / 3,
+      })
+    }
   }
 
   update = () => {
