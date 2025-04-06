@@ -1,5 +1,6 @@
 import Debug from '@utils/debug'
-import { Scene, SRGBColorSpace } from 'three'
+import { AxesHelper, BackSide, GridHelper, MeshBasicMaterial, Scene, SRGBColorSpace } from 'three'
+import BlockMaterial from './block-material'
 import Camera from './camera'
 import Environment from './environment'
 import Renderer from './renderer'
@@ -47,67 +48,74 @@ export default class Experience {
   }
 
   ready = () => {
+    const axesHelper = new AxesHelper(10)
+    axesHelper.position.y = 0.001
+    const gridHelper = new GridHelper(25, 50)
+    this.scene.add(axesHelper, gridHelper)
+
     // Textures
     const colormap = this.resources.items.colormap
     colormap.colorSpace = SRGBColorSpace
     colormap.flipY = false
 
-    const colormapDesert = this.resources.items.colormapDesert
-    colormapDesert.colorSpace = SRGBColorSpace
-    colormapDesert.flipY = false
+    // const colormapDesert = this.resources.items.colormapDesert
+    // colormapDesert.colorSpace = SRGBColorSpace
+    // colormapDesert.flipY = false
 
-    const colormapSnow = this.resources.items.colormapSnow
-    colormapSnow.colorSpace = SRGBColorSpace
-    colormapSnow.flipY = false
+    // const colormapSnow = this.resources.items.colormapSnow
+    // colormapSnow.colorSpace = SRGBColorSpace
+    // colormapSnow.flipY = false
 
-    // Models
-    const bridge = this.resources.items.bridge.scene.children.at(0)
-    bridge.material.map = colormap
-    bridge.receiveShadow = true
-    bridge.castShadow = true
-    this.scene.add(bridge)
+    // Blocks
+    this.bridge = this.resources.items.bridge.scene.children.at(0)
+    this.bridge.material.onBeforeCompile = BlockMaterial.init().inject
+    this.bridge.receiveShadow = true
+    this.bridge.castShadow = true
+    this.scene.add(this.bridge)
 
-    const buildingArchery = this.resources.items.buildingArchery.scene.children.at(0)
-    buildingArchery.material.map = colormap
-    buildingArchery.receiveShadow = true
-    buildingArchery.castShadow = true
-    buildingArchery.position.x = 1
+    this.water = this.resources.items.water.scene.children.at(0)
+    this.water.material.onBeforeCompile = BlockMaterial.init().inject
+    this.water.position.x = 1
 
-    this.scene.add(buildingArchery)
+    this.water2 = this.water.clone()
+    this.water2.position.x = -1
 
-    const water = this.resources.items.water.scene.children.at(0)
-    water.material.map = colormap
-    water.position.z = 0.865
-    water.position.x = 0.5
-    this.scene.add(water)
+    this.water3 = this.water.clone()
+    this.water3.position.x = 0.5
+    this.water3.position.z = 0.865
 
-    const water2 = water.clone()
-    water2.material.map = colormap
-    water2.position.z = 0.865
-    water2.position.x = -0.5
-    this.scene.add(water2)
+    this.water4 = this.water.clone()
+    this.water4.position.x = -0.5
+    this.water4.position.z = 0.865
 
-    const grass = this.resources.items.grass.scene.children.at(0)
-    grass.material.map = colormap
-    grass.position.x = -1
-    this.scene.add(grass)
+    this.water5 = this.water.clone()
+    this.water5.position.x = 0.5
+    this.water5.position.z = -0.865
 
-    const grass2 = grass.clone()
-    grass2.material.map = colormap
-    grass2.position.x = -1
-    grass2.position.y = 0.2
-    this.scene.add(grass2)
+    this.water6 = this.water.clone()
+    this.water6.position.x = -0.5
+    this.water6.position.z = -0.865
+
+    this.scene.add(this.water, this.water2, this.water3, this.water4, this.water5, this.water6)
+
+    // Outline
+    this.outlineMesh = this.bridge.clone()
+    this.outlineMesh.receiveShadow = false
+    this.outlineMesh.castShadow = false
+    this.outlineMesh.material = new MeshBasicMaterial({
+      color: 0xffffff,
+      side: BackSide,
+    })
+    this.outlineMesh.scale.multiplyScalar(1.05)
+    this.outlineMesh.visible = false
+    this.scene.add(this.outlineMesh)
 
     // GUI
     if (Debug.enabled) {
-      Debug.gui.root.addBinding(bridge.rotation, 'y', {
+      Debug.gui.root.addBinding(this.outlineMesh, 'visible', { label: 'bridge outline' })
+
+      Debug.gui.root.addBinding(this.bridge.rotation, 'y', {
         label: 'bridge rotation',
-        min: 0,
-        max: Math.PI * 2,
-        step: Math.PI / 3,
-      })
-      Debug.gui.root.addBinding(buildingArchery.rotation, 'y', {
-        label: 'archery rotation',
         min: 0,
         max: Math.PI * 2,
         step: Math.PI / 3,
@@ -118,5 +126,6 @@ export default class Experience {
   update = () => {
     this.camera.update()
     this.renderer.update()
+    BlockMaterial.instance?.update()
   }
 }

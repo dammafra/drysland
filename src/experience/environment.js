@@ -19,10 +19,9 @@ export default class Environment {
     this.directionalLight.position.set(3, 3, 2)
 
     this.directionalLight.castShadow = true
-    this.directionalLight.shadow.mapSize.set(512, 512)
+    this.directionalLight.shadow.mapSize.setScalar(512)
     this.directionalLight.shadow.camera.far = 10
-    this.directionalLight.shadow.normalBias = 0.05
-    // this.directionalLight.shadow.bias = 1
+    this.directionalLight.shadow.normalBias = 0.03
 
     this.scene.add(this.ambientLight, this.directionalLight)
   }

@@ -1,4 +1,9 @@
 export default [
+  {
+    name: 'perlin',
+    type: 'texture',
+    path: 'textures/perlin.png',
+  },
   // blocks textures
   {
     name: 'colormap',
