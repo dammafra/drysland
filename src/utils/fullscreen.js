@@ -9,7 +9,7 @@ export default class Fullscreen {
   }
 
   static get element() {
-    return document.element || document.webkitelement
+    return document.fullscreenElement || document.webkitFullscreenElement
   }
 
   static init(toggleSelector) {
@@ -50,9 +50,7 @@ export default class Fullscreen {
     })
 
     document.addEventListener('fullscreenchange', () =>
-      Fullscreen.element
-        ? document.body.classList.remove('fullscreen')
-        : document.body.classList.add('fullscreen'),
+      document.body.classList.toggle('fullscreen', Fullscreen.element),
     )
   }
 }
