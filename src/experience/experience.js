@@ -1,4 +1,3 @@
-import Debug from '@utils/debug'
 import { Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -48,12 +47,8 @@ export default class Experience {
   }
 
   ready = () => {
-    this.grid = new Grid(5)
-
-    Debug.gui.root.addButton({ title: '🎲 shuffle' }).on('click', () => {
-      this.grid.dispose()
-      this.grid = new Grid(5)
-    })
+    const radius = Math.floor(Math.random() * 5) + 1
+    this.grid = new Grid(radius)
   }
 
   update = () => {

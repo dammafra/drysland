@@ -42,14 +42,15 @@ export default class Camera {
 
   setInstance() {
     this.instance = new PerspectiveCamera(50, this.sizes.aspectRatio, 0.1, 100)
-    this.instance.position.set(1, 2, 3)
+    this.instance.position.set(3, 6, 10)
     this.scene.add(this.instance)
   }
 
   setControls() {
     this.controls = new CameraControls(this.instance, this.canvas)
     this.controls.minDistance = 1.3
-    this.controls.maxDistance = 10
+    this.controls.maxDistance = 20
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.truckSpeed = 0
     this.controls.restThreshold = 0.25
   }

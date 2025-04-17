@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import Debug from '@utils/debug'
 import { PCFSoftShadowMap, WebGLRenderer } from 'three'
 
 export default class Renderer {
@@ -20,7 +21,7 @@ export default class Renderer {
 
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-    this.instance.setClearColor(0x333333)
+    this.instance.setClearColor(Debug.enabled ? 0x333333 : 0x0084d1)
 
     this.resize()
   }
