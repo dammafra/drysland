@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import { AxesHelper, GridHelper } from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import { Pane } from 'tweakpane'
 
@@ -13,6 +14,19 @@ export default class GUI {
     this.root.addBinding(this, 'preserveChanges', { label: 'preserve changes' })
     addEventListener('beforeunload', this.saveState)
 
+    this.experience = Experience.instance
+    this.scene = this.experience.scene
+
+    this.axesHelper = new AxesHelper(10)
+    this.axesHelper.position.y = 0.001
+
+    this.gridHelper = new GridHelper(25, 50)
+
+    this.scene.add(this.axesHelper, this.gridHelper)
+
+    this.root.addBinding(this.axesHelper, 'visible', { label: 'axes helper' })
+    this.root.addBinding(this.gridHelper, 'visible', { label: 'grid helper' })
+
     // Global access
     window.Experience = Experience
 
@@ -24,14 +38,14 @@ export default class GUI {
   saveState = () => {
     if (!this.preserveChanges) return
 
-    const state = this.gui.exportState()
+    const state = this.root.exportState()
     localStorage.setItem('debug', JSON.stringify(state))
   }
 
   loadState = () => {
     const state = localStorage.getItem('debug')
     if (state) {
-      this.gui.importState(JSON.parse(state))
+      this.root.importState(JSON.parse(state))
       localStorage.removeItem('debug')
     }
   }

@@ -1,8 +1,8 @@
 import Debug from '@utils/debug'
-import { AxesHelper, BackSide, GridHelper, MeshBasicMaterial, Scene, SRGBColorSpace } from 'three'
-import BlockMaterial from './block-material'
+import { Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
+import Grid from './grid'
 import Renderer from './renderer'
 import Resources from './resources'
 import Sizes from './sizes'
@@ -48,84 +48,18 @@ export default class Experience {
   }
 
   ready = () => {
-    const axesHelper = new AxesHelper(10)
-    axesHelper.position.y = 0.001
-    const gridHelper = new GridHelper(25, 50)
-    this.scene.add(axesHelper, gridHelper)
+    this.grid = new Grid(10, 10)
 
-    // Textures
-    const colormap = this.resources.items.colormap
-    colormap.colorSpace = SRGBColorSpace
-    colormap.flipY = false
-
-    // const colormapDesert = this.resources.items.colormapDesert
-    // colormapDesert.colorSpace = SRGBColorSpace
-    // colormapDesert.flipY = false
-
-    // const colormapSnow = this.resources.items.colormapSnow
-    // colormapSnow.colorSpace = SRGBColorSpace
-    // colormapSnow.flipY = false
-
-    // Blocks
-    this.bridge = this.resources.items.bridge.scene.children.at(0)
-    this.bridge.material.onBeforeCompile = BlockMaterial.init().inject
-    this.bridge.receiveShadow = true
-    this.bridge.castShadow = true
-    this.scene.add(this.bridge)
-
-    this.water = this.resources.items.water.scene.children.at(0)
-    this.water.material.onBeforeCompile = BlockMaterial.init().inject
-    this.water.position.x = 1
-
-    this.water2 = this.water.clone()
-    this.water2.position.x = -1
-
-    this.water3 = this.water.clone()
-    this.water3.position.x = 0.5
-    this.water3.position.z = 0.865
-
-    this.water4 = this.water.clone()
-    this.water4.position.x = -0.5
-    this.water4.position.z = 0.865
-
-    this.water5 = this.water.clone()
-    this.water5.position.x = 0.5
-    this.water5.position.z = -0.865
-
-    this.water6 = this.water.clone()
-    this.water6.position.x = -0.5
-    this.water6.position.z = -0.865
-
-    this.scene.add(this.water, this.water2, this.water3, this.water4, this.water5, this.water6)
-
-    // Outline
-    this.outlineMesh = this.bridge.clone()
-    this.outlineMesh.receiveShadow = false
-    this.outlineMesh.castShadow = false
-    this.outlineMesh.material = new MeshBasicMaterial({
-      color: 0xffffff,
-      side: BackSide,
+    Debug.gui.root.addButton({ title: '🎲 shuffle' }).on('click', () => {
+      this.grid.dispose()
+      this.grid = new Grid(10, 10)
     })
-    this.outlineMesh.scale.multiplyScalar(1.05)
-    this.outlineMesh.visible = false
-    this.scene.add(this.outlineMesh)
-
-    // GUI
-    if (Debug.enabled) {
-      Debug.gui.root.addBinding(this.outlineMesh, 'visible', { label: 'bridge outline' })
-
-      Debug.gui.root.addBinding(this.bridge.rotation, 'y', {
-        label: 'bridge rotation',
-        min: 0,
-        max: Math.PI * 2,
-        step: Math.PI / 3,
-      })
-    }
   }
 
   update = () => {
     this.camera.update()
     this.renderer.update()
-    BlockMaterial.instance?.update()
+
+    this.grid?.update()
   }
 }
