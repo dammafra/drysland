@@ -48,11 +48,11 @@ export default class Experience {
   }
 
   ready = () => {
-    this.grid = new Grid(10, 10)
+    this.grid = new Grid(5)
 
     Debug.gui.root.addButton({ title: '🎲 shuffle' }).on('click', () => {
       this.grid.dispose()
-      this.grid = new Grid(10, 10)
+      this.grid = new Grid(5)
     })
   }
 
