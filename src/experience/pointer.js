@@ -71,8 +71,12 @@ export default class Pointer {
   }
 
   update() {
-    this.clickableObjects.values().forEach(object => object.onLeave && object.onLeave())
     this.currentIntersect = null
+
+    for (const object of this.clickableObjects.values()) {
+      object.onLeave && object.onLeave()
+    }
+
     if (!this.#enabled) return
 
     this.raycaster.setFromCamera(new Vector2(this.x, this.y), this.camera.instance)

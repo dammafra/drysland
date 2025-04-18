@@ -5,6 +5,11 @@
   --color-primary: #0084d1;
 }
 
+@utility hex {
+  @apply aspect-square;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+}
+
 /* styles */
 * {
   @apply select-none touch-manipulation;
@@ -21,6 +26,7 @@ body {
 
 body {
   @apply w-screen h-[100svh] bg-radial from-sky-200 to-primary;
+  background: -webkit-radial-gradient(#b8e6fe, #0084d1);
 }
 
 .webgl {
@@ -46,6 +52,5 @@ body {
 }
 
 .loading .spinner {
-  @apply w-28 aspect-square bg-primary;
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  @apply w-28 bg-primary hex;
 }
