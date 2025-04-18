@@ -22,3 +22,15 @@ body {
 .webgl {
   @apply fixed top-0 left-0 outline-none;
 }
+
+.webgl.pointer {
+  @apply !cursor-pointer;
+}
+
+.webgl.grab {
+  @apply !cursor-grab;
+}
+
+.webgl.grabbing {
+  @apply !cursor-grabbing;
+}

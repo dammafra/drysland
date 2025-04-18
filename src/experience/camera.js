@@ -52,7 +52,7 @@ export default class Camera {
     this.controls.maxDistance = 20
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.truckSpeed = 0
-    this.controls.restThreshold = 0.25
+    this.controls.restThreshold = 0.001
   }
 
   resize() {

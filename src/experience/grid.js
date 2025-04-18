@@ -25,8 +25,10 @@ export default class Grid {
         const block = new Block(keys[Math.floor(Math.random() * keys.length)])
 
         // Convert axial coordinates to cartesian
-        block.position.x = q + r * 0.5
-        block.position.z = r * 0.866 // sqrt(3)/2
+        block.setPosition(
+          q + r * 0.5,
+          r * 0.866, // sqrt(3)/2
+        )
 
         this.blocks.push(block)
       }
@@ -38,6 +40,6 @@ export default class Grid {
   }
 
   update() {
-    // this.blocks.forEach(block => block.update())
+    this.blocks.forEach(block => block.update())
   }
 }

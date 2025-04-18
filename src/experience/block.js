@@ -1,21 +1,18 @@
 import Experience from '@experience'
 import { BackSide, MeshBasicMaterial } from 'three'
-
 export default class Block {
-  get position() {
-    return this.mesh.position
-  }
-
-  constructor(id) {
+  constructor(name) {
     this.experience = Experience.instance
     this.resources = this.experience.resources
     this.scene = this.experience.scene
+    this.pointer = this.experience.pointer
 
-    this.id = id
     this.type = 'base'
+    this.name = name
 
     this.setMesh()
     this.setOutline()
+    this.pointer.add(this)
 
     // Textures
     // const colormap = this.resources.items.colormap
@@ -32,7 +29,7 @@ export default class Block {
   }
 
   setMesh() {
-    this.mesh = this.resources.items[this.id].scene.children.at(0).clone()
+    this.mesh = this.resources.items[this.name].scene.children.at(0).clone()
     this.mesh.receiveShadow = true
     this.mesh.castShadow = true
     this.scene.add(this.mesh)
@@ -51,9 +48,30 @@ export default class Block {
     this.scene.add(this.outlineMesh)
   }
 
-  update() {
-    //step Math.PI / 3
-    this.mesh.rotation.y = this.experience.time.elapsed * 0.05
+  setPosition(x, y) {
+    this.mesh.position.x = x
+    this.mesh.position.z = y
+    this.outlineMesh.position.copy(this.mesh.position)
+  }
+
+  rotate() {
+    // TODO animate
+    this.mesh.rotation.y -= Math.PI / 3
+    this.outlineMesh.rotation.copy(this.mesh.rotation)
+  }
+
+  update() {}
+
+  onClick() {
+    this.rotate()
+  }
+
+  onHover() {
+    this.outlineMesh.visible = true
+  }
+
+  onLeave() {
+    this.outlineMesh.visible = false
   }
 
   dispose() {

@@ -1,4 +1,5 @@
-import { AmbientLight, DirectionalLight } from 'three'
+import Debug from '@utils/debug'
+import { AmbientLight, CameraHelper, DirectionalLight } from 'three'
 import Experience from './experience'
 
 export default class Environment {
@@ -19,9 +20,38 @@ export default class Environment {
     this.directionalLight.position.set(3, 3, 2)
 
     this.directionalLight.castShadow = true
-    this.directionalLight.shadow.mapSize.setScalar(512)
+    this.directionalLight.shadow.mapSize.setScalar(2048)
     this.directionalLight.shadow.camera.far = 10
-    this.directionalLight.shadow.normalBias = 0.03
+    this.directionalLight.shadow.bias = -0.003
+    this.directionalLight.shadow.normalBias = 0.01
+
+    if (Debug.enabled) {
+      Debug.gui.root.addBinding(this.directionalLight, 'position', {
+        label: 'light position',
+      })
+
+      this.shadowHelper = new CameraHelper(this.directionalLight.shadow.camera)
+      this.shadowHelper.visible = false
+      this.scene.add(this.shadowHelper)
+
+      Debug.gui.root.addBinding(this.shadowHelper, 'visible', {
+        label: 'shadow helper',
+      })
+
+      Debug.gui.root.addBinding(this.directionalLight.shadow, 'bias', {
+        label: 'shadow bias',
+        min: -1,
+        max: 1,
+        step: 0.001,
+      })
+
+      Debug.gui.root.addBinding(this.directionalLight.shadow, 'normalBias', {
+        label: 'shadow normal bias',
+        min: -1,
+        max: 1,
+        step: 0.001,
+      })
+    }
 
     this.scene.add(this.ambientLight, this.directionalLight)
   }

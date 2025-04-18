@@ -10,6 +10,6 @@ inject()
 DoubleTapPreventer.init()
 Versioning.init()
 Fullscreen.init()
-Debug.init()
+await Debug.init()
 
 Experience.init('canvas.webgl')
