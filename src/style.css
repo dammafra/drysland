@@ -43,11 +43,6 @@ body {
 .loading {
   @apply fixed top-0 w-full h-full z-20;
   @apply flex flex-col gap-8 justify-center items-center;
-  @apply transition-opacity duration-500;
-}
-
-.loading.end {
-  @apply opacity-0;
 }
 
 .loading .spinner {
