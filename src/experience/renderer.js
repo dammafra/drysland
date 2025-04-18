@@ -16,13 +16,14 @@ export default class Renderer {
 
   setInstance() {
     this.instance = new WebGLRenderer({
+      alpha: true,
       canvas: this.canvas,
       antialias: this.sizes.pixelRatio < 2,
     })
 
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-    this.instance.setClearColor(0x0084d1)
+    this.instance.setClearColor('black', 0)
 
     this.resize()
   }
@@ -41,6 +42,11 @@ export default class Renderer {
 
     Debug.gui.root
       .addBinding(this, 'disableClearColor', { label: 'disable clear color' })
-      .on('change', () => this.instance.setClearColor(this.disableClearColor ? 0x333333 : 0x0084d1))
+      .on('change', () =>
+        this.instance.setClearColor(
+          this.disableClearColor ? 0x333333 : 'black',
+          this.disableClearColor ? 1 : 0,
+        ),
+      )
   }
 }

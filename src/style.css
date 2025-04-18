@@ -20,7 +20,7 @@ body {
 }
 
 body {
-  @apply w-screen h-[100svh];
+  @apply w-screen h-[100svh] bg-radial from-sky-200 to-primary;
 }
 
 .webgl {
@@ -43,7 +43,7 @@ body {
 .loading {
   @apply fixed top-0 w-full h-full z-20;
   @apply flex flex-col gap-8 justify-center items-center;
-  @apply transition-opacity duration-500 bg-radial from-sky-200 to-primary;
+  @apply transition-opacity duration-500;
 }
 
 .loading.end {
