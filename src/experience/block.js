@@ -88,14 +88,22 @@ export default class Block {
     })
   }
 
-  rotate() {
-    ;[this.mesh, this.outlineMesh].forEach(mesh => {
-      gsap.to(mesh.rotation, {
-        y: mesh.rotation.y - Math.PI / 3,
-        duration: 0.5,
-        ease: 'back.inOut',
-      })
-    })
+  async rotate() {
+    if (this.rotating) return
+
+    this.rotating = true
+
+    await Promise.all(
+      [this.mesh, this.outlineMesh].map(mesh =>
+        gsap.to(mesh.rotation, {
+          y: mesh.rotation.y - Math.PI / 3,
+          duration: 0.5,
+          ease: 'back.inOut',
+        }),
+      ),
+    )
+
+    this.rotating = false
   }
 
   setAnimation() {
