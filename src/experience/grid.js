@@ -3,7 +3,7 @@ import Block from './block'
 
 export default class Grid {
   constructor(radius) {
-    this.radius = radius
+    this.radius = 2
     this.blocks = []
 
     this.init()
@@ -22,24 +22,20 @@ export default class Grid {
       const r2 = Math.min(this.radius, -q + this.radius)
 
       for (let r = r1; r <= r2; r++) {
-        const block = new Block(keys[Math.floor(Math.random() * keys.length)])
+        this.blocks.push(
+          new Block({
+            name: keys[Math.floor(Math.random() * keys.length)],
 
-        // Convert axial coordinates to cartesian
-        block.setPosition(
-          q + r * 0.5,
-          r * 0.866, // sqrt(3)/2
+            // Convert axial coordinates to cartesian
+            x: q + r * 0.5,
+            y: r * 0.866, // sqrt(3)/2
+          }),
         )
-
-        this.blocks.push(block)
       }
     }
   }
 
   dispose() {
     this.blocks.forEach(block => block.dispose())
-  }
-
-  update() {
-    this.blocks.forEach(block => block.update())
   }
 }

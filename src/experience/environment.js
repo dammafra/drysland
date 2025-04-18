@@ -11,6 +11,8 @@ export default class Environment {
     this.resources = this.experience.resources
 
     this.setLight()
+
+    addEventListener('debug', this.setDebug)
   }
 
   setLight() {
@@ -25,34 +27,34 @@ export default class Environment {
     this.directionalLight.shadow.bias = -0.003
     this.directionalLight.shadow.normalBias = 0.01
 
-    if (Debug.enabled) {
-      Debug.gui.root.addBinding(this.directionalLight, 'position', {
-        label: 'light position',
-      })
-
-      this.shadowHelper = new CameraHelper(this.directionalLight.shadow.camera)
-      this.shadowHelper.visible = false
-      this.scene.add(this.shadowHelper)
-
-      Debug.gui.root.addBinding(this.shadowHelper, 'visible', {
-        label: 'shadow helper',
-      })
-
-      Debug.gui.root.addBinding(this.directionalLight.shadow, 'bias', {
-        label: 'shadow bias',
-        min: -1,
-        max: 1,
-        step: 0.001,
-      })
-
-      Debug.gui.root.addBinding(this.directionalLight.shadow, 'normalBias', {
-        label: 'shadow normal bias',
-        min: -1,
-        max: 1,
-        step: 0.001,
-      })
-    }
-
     this.scene.add(this.ambientLight, this.directionalLight)
+  }
+
+  setDebug = () => {
+    Debug.gui.root.addBinding(this.directionalLight, 'position', {
+      label: 'light position',
+    })
+
+    this.shadowHelper = new CameraHelper(this.directionalLight.shadow.camera)
+    this.shadowHelper.visible = false
+    this.scene.add(this.shadowHelper)
+
+    Debug.gui.root.addBinding(this.shadowHelper, 'visible', {
+      label: 'shadow helper',
+    })
+
+    Debug.gui.root.addBinding(this.directionalLight.shadow, 'bias', {
+      label: 'shadow bias',
+      min: -1,
+      max: 1,
+      step: 0.001,
+    })
+
+    Debug.gui.root.addBinding(this.directionalLight.shadow, 'normalBias', {
+      label: 'shadow normal bias',
+      min: -1,
+      max: 1,
+      step: 0.001,
+    })
   }
 }

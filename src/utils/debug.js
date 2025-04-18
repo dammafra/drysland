@@ -1,7 +1,6 @@
 export default class Debug {
   static get enabled() {
-    return false
-    // return import.meta.env.DEV || window.location.hash === '#debug'
+    return import.meta.env.DEV || window.location.hash === '#debug'
   }
 
   static async init() {
@@ -10,5 +9,7 @@ export default class Debug {
     const { default: GUI } = await import('./gui.js')
     this.gui = new GUI()
     this.gui.loadState()
+
+    dispatchEvent(new Event('debug'))
   }
 }

@@ -46,6 +46,10 @@ export default class Pointer {
         this.enabled = true
       })
     }
+
+    this.camera.controls.addEventListener('sleep', () => {
+      this.enabled = true
+    })
   }
 
   setMouse = event => {

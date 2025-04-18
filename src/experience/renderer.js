@@ -9,8 +9,9 @@ export default class Renderer {
     this.sizes = this.experience.sizes
     this.scene = this.experience.scene
     this.camera = this.experience.camera
-
     this.setInstance()
+
+    addEventListener('debug', this.setDebug)
   }
 
   setInstance() {
@@ -21,7 +22,7 @@ export default class Renderer {
 
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-    this.instance.setClearColor(Debug.enabled ? 0x333333 : 0x0084d1)
+    this.instance.setClearColor(0x0084d1)
 
     this.resize()
   }
@@ -33,5 +34,13 @@ export default class Renderer {
 
   update() {
     this.instance.render(this.scene, this.camera.instance)
+  }
+
+  setDebug = () => {
+    this.disableClearColor = false
+
+    Debug.gui.root
+      .addBinding(this, 'disableClearColor', { label: 'disable clear color' })
+      .on('change', () => this.instance.setClearColor(this.disableClearColor ? 0x333333 : 0x0084d1))
   }
 }

@@ -1,6 +1,10 @@
 /* tailwind config */
 @import 'tailwindcss';
 
+@theme {
+  --color-primary: #0084d1;
+}
+
 /* styles */
 * {
   @apply select-none touch-manipulation;
@@ -33,4 +37,20 @@ body {
 
 .webgl.grabbing {
   @apply !cursor-grabbing;
+}
+
+/* loading */
+.loading {
+  @apply fixed top-0 w-full h-full z-20;
+  @apply flex flex-col gap-8 justify-center items-center;
+  @apply transition-opacity duration-500 bg-radial from-sky-200 to-primary;
+}
+
+.loading.end {
+  @apply opacity-0;
+}
+
+.loading .spinner {
+  @apply w-28 aspect-square bg-primary;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
 }

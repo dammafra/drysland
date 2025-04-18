@@ -1,9 +1,9 @@
 import Experience from '@experience'
 import gsap from 'gsap'
-import { BackSide, MeshBasicMaterial } from 'three'
+import { BackSide, MeshBasicMaterial, Vector3 } from 'three'
 
 export default class Block {
-  constructor(name) {
+  constructor({ name, x, y }) {
     this.experience = Experience.instance
     this.resources = this.experience.resources
     this.scene = this.experience.scene
@@ -11,6 +11,8 @@ export default class Block {
 
     this.type = 'base'
     this.name = name
+    this.x = x
+    this.y = y
 
     this.setMesh()
     this.setOutline()
@@ -30,31 +32,57 @@ export default class Block {
     // colormapSnow.flipY = false
   }
 
-  setMesh() {
+  async setMesh() {
     this.mesh = this.resources.items[this.name].scene.children.at(0).clone()
+    this.mesh.position.x = this.x
+    this.mesh.position.z = this.y
+
     this.mesh.receiveShadow = true
     this.mesh.castShadow = true
+
     this.scene.add(this.mesh)
+
+    this.transitionIn()
   }
 
   // TODO: use shader?
   setOutline() {
-    this.outlineMesh = this.mesh.clone()
-    this.outlineMesh.receiveShadow = false
-    this.outlineMesh.castShadow = false
+    this.outlineMesh = this.resources.items[this.name].scene.children.at(0).clone()
+    this.outlineMesh.visible = false
+    this.outlineMesh.position.x = this.x
+    this.outlineMesh.position.z = this.y
+    this.outlineMesh.scale.multiplyScalar(1.05)
+
     this.outlineMesh.material = new MeshBasicMaterial({
       color: 0xffffff,
       side: BackSide,
     })
-    this.outlineMesh.scale.multiplyScalar(1.05)
-    this.outlineMesh.visible = false
+
     this.scene.add(this.outlineMesh)
   }
 
-  setPosition(x, y) {
-    this.mesh.position.x = x
-    this.mesh.position.z = y
-    this.outlineMesh.position.copy(this.mesh.position)
+  transitionIn() {
+    const center = new Vector3(0, 0, 0)
+    const delay = this.mesh.position.distanceTo(center) * 0.05
+
+    this.mesh.position.y = -2
+    this.mesh.scale.setScalar(0.001)
+
+    gsap.to(this.mesh.scale, {
+      x: 1,
+      y: 1,
+      z: 1,
+      duration: 0.5,
+      delay,
+      ease: 'back.inOut',
+    })
+
+    gsap.to(this.mesh.position, {
+      y: 0,
+      duration: 0.5,
+      delay,
+      ease: 'back.inOut',
+    })
   }
 
   rotate() {
@@ -66,8 +94,6 @@ export default class Block {
       })
     })
   }
-
-  update() {}
 
   onClick() {
     this.rotate()
