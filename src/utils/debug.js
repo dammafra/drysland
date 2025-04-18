@@ -1,6 +1,7 @@
 export default class Debug {
   static get enabled() {
-    return import.meta.env.DEV || window.location.hash === '#debug'
+    return false
+    // return import.meta.env.DEV || window.location.hash === '#debug'
   }
 
   static async init() {
