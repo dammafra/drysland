@@ -1,14 +1,18 @@
 #include <opaque_fragment>
 
 vec3 color = outgoingLight;
+float alpha = diffuseColor.a;
 
 // hover
-if (uHovering) {
-  color *= 1.5;
-}
+color *= uHovered ? 1.5 : 1.0;
 
 // water
-if (isWater(vUv) && isTopFace(vObjectNormal)) {
+if (isWater(vUv)) {
+  color = uLinked ? color : vec3(0.3, 0.15, 0.05);
+
+  if (isTopFace(vNormal)) {
+    // TODO: perlin
+  }
 }
 
-gl_FragColor = vec4(color, diffuseColor.a);
+gl_FragColor = vec4(color, alpha);

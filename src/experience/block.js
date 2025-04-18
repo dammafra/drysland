@@ -1,10 +1,13 @@
 import Experience from '@experience'
 import gsap from 'gsap'
-import { AnimationMixer, Vector3 } from 'three'
+import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
 
 import BlockMaterial from './block-material'
 
 export default class Block {
+  static colormapDefault = null
+  static colormapDesert = null
+
   constructor({ name, x, y }) {
     this.experience = Experience.instance
     this.time = this.experience.time
@@ -17,25 +20,28 @@ export default class Block {
     this.x = x
     this.y = y
 
+    this.setColormaps()
     this.setMesh()
     this.setAnimation()
 
+    // TODO inheritance
     if (this.name == 'bridge' || this.name === 'buildingWatermill' || this.name.includes('river')) {
       this.pointer.add(this)
     }
+  }
 
-    // Textures
-    // const colormap = this.resources.items.colormap
-    // colormap.colorSpace = SRGBColorSpace
-    // colormap.flipY = false
+  setColormaps() {
+    if (!Block.colormapDefault) {
+      Block.colormapDefault = this.resources.items.colormap
+      Block.colormapDefault.flipY = false
+      Block.colormapDefault.colorSpace = SRGBColorSpace
+    }
 
-    // const colormapDesert = this.resources.items.colormapDesert
-    // colormapDesert.colorSpace = SRGBColorSpace
-    // colormapDesert.flipY = false
-
-    // const colormapSnow = this.resources.items.colormapSnow
-    // colormapSnow.colorSpace = SRGBColorSpace
-    // colormapSnow.flipY = false
+    if (!Block.colormapDesert) {
+      Block.colormapDesert = this.resources.items.colormapDesert
+      Block.colormapDesert.flipY = false
+      Block.colormapDesert.colorSpace = SRGBColorSpace
+    }
   }
 
   async setMesh() {
@@ -54,6 +60,16 @@ export default class Block {
     this.scene.add(this.mesh)
 
     this.transitionIn()
+
+    // TODO inheritance
+    // this.setLinked(this.name.includes('water') || this.name === 'riverStart')
+    this.setLinked(true)
+  }
+
+  setLinked(value) {
+    this.linked = value
+    this.material.uniforms.uLinked.value = this.linked
+    this.mesh.material.map = this.linked ? Block.colormapDefault : Block.colormapDesert
   }
 
   transitionIn() {
@@ -110,7 +126,10 @@ export default class Block {
 
   update() {
     this.material.update()
-    this.animationMixer?.update(this.time.delta * 0.2)
+
+    if (this.linked) {
+      this.animationMixer?.update(this.time.delta * 0.2)
+    }
   }
 
   onClick() {
@@ -120,13 +139,13 @@ export default class Block {
   onHover() {
     this.mesh.castShadow = false
     this.mesh.receiveShadow = false
-    this.material.uniforms.uHovering.value = true
+    this.material.uniforms.uHovered.value = true
   }
 
   onLeave() {
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true
-    this.material.uniforms.uHovering.value = false
+    this.material.uniforms.uHovered.value = false
   }
 
   dispose() {

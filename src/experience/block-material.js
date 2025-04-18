@@ -18,7 +18,8 @@ export default class BlockMaterial {
     this.uniforms = {
       uTime: new Uniform(0),
       uPerlinTexture: new Uniform(this.resources.items.perlin),
-      uHovering: new Uniform(false),
+      uHovered: new Uniform(false),
+      uLinked: new Uniform(false),
     }
   }
 
@@ -29,7 +30,8 @@ export default class BlockMaterial {
     // uniforms
     shader.uniforms.uTime = this.uniforms.uTime
     shader.uniforms.uPerlinTexture = this.uniforms.uPerlinTexture
-    shader.uniforms.uHovering = this.uniforms.uHovering
+    shader.uniforms.uHovered = this.uniforms.uHovered
+    shader.uniforms.uLinked = this.uniforms.uLinked
 
     // common
     shader.vertexShader = shader.vertexShader.replace('#include <common>', blockCommonChunk)

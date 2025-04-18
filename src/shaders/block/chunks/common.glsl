@@ -2,7 +2,8 @@
 
 uniform float uTime;
 uniform sampler2D uPerlinTexture;
-uniform bool uHovering;
+uniform bool uHovered;
+uniform bool uLinked;
 
 varying vec3 vObjectNormal;
 varying vec3 vPosition;
