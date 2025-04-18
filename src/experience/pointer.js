@@ -29,17 +29,23 @@ export default class Pointer {
     if (this.isTouchDevice) {
       window.addEventListener('touchstart', this.touchstart)
       window.addEventListener('touchend', this.click)
+
+      this.camera.controls.addEventListener('control', () => {
+        this.x = Number.POSITIVE_INFINITY
+        this.y = Number.POSITIVE_INFINITY
+        this.update()
+      })
     } else {
       window.addEventListener('mousemove', this.setMouse)
       window.addEventListener('click', this.click)
-    }
 
-    this.camera.controls.addEventListener('wake', () => {
-      this.enabled = false
-    })
-    this.camera.controls.addEventListener('rest', () => {
-      this.enabled = true
-    })
+      this.camera.controls.addEventListener('wake', () => {
+        this.enabled = false
+      })
+      this.camera.controls.addEventListener('rest', () => {
+        this.enabled = true
+      })
+    }
   }
 
   setMouse = event => {
