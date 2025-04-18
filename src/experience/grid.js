@@ -45,5 +45,6 @@ export default class Grid {
 
   dispose() {
     this.blocks.forEach(block => block.dispose())
+    this.blocks = []
   }
 }

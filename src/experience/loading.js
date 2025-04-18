@@ -22,8 +22,8 @@ export default class Loading {
   stopSpinner() {
     return gsap.to('.spinner', {
       scale: 0,
-      duration: 1,
-      ease: 'back.inOut',
+      duration: 0.5,
+      ease: 'back.in',
     })
   }
 

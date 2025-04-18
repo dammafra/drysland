@@ -7,35 +7,19 @@ import blockOpaqueChunk from '../shaders/block/chunks/opaque.glsl'
 import blockWorkdposVertexChunk from '../shaders/block/chunks/worldpos_vertex.glsl'
 
 export default class BlockMaterial {
-  /** @type {BlockMaterial} */
-  static instance
-
-  static init() {
-    return new BlockMaterial()
-  }
-
   constructor() {
-    // Singleton
-    if (BlockMaterial.instance) {
-      return BlockMaterial.instance
-    }
-
-    BlockMaterial.instance = this
-
     this.experience = Experience.instance
     this.resources = this.experience.resources
+    this.time = this.experience.time
 
     this.resources.items.perlin.wrapT = RepeatWrapping
     this.resources.items.perlin.wrapS = RepeatWrapping
 
-    // Options
     this.uniforms = {
       uTime: new Uniform(0),
       uPerlinTexture: new Uniform(this.resources.items.perlin),
+      uHovering: new Uniform(false),
     }
-
-    // Setup
-    this.time = Experience.instance.time
   }
 
   inject = shader => {
@@ -45,6 +29,7 @@ export default class BlockMaterial {
     // uniforms
     shader.uniforms.uTime = this.uniforms.uTime
     shader.uniforms.uPerlinTexture = this.uniforms.uPerlinTexture
+    shader.uniforms.uHovering = this.uniforms.uHovering
 
     // common
     shader.vertexShader = shader.vertexShader.replace('#include <common>', blockCommonChunk)

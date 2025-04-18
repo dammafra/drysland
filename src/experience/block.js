@@ -1,6 +1,8 @@
 import Experience from '@experience'
 import gsap from 'gsap'
-import { AnimationMixer, BackSide, Mesh, MeshBasicMaterial, Vector3 } from 'three'
+import { AnimationMixer, Vector3 } from 'three'
+
+import BlockMaterial from './block-material'
 
 export default class Block {
   constructor({ name, x, y }) {
@@ -16,7 +18,6 @@ export default class Block {
     this.y = y
 
     this.setMesh()
-    this.setOutline()
     this.setAnimation()
 
     if (this.name == 'bridge' || this.name === 'buildingWatermill' || this.name.includes('river')) {
@@ -39,6 +40,11 @@ export default class Block {
 
   async setMesh() {
     this.mesh = this.resources.items[this.name].scene.children.at(0).clone()
+    this.material = new BlockMaterial()
+
+    this.mesh.material = this.mesh.material.clone()
+    this.mesh.material.onBeforeCompile = this.material.inject
+
     this.mesh.position.x = this.x
     this.mesh.position.z = this.y
 
@@ -48,20 +54,6 @@ export default class Block {
     this.scene.add(this.mesh)
 
     this.transitionIn()
-  }
-
-  // TODO: use shader?
-  setOutline() {
-    const geometry = this.mesh.geometry
-    const material = new MeshBasicMaterial({ color: 'white', side: BackSide })
-
-    this.outline = new Mesh(geometry, material)
-    this.outline.visible = false
-    this.outline.position.x = this.x
-    this.outline.position.z = this.y
-    this.outline.scale.multiplyScalar(1.05)
-
-    this.scene.add(this.outline)
   }
 
   transitionIn() {
@@ -93,24 +85,15 @@ export default class Block {
 
     this.rotating = true
 
-    await Promise.all(
-      [this.mesh, this.outline].map(mesh => {
-        const tl = gsap.timeline()
-
-        tl.to(mesh.rotation, {
-          y: mesh.rotation.y - Math.PI / 3,
-          duration: 0.5,
-          ease: 'back.inOut',
-        })
-
-        const initialScale = mesh.scale.x
-        const shrinkScale = initialScale - 0.2
-        tl.to(mesh.scale, { x: shrinkScale, y: shrinkScale, z: shrinkScale, duration: 0.25 }, '<')
-        tl.to(mesh.scale, { x: initialScale, y: initialScale, z: initialScale, duration: 0.25 })
-
-        return tl
-      }),
-    )
+    await gsap
+      .timeline()
+      .to(this.mesh.rotation, {
+        y: this.mesh.rotation.y - Math.PI / 3,
+        duration: 0.5,
+        ease: 'back.inOut',
+      })
+      .to(this.mesh.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.25 }, '<')
+      .to(this.mesh.scale, { x: 1, y: 1, z: 1, duration: 0.25 })
 
     this.rotating = false
   }
@@ -118,18 +101,16 @@ export default class Block {
   setAnimation() {
     const animation = this.resources.items[this.name].animations?.at(0)
     if (!animation) return
+
     this.animationMixer = new AnimationMixer(this.mesh)
-    this.animationMixerOutline = new AnimationMixer(this.outline)
     const action = this.animationMixer.clipAction(animation)
-    const actionOutline = this.animationMixerOutline.clipAction(animation)
 
     action.play()
-    actionOutline.play()
   }
 
   update() {
+    this.material.update()
     this.animationMixer?.update(this.time.delta * 0.2)
-    this.animationMixerOutline?.update(this.time.delta * 0.2)
   }
 
   onClick() {
@@ -137,14 +118,22 @@ export default class Block {
   }
 
   onHover() {
-    this.outline.visible = true
+    this.mesh.castShadow = false
+    this.mesh.receiveShadow = false
+    this.material.uniforms.uHovering.value = true
   }
 
   onLeave() {
-    this.outline.visible = false
+    this.mesh.castShadow = true
+    this.mesh.receiveShadow = true
+    this.material.uniforms.uHovering.value = false
   }
 
   dispose() {
-    this.scene.remove(this.mesh, this.outline)
+    this.pointer.remove(this)
+
+    this.mesh.geometry.dispose()
+    this.mesh.material.dispose()
+    this.scene.remove(this.mesh)
   }
 }
