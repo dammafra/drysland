@@ -19,7 +19,9 @@ export default class Block {
     this.setOutline()
     this.setAnimation()
 
-    this.pointer.add(this)
+    if (this.name == 'bridge' || this.name === 'buildingWatermill' || this.name.includes('river')) {
+      this.pointer.add(this)
+    }
 
     // Textures
     // const colormap = this.resources.items.colormap
