@@ -1,6 +1,6 @@
 import Experience from '@experience'
 import gsap from 'gsap'
-import { AnimationMixer, BackSide, MeshBasicMaterial, Vector3 } from 'three'
+import { AnimationMixer, BackSide, Mesh, MeshBasicMaterial, Vector3 } from 'three'
 
 export default class Block {
   constructor({ name, x, y }) {
@@ -52,18 +52,16 @@ export default class Block {
 
   // TODO: use shader?
   setOutline() {
-    this.outlineMesh = this.resources.items[this.name].scene.children.at(0).clone()
-    this.outlineMesh.visible = false
-    this.outlineMesh.position.x = this.x
-    this.outlineMesh.position.z = this.y
-    this.outlineMesh.scale.multiplyScalar(1.05)
+    const geometry = this.mesh.geometry
+    const material = new MeshBasicMaterial({ color: 'white', side: BackSide })
 
-    this.outlineMesh.material = new MeshBasicMaterial({
-      color: 0xffffff,
-      side: BackSide,
-    })
+    this.outline = new Mesh(geometry, material)
+    this.outline.visible = false
+    this.outline.position.x = this.x
+    this.outline.position.z = this.y
+    this.outline.scale.multiplyScalar(1.05)
 
-    this.scene.add(this.outlineMesh)
+    this.scene.add(this.outline)
   }
 
   transitionIn() {
@@ -96,13 +94,22 @@ export default class Block {
     this.rotating = true
 
     await Promise.all(
-      [this.mesh, this.outlineMesh].map(mesh =>
-        gsap.to(mesh.rotation, {
+      [this.mesh, this.outline].map(mesh => {
+        const tl = gsap.timeline()
+
+        tl.to(mesh.rotation, {
           y: mesh.rotation.y - Math.PI / 3,
           duration: 0.5,
           ease: 'back.inOut',
-        }),
-      ),
+        })
+
+        const initialScale = mesh.scale.x
+        const shrinkScale = initialScale - 0.2
+        tl.to(mesh.scale, { x: shrinkScale, y: shrinkScale, z: shrinkScale, duration: 0.25 }, '<')
+        tl.to(mesh.scale, { x: initialScale, y: initialScale, z: initialScale, duration: 0.25 })
+
+        return tl
+      }),
     )
 
     this.rotating = false
@@ -112,7 +119,7 @@ export default class Block {
     const animation = this.resources.items[this.name].animations?.at(0)
     if (!animation) return
     this.animationMixer = new AnimationMixer(this.mesh)
-    this.animationMixerOutline = new AnimationMixer(this.outlineMesh)
+    this.animationMixerOutline = new AnimationMixer(this.outline)
     const action = this.animationMixer.clipAction(animation)
     const actionOutline = this.animationMixerOutline.clipAction(animation)
 
@@ -130,14 +137,14 @@ export default class Block {
   }
 
   onHover() {
-    this.outlineMesh.visible = true
+    this.outline.visible = true
   }
 
   onLeave() {
-    this.outlineMesh.visible = false
+    this.outline.visible = false
   }
 
   dispose() {
-    this.scene.remove(this.mesh, this.outlineMesh)
+    this.scene.remove(this.mesh, this.outline)
   }
 }
