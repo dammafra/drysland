@@ -65,6 +65,8 @@ export default class Experience {
     this.camera.update()
     this.renderer.update()
     this.pointer.update()
+
+    this.grid?.update()
   }
 
   setDebug = () => {

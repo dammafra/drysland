@@ -1,10 +1,11 @@
 import Experience from '@experience'
 import gsap from 'gsap'
-import { BackSide, MeshBasicMaterial, Vector3 } from 'three'
+import { AnimationMixer, BackSide, MeshBasicMaterial, Vector3 } from 'three'
 
 export default class Block {
   constructor({ name, x, y }) {
     this.experience = Experience.instance
+    this.time = this.experience.time
     this.resources = this.experience.resources
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
@@ -16,6 +17,8 @@ export default class Block {
 
     this.setMesh()
     this.setOutline()
+    this.setAnimation()
+
     this.pointer.add(this)
 
     // Textures
@@ -93,6 +96,23 @@ export default class Block {
         ease: 'back.inOut',
       })
     })
+  }
+
+  setAnimation() {
+    const animation = this.resources.items[this.name].animations?.at(0)
+    if (!animation) return
+    this.animationMixer = new AnimationMixer(this.mesh)
+    this.animationMixerOutline = new AnimationMixer(this.outlineMesh)
+    const action = this.animationMixer.clipAction(animation)
+    const actionOutline = this.animationMixerOutline.clipAction(animation)
+
+    action.play()
+    actionOutline.play()
+  }
+
+  update() {
+    this.animationMixer?.update(this.time.delta * 0.2)
+    this.animationMixerOutline?.update(this.time.delta * 0.2)
   }
 
   onClick() {

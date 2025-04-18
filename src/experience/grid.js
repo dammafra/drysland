@@ -3,7 +3,7 @@ import Block from './block'
 
 export default class Grid {
   constructor(radius) {
-    this.radius = 2
+    this.radius = radius
     this.blocks = []
 
     this.init()
@@ -33,6 +33,10 @@ export default class Grid {
         )
       }
     }
+  }
+
+  update() {
+    this.blocks.forEach(block => block.update())
   }
 
   dispose() {
