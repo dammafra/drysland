@@ -1,5 +1,7 @@
 import Experience from '@experience'
+import gsap from 'gsap'
 import { BackSide, MeshBasicMaterial } from 'three'
+
 export default class Block {
   constructor(name) {
     this.experience = Experience.instance
@@ -35,6 +37,7 @@ export default class Block {
     this.scene.add(this.mesh)
   }
 
+  // TODO: use shader?
   setOutline() {
     this.outlineMesh = this.mesh.clone()
     this.outlineMesh.receiveShadow = false
@@ -55,9 +58,13 @@ export default class Block {
   }
 
   rotate() {
-    // TODO animate
-    this.mesh.rotation.y -= Math.PI / 3
-    this.outlineMesh.rotation.copy(this.mesh.rotation)
+    ;[this.mesh, this.outlineMesh].forEach(mesh => {
+      gsap.to(mesh.rotation, {
+        y: mesh.rotation.y - Math.PI / 3,
+        duration: 0.5,
+        ease: 'back.inOut',
+      })
+    })
   }
 
   update() {}
