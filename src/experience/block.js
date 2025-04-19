@@ -24,6 +24,7 @@ export default class Block {
     this.experience = Experience.instance
     this.time = this.experience.time
     this.resources = this.experience.resources
+    this.soundPlayer = this.experience.soundPlayer
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
     this.grid = grid
@@ -102,6 +103,7 @@ export default class Block {
   }
 
   async rotate() {
+    this.soundPlayer.play('splash')
     this.rotationAnimation?.totalProgress(1)
 
     this.links = this.links.map(edge => (edge + 1) % 6)

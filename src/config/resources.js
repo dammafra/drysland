@@ -1,4 +1,11 @@
 export default [
+  // sounds
+  {
+    name: 'splash',
+    type: 'sound',
+    path: 'sounds/splash.mp3',
+  },
+  // textures
   // {
   //   name: 'perlin',
   //   type: 'texture',

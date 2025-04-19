@@ -8,6 +8,7 @@ import Pointer from './pointer'
 import Renderer from './renderer'
 import Resources from './resources'
 import Sizes from './sizes'
+import { SoundPlayer } from './sound-player'
 import Time from './time'
 
 export default class Experience {
@@ -57,8 +58,8 @@ export default class Experience {
   ready = () => {
     this.loading.ready()
 
-    const radius = Math.floor(Math.random() * 5) + 1
-    this.grid = new Grid(radius)
+    this.soundPlayer = new SoundPlayer()
+    this.grid = new Grid(Math.floor(Math.random() * 5) + 1)
   }
 
   update = () => {
