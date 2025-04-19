@@ -79,7 +79,7 @@ export default class Experience {
   setHelpers() {
     this.axesHelper = new AxesHelper(10)
     this.axesHelper.visible = false
-    this.axesHelper.position.y = 0.001
+    this.axesHelper.position.y = 2
 
     this.gridHelper = new GridHelper(25, 50)
     this.gridHelper.visible = false

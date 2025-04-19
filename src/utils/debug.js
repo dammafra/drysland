@@ -8,7 +8,6 @@ export default class Debug {
 
     const { default: GUI } = await import('./gui.js')
     this.gui = new GUI()
-    this.gui.loadState()
 
     dispatchEvent(new Event('debug'))
   }
