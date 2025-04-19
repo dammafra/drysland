@@ -1,9 +1,9 @@
 export default [
-  {
-    name: 'perlin',
-    type: 'texture',
-    path: 'textures/perlin.png',
-  },
+  // {
+  //   name: 'perlin',
+  //   type: 'texture',
+  //   path: 'textures/perlin.png',
+  // },
   // blocks textures
   {
     name: 'colormap',
@@ -121,11 +121,11 @@ export default [
     type: 'gltfModel',
     path: 'blocks/dirt.glb',
   },
-  {
-    name: 'dirtLumber',
-    type: 'gltfModel',
-    path: 'blocks/dirt-lumber.glb',
-  },
+  // {
+  //   name: 'dirtLumber',
+  //   type: 'gltfModel',
+  //   path: 'blocks/dirt-lumber.glb',
+  // },
   {
     name: 'grass',
     type: 'gltfModel',
@@ -296,11 +296,11 @@ export default [
     type: 'gltfModel',
     path: 'blocks/sand.glb',
   },
-  {
-    name: 'sandDesert',
-    type: 'gltfModel',
-    path: 'blocks/sand-desert.glb',
-  },
+  // {
+  //   name: 'sandDesert',
+  //   type: 'gltfModel',
+  //   path: 'blocks/sand-desert.glb',
+  // },
   {
     name: 'sandRocks',
     type: 'gltfModel',
@@ -371,11 +371,11 @@ export default [
     type: 'gltfModel',
     path: 'blocks/water.glb',
   },
-  {
-    name: 'waterIsland',
-    type: 'gltfModel',
-    path: 'blocks/water-island.glb',
-  },
+  // {
+  //   name: 'waterIsland',
+  //   type: 'gltfModel',
+  //   path: 'blocks/water-island.glb',
+  // },
   {
     name: 'waterRocks',
     type: 'gltfModel',

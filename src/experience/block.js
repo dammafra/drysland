@@ -1,31 +1,44 @@
+import blocksConfig from '@config/blocks'
 import Experience from '@experience'
 import gsap from 'gsap'
 import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
-
 import BlockMaterial from './block-material'
 
 export default class Block {
   static colormapDefault = null
   static colormapDesert = null
 
-  constructor({ name, x, y }) {
+  #linked = false
+
+  get linked() {
+    return this.#linked
+  }
+
+  set linked(value) {
+    this.#linked = value
+    this.material.uniforms.uLinked.value = this.name === 'water' || this.#linked
+    this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
+  }
+
+  constructor({ name, q, r }) {
     this.experience = Experience.instance
     this.time = this.experience.time
     this.resources = this.experience.resources
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
 
-    this.type = 'base'
     this.name = name
-    this.x = x
-    this.y = y
+    this.q = q
+    this.r = r
 
     this.setColormaps()
     this.setMesh()
     this.setAnimation()
 
-    // TODO inheritance
-    if (this.name == 'bridge' || this.name === 'buildingWatermill' || this.name.includes('river')) {
+    this.links = blocksConfig.getLinks(this.name)
+    this.linked = blocksConfig.isForcedLinked(this.name)
+
+    if (blocksConfig.isInteractive(this.name)) {
       this.pointer.add(this)
     }
   }
@@ -51,8 +64,9 @@ export default class Block {
     this.mesh.material = this.mesh.material.clone()
     this.mesh.material.onBeforeCompile = this.material.inject
 
-    this.mesh.position.x = this.x
-    this.mesh.position.z = this.y
+    // Convert axial coordinates to cartesian
+    this.mesh.position.x = this.q + this.r * 0.5
+    this.mesh.position.z = this.r * 0.866 // sqrt(3)/2
 
     this.mesh.receiveShadow = true
     this.mesh.castShadow = true
@@ -60,16 +74,6 @@ export default class Block {
     this.scene.add(this.mesh)
 
     this.transitionIn()
-
-    // TODO inheritance
-    // this.setLinked(this.name.includes('water') || this.name === 'riverStart')
-    this.setLinked(true)
-  }
-
-  setLinked(value) {
-    this.linked = value
-    this.material.uniforms.uLinked.value = this.linked
-    this.mesh.material.map = this.linked ? Block.colormapDefault : Block.colormapDesert
   }
 
   transitionIn() {
@@ -100,6 +104,7 @@ export default class Block {
     if (this.rotating) return
 
     this.rotating = true
+    this.links = this.links.map(edge => (edge + 1) % 6)
 
     await gsap
       .timeline()
@@ -127,7 +132,7 @@ export default class Block {
   update() {
     this.material.update()
 
-    if (this.linked) {
+    if (this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }
   }
