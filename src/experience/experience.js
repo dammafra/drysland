@@ -59,7 +59,7 @@ export default class Experience {
     this.loading.ready()
 
     this.soundPlayer = new SoundPlayer()
-    this.grid = new Grid(Math.floor(Math.random() * 5) + 1)
+    Grid.shuffle()
   }
 
   update = () => {
@@ -67,7 +67,7 @@ export default class Experience {
     this.renderer.update()
     this.pointer.update()
 
-    this.grid?.update()
+    Grid.instance?.update()
   }
 
   setDebug = () => {
@@ -89,5 +89,6 @@ export default class Experience {
 
     Debug.gui.root.addBinding(this.axesHelper, 'visible', { label: 'axes helper' })
     Debug.gui.root.addBinding(this.gridHelper, 'visible', { label: 'grid helper' })
+    Debug.gui.root.addButton({ title: 'grid shuffle' }).on('click', Grid.shuffle)
   }
 }

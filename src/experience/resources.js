@@ -8,7 +8,7 @@ export default class Resources extends EventDispatcher {
     super()
 
     // Options
-    this.sources = sources
+    this.sources = sources.filter(s => !s.skip)
 
     // Setup
     this.items = {}

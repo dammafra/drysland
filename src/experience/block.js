@@ -65,6 +65,7 @@ export default class Block {
 
     this.mesh.material = this.mesh.material.clone()
     this.mesh.material.onBeforeCompile = this.material.inject
+    this.mesh.children.forEach(m => (m.material = this.mesh.material))
 
     // Convert axial coordinates to cartesian
     this.mesh.position.x = this.q + this.r * 0.5
@@ -85,21 +86,47 @@ export default class Block {
     this.mesh.position.y = -2
     this.mesh.scale.setScalar(0.001)
 
-    gsap.to(this.mesh.scale, {
-      x: 1,
-      y: 1,
-      z: 1,
-      duration: 0.5,
-      delay,
-      ease: 'back.inOut',
-    })
+    return gsap
+      .timeline({ delay })
+      .to(this.mesh.scale, {
+        x: 1,
+        y: 1,
+        z: 1,
+        ease: 'back.inOut',
+      })
+      .to(
+        this.mesh.position,
+        {
+          y: 0,
+          duration: 0.5,
+          ease: 'back.inOut',
+        },
+        '<',
+      )
+  }
 
-    gsap.to(this.mesh.position, {
-      y: 0,
-      duration: 0.5,
-      delay,
-      ease: 'back.inOut',
-    })
+  transitionOut() {
+    const center = new Vector3(0, 0, 0)
+    const delay = this.mesh.position.distanceTo(center) * 0.05
+
+    return gsap
+      .timeline({ delay })
+      .to(this.mesh.scale, {
+        x: 0.001,
+        y: 0.001,
+        z: 0.001,
+        duration: 0.5,
+        ease: 'back.inOut',
+      })
+      .to(
+        this.mesh.position,
+        {
+          y: -2,
+          duration: 0.5,
+          ease: 'back.inOut',
+        },
+        '<',
+      )
   }
 
   async rotate() {
@@ -154,8 +181,10 @@ export default class Block {
     this.material.uniforms.uHovered.value = false
   }
 
-  dispose() {
+  async dispose() {
     this.pointer.remove(this)
+
+    await this.transitionOut()
 
     this.mesh.geometry.dispose()
     this.mesh.material.dispose()

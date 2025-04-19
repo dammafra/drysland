@@ -2,6 +2,14 @@ import resources from '@config/resources'
 import Block from './block'
 
 export default class Grid {
+  static instance = null
+
+  static shuffle() {
+    Grid.instance?.dispose()
+    const radius = Math.floor(Math.random() * 5) + 1
+    Grid.instance = new Grid(radius)
+  }
+
   constructor(radius) {
     this.radius = radius
     this.totalRadius = this.radius + 3
@@ -15,9 +23,9 @@ export default class Grid {
 
   setBlocks() {
     const names = resources
+      .filter(r => !r.skip)
       .filter(resource => resource.type === 'gltfModel')
       .filter(resource => !resource.name.includes('unit'))
-      .filter(resource => !resource.name.includes('path'))
       .map(resource => resource.name)
 
     const randomName = () => names[Math.floor(Math.random() * names.length)]

@@ -6,11 +6,11 @@ export default [
     path: 'sounds/splash.mp3',
   },
   // textures
-  // {
-  //   name: 'perlin',
-  //   type: 'texture',
-  //   path: 'textures/perlin.png',
-  // },
+  {
+    name: 'perlin',
+    type: 'texture',
+    path: 'textures/perlin.png',
+  },
   // blocks textures
   {
     name: 'colormap',
@@ -127,12 +127,14 @@ export default [
     name: 'dirt',
     type: 'gltfModel',
     path: 'blocks/dirt.glb',
+    skip: true,
   },
-  // {
-  //   name: 'dirtLumber',
-  //   type: 'gltfModel',
-  //   path: 'blocks/dirt-lumber.glb',
-  // },
+  {
+    name: 'dirtLumber',
+    type: 'gltfModel',
+    path: 'blocks/dirt-lumber.glb',
+    skip: true,
+  },
   {
     name: 'grass',
     type: 'gltfModel',
@@ -152,81 +154,97 @@ export default [
     name: 'pathCorner',
     type: 'gltfModel',
     path: 'blocks/path-corner.glb',
+    skip: true,
   },
   {
     name: 'pathCornerSharp',
     type: 'gltfModel',
     path: 'blocks/path-corner-sharp.glb',
+    skip: true,
   },
   {
     name: 'pathCrossing',
     type: 'gltfModel',
     path: 'blocks/path-crossing.glb',
+    skip: true,
   },
   {
     name: 'pathEnd',
     type: 'gltfModel',
     path: 'blocks/path-end.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionA',
     type: 'gltfModel',
     path: 'blocks/path-intersectionA.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionB',
     type: 'gltfModel',
     path: 'blocks/path-intersectionB.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionC',
     type: 'gltfModel',
     path: 'blocks/path-intersectionC.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionD',
     type: 'gltfModel',
     path: 'blocks/path-intersectionD.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionE',
     type: 'gltfModel',
     path: 'blocks/path-intersectionE.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionF',
     type: 'gltfModel',
     path: 'blocks/path-intersectionF.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionG',
     type: 'gltfModel',
     path: 'blocks/path-intersectionG.glb',
+    skip: true,
   },
   {
     name: 'pathIntersectionH',
     type: 'gltfModel',
     path: 'blocks/path-intersectionH.glb',
+    skip: true,
   },
   {
     name: 'pathSquare',
     type: 'gltfModel',
     path: 'blocks/path-square.glb',
+    skip: true,
   },
   {
     name: 'pathSquareEnd',
     type: 'gltfModel',
     path: 'blocks/path-square-end.glb',
+    skip: true,
   },
   {
     name: 'pathStart',
     type: 'gltfModel',
     path: 'blocks/path-start.glb',
+    skip: true,
   },
   {
     name: 'pathStraight',
     type: 'gltfModel',
     path: 'blocks/path-straight.glb',
+    skip: true,
   },
   {
     name: 'riverCorner',
@@ -303,11 +321,12 @@ export default [
     type: 'gltfModel',
     path: 'blocks/sand.glb',
   },
-  // {
-  //   name: 'sandDesert',
-  //   type: 'gltfModel',
-  //   path: 'blocks/sand-desert.glb',
-  // },
+  {
+    name: 'sandDesert',
+    type: 'gltfModel',
+    path: 'blocks/sand-desert.glb',
+    skip: true,
+  },
   {
     name: 'sandRocks',
     type: 'gltfModel',
@@ -317,6 +336,7 @@ export default [
     name: 'stone',
     type: 'gltfModel',
     path: 'blocks/stone.glb',
+    skip: true,
   },
   {
     name: 'stoneHill',
@@ -378,11 +398,12 @@ export default [
     type: 'gltfModel',
     path: 'blocks/water.glb',
   },
-  // {
-  //   name: 'waterIsland',
-  //   type: 'gltfModel',
-  //   path: 'blocks/water-island.glb',
-  // },
+  {
+    name: 'waterIsland',
+    type: 'gltfModel',
+    path: 'blocks/water-island.glb',
+    skip: true,
+  },
   {
     name: 'waterRocks',
     type: 'gltfModel',

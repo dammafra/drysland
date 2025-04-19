@@ -82,7 +82,7 @@ export default class Pointer {
     this.raycaster.setFromCamera(new Vector2(this.x, this.y), this.camera.instance)
 
     const test = Array.from(this.clickableObjects.keys())
-    const intersects = this.raycaster.intersectObjects(test)
+    const intersects = this.raycaster.intersectObjects(test, false)
     this.currentIntersect = intersects.length
       ? this.clickableObjects.get(intersects[0].object)
       : null

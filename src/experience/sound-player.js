@@ -6,7 +6,7 @@ export class SoundPlayer {
     this.resources = this.experience.resources
 
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    this.muted = false
+    this.muted = true
   }
 
   setMuted(value) {
