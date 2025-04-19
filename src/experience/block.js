@@ -102,12 +102,11 @@ export default class Block {
   }
 
   async rotate() {
-    if (this.rotating) return
+    this.rotationAnimation?.totalProgress(1)
 
-    this.rotating = true
     this.links = this.links.map(edge => (edge + 1) % 6)
 
-    await gsap
+    this.rotationAnimation = gsap
       .timeline()
       .to(this.mesh.rotation, {
         y: this.mesh.rotation.y - Math.PI / 3,
@@ -116,8 +115,6 @@ export default class Block {
       })
       .to(this.mesh.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.25 }, '<')
       .to(this.mesh.scale, { x: 1, y: 1, z: 1, duration: 0.25 })
-
-    this.rotating = false
   }
 
   setAnimation() {
