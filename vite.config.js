@@ -24,6 +24,7 @@ export default {
     alias: {
       '@config': path.resolve(__dirname, 'src/config'),
       '@experience': path.resolve(__dirname, 'src/experience/experience.js'),
+      '@shaders': path.resolve(__dirname, 'src/shaders'),
       '@utils': path.resolve(__dirname, 'src/utils'),
     },
   },

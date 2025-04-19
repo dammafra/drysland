@@ -1,10 +1,10 @@
 import Experience from '@experience'
+import blockBeginVertexChunk from '@shaders/block/chunks/begin-vertex.glsl'
+import blockBeginNormalVertexChunk from '@shaders/block/chunks/beginnormal-vertex.glsl'
+import blockCommonChunk from '@shaders/block/chunks/common.glsl'
+import blockOpaqueChunk from '@shaders/block/chunks/opaque.glsl'
+import blockWorkdposVertexChunk from '@shaders/block/chunks/worldpos_vertex.glsl'
 import { RepeatWrapping, Uniform } from 'three'
-import blockBeginVertexChunk from '../shaders/block/chunks/begin-vertex.glsl'
-import blockBeginNormalVertexChunk from '../shaders/block/chunks/beginnormal-vertex.glsl'
-import blockCommonChunk from '../shaders/block/chunks/common.glsl'
-import blockOpaqueChunk from '../shaders/block/chunks/opaque.glsl'
-import blockWorkdposVertexChunk from '../shaders/block/chunks/worldpos_vertex.glsl'
 
 export default class BlockMaterial {
   constructor() {
