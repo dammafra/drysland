@@ -18,7 +18,6 @@ export default class Grid {
       .filter(resource => resource.type === 'gltfModel')
       .filter(resource => !resource.name.includes('unit'))
       .filter(resource => !resource.name.includes('path'))
-      .filter(resource => resource.name.includes('river'))
       .map(resource => resource.name)
 
     const randomName = () => names[Math.floor(Math.random() * names.length)]
@@ -43,7 +42,7 @@ export default class Grid {
   }
 
   setLinkableBlocks() {
-    this.linkableBlocks = this.blocks.filter(b => b.name !== 'water' && b.name !== 'riverStart')
+    this.linkableBlocks = this.blocks.filter(b => !!b.links.length)
   }
 
   setBlocksNeighbors() {
@@ -66,19 +65,29 @@ export default class Grid {
   }
 
   checkLinks() {
-    this.linkableBlocks.forEach(block => {
-      block.linked = block.links.reduce((linked, edge) => {
+    this.linkableBlocks.forEach(block => (block.linked = false))
+
+    const riverStarts = this.linkableBlocks.filter(block => block.name === 'riverStart')
+
+    const checkNeighborLinks = (block, visited = new Set()) => {
+      if (visited.has(block)) return
+      visited.add(block)
+
+      block.links.forEach(edge => {
         const neighbor = block.neighbors.at(edge)
-        if (!neighbor || !neighbor.linked) return linked
+        if (!neighbor) return
 
-        return linked || neighbor.links.includes((edge + 3) % 6)
-      }, false)
-    })
-  }
+        const oppositeEdge = (edge + 3) % 6
+        if (neighbor.links.includes(oppositeEdge)) {
+          neighbor.linked = true
+          checkNeighborLinks(neighbor, visited)
+        }
+      })
+    }
 
-  resetLinks() {
-    this.linkableBlocks.forEach(block => {
-      block.linked = false
+    riverStarts.forEach(startBlock => {
+      startBlock.linked = true
+      checkNeighborLinks(startBlock)
     })
   }
 

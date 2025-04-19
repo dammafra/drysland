@@ -29,7 +29,7 @@ const blocksConfig = {
     }
     return links[name] || []
   },
-  isForcedLinked: name => ['riverStart'].includes(name),
+  isForcedLinked: name => ['water'].includes(name),
   isInteractive: name =>
     name === 'bridge' || name === 'buildingWatermill' || name.includes('river'),
 }

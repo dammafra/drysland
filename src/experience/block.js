@@ -16,16 +16,17 @@ export default class Block {
 
   set linked(value) {
     this.#linked = value
-    this.material.uniforms.uLinked.value = this.name === 'water' || this.#linked
+    this.material.uniforms.uLinked.value = blocksConfig.isForcedLinked(this.name) || this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
-  constructor({ name, q, r }) {
+  constructor({ grid, name, q, r }) {
     this.experience = Experience.instance
     this.time = this.experience.time
     this.resources = this.experience.resources
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
+    this.grid = grid
 
     this.name = name
     this.q = q
@@ -35,8 +36,8 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
+    this.linked = false
     this.links = blocksConfig.getLinks(this.name)
-    this.linked = blocksConfig.isForcedLinked(this.name)
 
     if (blocksConfig.isInteractive(this.name)) {
       this.pointer.add(this)
@@ -139,6 +140,7 @@ export default class Block {
 
   onClick() {
     this.rotate()
+    this.grid.checkLinks()
   }
 
   onHover() {
