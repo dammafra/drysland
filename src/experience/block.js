@@ -1,8 +1,42 @@
-import blocksConfig from '@config/blocks'
 import Experience from '@experience'
 import gsap from 'gsap'
 import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
 import BlockMaterial from './block-material'
+
+/**
+ * Hexagon Edges:
+ *
+ *    1 / \ 2
+ *  0  |   |  3
+ *    5 \ / 4
+ *
+ */
+
+const linksMap = {
+  0: ['riverStart', 'riverEnd'],
+
+  '01': ['riverCornerSharp'],
+  '02': ['riverCorner'],
+  '03': ['bridge', 'buildingWatermill', 'riverStraight'],
+
+  '012': ['riverIntersectionA'],
+  '034': ['riverIntersectionC'],
+  '024': ['riverIntersectionF'],
+
+  '023': ['riverIntersectionB'],
+
+  '0123': ['riverIntersectionH'],
+  '0234': ['riverIntersectionD'],
+  '0134': ['riverIntersectionE'],
+
+  '01234': ['riverIntersectionG'],
+
+  '012345': ['riverCrossing'],
+}
+
+const validLinks = ['', ...Object.keys(linksMap)]
+
+const getName = key => (linksMap[key] || ['water']).at(0)
 
 export default class Block {
   static colormapDefault = null
@@ -14,9 +48,13 @@ export default class Block {
     return this.#linked
   }
 
+  get linksKey() {
+    return this.links.sort((a, b) => a - b).join('')
+  }
+
   set linked(value) {
     this.#linked = value
-    this.material.uniforms.uLinked.value = blocksConfig.isForcedLinked(this.name) || this.#linked
+    this.material.uniforms.uLinked.value = this.name === 'water' || this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
@@ -32,18 +70,35 @@ export default class Block {
     this.name = name
     this.q = q
     this.r = r
+    this.links = []
+    this.neighbors = []
   }
 
   init() {
+    this.normalizeLinks()
+
+    if (!this.name) {
+      this.name = getName(this.linksKey)
+    }
+
     this.setColormaps()
     this.setMesh()
     this.setAnimation()
 
     this.linked = false
-    this.links = blocksConfig.getLinks(this.name)
 
-    if (blocksConfig.isInteractive(this.name)) {
+    if (
+      this.name === 'bridge' ||
+      this.name === 'buildingWatermill' ||
+      this.name.includes('river')
+    ) {
       this.pointer.add(this)
+    }
+  }
+
+  normalizeLinks() {
+    while (!validLinks.includes(this.linksKey)) {
+      this.rotate()
     }
   }
 
@@ -136,6 +191,8 @@ export default class Block {
     this.rotationAnimation?.totalProgress(1)
 
     this.links = this.links.map(edge => (edge + 1) % 6)
+
+    if (!this.mesh) return
 
     this.rotationAnimation = gsap
       .timeline()
