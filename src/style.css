@@ -1,6 +1,15 @@
 /* tailwind config */
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Hexaplex';
+  src: url('/fonts/hexaplex.ttf');
+}
+
+@utility font-hex {
+  font-family: 'Hexaplex', monospace;
+}
+
 @theme {
   --color-primary: #0084d1;
 }
@@ -52,5 +61,10 @@ body {
 }
 
 .loading .spinner {
-  @apply w-28 bg-primary hex;
+  @apply w-28 bg-primary hex scale-0;
+}
+
+.loading .title {
+  @apply font-hex text-5xl text-white absolute z-10 scale-0 uppercase;
+  text-shadow: 1px 1px 2px black;
 }

@@ -6,29 +6,56 @@ export default class Loading {
     this.time = this.experience.time
 
     this.element = document.querySelector('.loading')
-    this.startSpinner()
+    this.start()
   }
 
-  startSpinner() {
-    gsap.to('.spinner', {
-      rotation: '+=30',
-      duration: 0.5,
-      ease: 'back.inOut',
-      repeat: -1,
-      repeatRefresh: true,
-    })
+  start() {
+    return gsap
+      .timeline()
+      .to('.spinner', {
+        scale: 1,
+        duration: 0.5,
+        ease: 'back.out',
+      })
+      .to(
+        '.title',
+        {
+          scale: 1,
+          duration: 0.5,
+          ease: 'back.out',
+        },
+        '<+0.2',
+      )
+      .to('.spinner', {
+        rotation: '+=30',
+        duration: 0.5,
+        ease: 'back.inOut',
+        repeat: -1,
+        repeatRefresh: true,
+      })
   }
 
-  stopSpinner() {
-    return gsap.to('.spinner', {
-      scale: 0,
-      duration: 0.5,
-      ease: 'back.in',
-    })
+  stop() {
+    return gsap
+      .timeline()
+      .to('.spinner', {
+        scale: 0,
+        duration: 0.5,
+        ease: 'back.in',
+      })
+      .to(
+        '.title',
+        {
+          scale: 0,
+          duration: 0.5,
+          ease: 'back.in',
+        },
+        '<+0.2',
+      )
   }
 
   async ready() {
-    await this.stopSpinner()
+    await this.stop()
     this.dispose()
   }
 
