@@ -46,8 +46,6 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
-
-    addEventListener('debug', this.setDebug)
   }
 
   resize = () => {
@@ -70,25 +68,28 @@ export default class Experience {
     Grid.instance?.update()
   }
 
-  setDebug = () => {
-    this.setHelpers()
+  setDebug() {
+    const folder = Debug.gui.root.addFolder({ title: '🌐 experience' })
 
-    // Global access
-    window.experience = this
-  }
-
-  setHelpers() {
-    this.axesHelper = new AxesHelper(10)
+    const helpersSize = 24
+    this.axesHelper = new AxesHelper(helpersSize)
     this.axesHelper.visible = false
-    this.axesHelper.position.y = 2
+    this.axesHelper.position.x = -helpersSize * 0.5
+    this.axesHelper.position.y = 0.01
+    this.axesHelper.position.z = -helpersSize * 0.5
 
-    this.gridHelper = new GridHelper(25, 50)
+    this.gridHelper = new GridHelper(helpersSize, helpersSize * 2, 'gray', 'gray')
     this.gridHelper.visible = false
 
     this.scene.add(this.axesHelper, this.gridHelper)
 
-    Debug.gui.root.addBinding(this.axesHelper, 'visible', { label: 'axes helper' })
-    Debug.gui.root.addBinding(this.gridHelper, 'visible', { label: 'grid helper' })
-    Debug.gui.root.addButton({ title: 'grid shuffle' }).on('click', Grid.shuffle)
+    folder.addBinding(this.axesHelper, 'visible', { label: 'helpers' }).on('change', event => {
+      this.axesHelper.visible = event.value
+      this.gridHelper.visible = event.value
+      this.renderer.instance.setClearColor(event.value ? 0x333333 : 'black', event.value ? 1 : 0)
+      this.environment.shadowHelper.visible = event.value
+    })
+
+    folder.addButton({ title: 'grid shuffle' }).on('click', Grid.shuffle)
   }
 }

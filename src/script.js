@@ -11,5 +11,5 @@ DoubleTapPreventer.init()
 Versioning.init()
 Fullscreen.init()
 
-Experience.init('canvas.webgl')
-Debug.init()
+const experience = Experience.init('canvas.webgl')
+Debug.init(experience)

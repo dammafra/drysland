@@ -8,15 +8,19 @@ export default class GUI {
     this.root.element.parentElement.style.width = '350px'
     this.root.element.parentElement.style.zIndex = 999
 
-    addEventListener('beforeunload', this.saveState)
-    addEventListener('keydown', event => event.key === 'R' && this.loadState())
-    addEventListener('keydown', event => event.key === 'C' && this.clearState())
-    this.root.addButton({ title: 'load previuos state [R]' }).on('click', this.loadState)
-    this.root.addButton({ title: 'clear previuos state [C]' }).on('click', this.clearState)
-
     // Stats
     this.stats = new Stats()
     document.body.appendChild(this.stats.dom)
+
+    addEventListener('beforeunload', this.saveState)
+    this.root
+      .addButton({ title: 'reset' })
+      .on('click', () => this.root.importState(JSON.parse(this.defaults)))
+  }
+
+  storeDefaults() {
+    const defaults = this.root.exportState()
+    this.defaults = JSON.stringify(defaults)
   }
 
   saveState = () => {
@@ -28,10 +32,7 @@ export default class GUI {
     const state = localStorage.getItem('debug')
     if (state) {
       this.root.importState(JSON.parse(state))
+      localStorage.removeItem('debug')
     }
-  }
-
-  clearState = () => {
-    localStorage.removeItem('debug')
   }
 }

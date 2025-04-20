@@ -47,6 +47,8 @@ export default class Grid {
         this.blocks.push(new Block({ grid: this, name, q, r }))
       }
     }
+
+    this.blocks.forEach(b => b.init())
   }
 
   setLinkableBlocks() {

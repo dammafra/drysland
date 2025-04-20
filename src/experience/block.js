@@ -32,7 +32,9 @@ export default class Block {
     this.name = name
     this.q = q
     this.r = r
+  }
 
+  init() {
     this.setColormaps()
     this.setMesh()
     this.setAnimation()

@@ -1,5 +1,4 @@
 import Experience from '@experience'
-import Debug from '@utils/debug'
 import { PCFSoftShadowMap, WebGLRenderer } from 'three'
 
 export default class Renderer {
@@ -10,8 +9,6 @@ export default class Renderer {
     this.scene = this.experience.scene
     this.camera = this.experience.camera
     this.setInstance()
-
-    addEventListener('debug', this.setDebug)
   }
 
   setInstance() {
@@ -35,18 +32,5 @@ export default class Renderer {
 
   update() {
     this.instance.render(this.scene, this.camera.instance)
-  }
-
-  setDebug = () => {
-    this.disableClearColor = false
-
-    Debug.gui.root
-      .addBinding(this, 'disableClearColor', { label: 'disable clear color' })
-      .on('change', () =>
-        this.instance.setClearColor(
-          this.disableClearColor ? 0x333333 : 'black',
-          this.disableClearColor ? 1 : 0,
-        ),
-      )
   }
 }
