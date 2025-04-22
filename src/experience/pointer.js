@@ -66,7 +66,8 @@ export default class Pointer {
     this.update()
   }
 
-  click = () => {
+  click = event => {
+    if (event.target !== this.canvas) return
     this.currentIntersect?.onClick && this.currentIntersect.onClick()
   }
 

@@ -16,7 +16,8 @@ const rivers = [
   'riverWatermill',
 ]
 
-const others = ['water', 'grassForest']
+const water = ['water']
+const grass = ['grass', 'grassForest']
 
 /**
  * Hexagon Edges:
@@ -58,7 +59,9 @@ const links = Object.keys(linksMap)
 
 const blocksConfig = {
   rivers,
-  others,
+  grass,
+  water,
+
   links,
   linksMap,
 }

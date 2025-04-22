@@ -3,6 +3,21 @@ export default class Debug {
     return import.meta.env.DEV || window.location.hash === '#debug'
   }
 
+  static {
+    const debugConsole = { ...window.console }
+
+    for (let key in debugConsole) {
+      if (typeof debugConsole[key] !== 'function') continue
+
+      const func = debugConsole[key]
+      debugConsole[key] = function () {
+        Debug.enabled && func.apply(debugConsole, arguments)
+      }
+    }
+
+    window.debug = debugConsole
+  }
+
   static async init(experience) {
     if (!Debug.enabled) return
 

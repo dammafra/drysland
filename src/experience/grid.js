@@ -7,6 +7,10 @@ const opposite = edge => (edge + 3) % 6
 export default class Grid {
   static instance = null
 
+  static {
+    document.getElementById('shuffle').onclick = Grid.shuffle
+  }
+
   static shuffle() {
     Grid.instance?.dispose()
     Grid.instance = new Grid(
@@ -21,9 +25,11 @@ export default class Grid {
     this.setNeighbors()
 
     this.generateMaze()
-    this.addExtraLinks()
 
+    this.blocks.forEach(b => b.setName())
+    // TODO: grid tweaks...
     this.blocks.forEach(b => b.init())
+
     this.checkLinks()
   }
 
@@ -59,98 +65,71 @@ export default class Grid {
     })
   }
 
+  /**
+   * Growing Tree algorithm
+   * https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
+   */
   generateMaze() {
-    const minLength = this.radius + gridConfig.minPathLength
-
     const visited = new Set()
-    const blacklist = new Set()
+    const frontier = []
+    const targetVisits = Math.floor(this.blocks.length * gridConfig.coverageRatio)
 
-    // Start from a random cell
+    // Selection strategy:
+    // 1. DFS style: pick last           --> frontier.at(-1)
+    // 2. BFS style: pick first          --> frontier.at(0)
+    // 3. Prim style: pick random        --> Random.oneOf(frontier)
+    // - Balanced: use middle or weighted
+    // - Mixed
+    const select = (frontier, strategy) => {
+      // prettier-ignore
+      switch (strategy) {
+        case 1: return frontier.at(-1)
+        case 2: return frontier.at(0)
+        case 3: return Random.oneOf(frontier)
+        default:
+          debug.warn('The selected strategy doe not exixt, fallback to DFS')
+          return frontier.at(-1)
+      }
+    }
+
     const start = Random.oneOf(this.blocks)
     visited.add(start.key)
+    frontier.push(start)
 
-    let attempts = 0
-    const maxAttempts = 10000
+    debug.groupCollapsed('Grid.generateMaze')
+    debug.log(this.toString())
+    debug.log('start from', start.key)
 
-    while (visited.size < this.blocks.length) {
-      if (++attempts > maxAttempts) break // safety limit
+    while (frontier.length && visited.size < targetVisits) {
+      const logs = []
 
-      const unvisited = this.blocks.filter(b => !visited.has(b.key) && !blacklist.has(b.key))
+      const current = select(frontier, 1)
+      logs.push('current: ' + current)
 
-      if (!unvisited.length) break
+      const neighbors = current.neighbors
+        .map((n, dir) => ({ block: n, dir }))
+        .filter(({ block }) => block && !visited.has(block.key))
 
-      const walkStart = Random.oneOf(unvisited)
-      const pathMap = new Map()
-      const pathList = []
-
-      let current = walkStart
-      const seen = new Map()
-
-      while (!visited.has(current.key)) {
-        // Loop erase
-        if (seen.has(current.key)) {
-          const loopIndex = pathList.findIndex(b => b.key === current.key)
-          pathList.splice(loopIndex + 1)
-        } else {
-          seen.set(current.key, true)
-          pathList.push(current)
-        }
-
-        const neighbors = current.neighbors
-          .map((n, i) => ({ block: n, dir: i }))
-          .filter(({ block }) => !!block)
-
-        if (!neighbors.length) break
-
+      if (!neighbors.length) {
+        // Dead end reached, backtrack
+        frontier.splice(frontier.indexOf(current), 1)
+        logs.push('dead end, backtrack')
+      } else {
         const { block: next, dir } = Random.oneOf(neighbors)
-        pathMap.set(current.key, { to: next, dir })
-        current = next
-      }
+        logs.push('next: ' + next)
 
-      if (pathList.length < minLength) {
-        // Mark this start block as unusable
-        blacklist.add(walkStart.key)
-        continue
-      }
-
-      // Commit the walk
-      current = walkStart
-      while (!visited.has(current.key)) {
-        const { to, dir } = pathMap.get(current.key)
+        // Link both blocks
         current.links.push(dir)
-        to.links.push(opposite(dir))
-        visited.add(current.key)
-        current = to
+        next.links.push(opposite(dir))
+
+        visited.add(next.key)
+        frontier.push(next)
       }
 
-      visited.add(current.key)
+      debug.log(logs.join(' ->\t'))
     }
-  }
 
-  addExtraLinks() {
-    if (!gridConfig.extraLinkChance) return
-
-    // Find initial dead ends
-    const initialDeadEnds = this.blocks.filter(b => b.links.length === 1)
-    const preserveAtLeast = Math.floor(initialDeadEnds.length * gridConfig.preserveDeadEndsRatio)
-    const preserved = new Set(initialDeadEnds.slice(0, preserveAtLeast).map(b => b.key))
-
-    for (const block of this.blocks) {
-      if (!block.links || !block.neighbors || preserved.has(block.key)) continue
-
-      block.neighbors.forEach((neighbor, dir) => {
-        if (!Random.boolean(gridConfig.extraLinkChance)) return
-        if (!neighbor || !neighbor.links) return
-
-        const alreadyLinked = block.links.includes(dir)
-        const bothLinked = neighbor.links.length > 0 && block.links.length > 0
-
-        if (!alreadyLinked && bothLinked && !preserved.has(neighbor.key)) {
-          block.links.push(dir)
-          neighbor.links.push(opposite(dir))
-        }
-      })
-    }
+    debug.groupEnd()
   }
 
   checkLinks() {
@@ -186,5 +165,27 @@ export default class Grid {
   dispose() {
     this.blocks.forEach(block => block.dispose())
     this.blocks = []
+  }
+
+  toString() {
+    let res = ''
+    for (let r = -this.radius; r <= this.radius; r++) {
+      let row = ''
+
+      // Add indentation based on the row
+      const indent = Math.abs(r)
+      row += '\t'.repeat(indent)
+
+      for (let q = -this.radius; q <= this.radius; q++) {
+        const block = this.blocks.find(b => b.q === q && b.r === r)
+        if (block) {
+          row += block + '\t'
+        }
+      }
+
+      res += `${row.trimEnd()}\n`
+    }
+
+    return res
   }
 }

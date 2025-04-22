@@ -58,9 +58,6 @@ export default class Block {
   }
 
   init() {
-    this.normalizeLinks()
-    this.setName()
-
     this.setColormaps()
     this.setMesh()
     this.setAnimation()
@@ -82,7 +79,11 @@ export default class Block {
 
   setName() {
     if (this.name) return
-    this.name = Random.oneOf(blocksConfig.linksMap[this.linksKey] || blocksConfig.others)
+
+    this.normalizeLinks()
+
+    const others = Random.boolean() ? blocksConfig.grass : blocksConfig.water
+    this.name = Random.oneOf(blocksConfig.linksMap[this.linksKey] || others)
   }
 
   setColormaps() {
@@ -243,5 +244,9 @@ export default class Block {
     this.mesh.geometry.dispose()
     this.mesh.material.dispose()
     this.scene.remove(this.mesh)
+  }
+
+  toString() {
+    return `[${this.key}]`
   }
 }
