@@ -1,4 +1,5 @@
 import gridConfig from '@config/grid'
+import Experience from '@experience'
 import Random from '@utils/random'
 import Block from './block'
 
@@ -19,6 +20,9 @@ export default class Grid {
   }
 
   constructor(radius) {
+    this.experience = Experience.instance
+    this.camera = this.experience.camera
+
     this.radius = radius
 
     this.setBlocks()
@@ -31,6 +35,8 @@ export default class Grid {
     this.blocks.forEach(b => b.init())
 
     this.checkLinks()
+
+    this.camera.intro()
   }
 
   setBlocks() {

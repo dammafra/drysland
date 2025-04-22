@@ -71,6 +71,10 @@ export default class Camera {
     return this.instance.position.distanceTo(position)
   }
 
+  intro() {
+    this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
+  }
+
   canView(position) {
     const frustum = new Frustum()
     frustum.setFromProjectionMatrix(

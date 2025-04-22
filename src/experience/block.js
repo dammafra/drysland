@@ -219,7 +219,7 @@ export default class Block {
 
     // TODO improve
     if (
-      this.camera.controls.polarAngle > 1 ||
+      this.camera.controls.polarAngle > 0.5 ||
       this.neighbors.some(n => n && !this.camera.canView(n.mesh.position))
     ) {
       this.camera.controls.fitToBox(this.mesh, true)
