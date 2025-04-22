@@ -41,6 +41,7 @@ export default class Block {
 
   constructor({ grid, name, q, r }) {
     this.experience = Experience.instance
+    this.camera = this.experience.camera
     this.time = this.experience.time
     this.resources = this.experience.resources
     this.soundPlayer = this.experience.soundPlayer
@@ -214,6 +215,16 @@ export default class Block {
   onClick() {
     this.rotate()
     this.grid.checkLinks()
+
+    // TODO improve
+    if (
+      this.camera.controls.polarAngle > 1 ||
+      this.neighbors.some(n => n && !this.camera.canView(n.mesh.position))
+    ) {
+      this.camera.controls.fitToBox(this.mesh, true)
+      this.camera.controls.rotatePolarTo(0, true)
+      this.camera.controls.dollyTo(10, true)
+    }
   }
 
   update() {

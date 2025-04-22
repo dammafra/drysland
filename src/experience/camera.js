@@ -2,6 +2,7 @@ import Experience from '@experience'
 import CameraControls from 'camera-controls'
 import {
   Box3,
+  Frustum,
   Matrix4,
   PerspectiveCamera,
   Quaternion,
@@ -52,6 +53,12 @@ export default class Camera {
     this.controls.maxDistance = 25
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.001
+
+    this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
+    this.controls.mouseButtons.right = CameraControls.ACTION.ROTATE
+
+    this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
+    this.controls.touches.two = CameraControls.ACTION.TOUCH_DOLLY_ROTATE
   }
 
   resize() {
@@ -65,5 +72,16 @@ export default class Camera {
 
   distanceTo(position) {
     return this.instance.position.distanceTo(position)
+  }
+
+  canView(position) {
+    const frustum = new Frustum()
+    frustum.setFromProjectionMatrix(
+      new Matrix4().multiplyMatrices(
+        this.instance.projectionMatrix,
+        this.instance.matrixWorldInverse,
+      ),
+    )
+    return frustum.containsPoint(position)
   }
 }
