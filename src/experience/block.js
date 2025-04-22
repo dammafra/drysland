@@ -1,58 +1,34 @@
+import blocksConfig from '@config/blocks'
 import Experience from '@experience'
 import Random from '@utils/random'
 import gsap from 'gsap'
 import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
 import BlockMaterial from './block-material'
 
-/**
- * Hexagon Edges:
- *
- *    1 / \ 2
- *  0  |   |  3
- *    5 \ / 4
- *
- */
-
-const linksMap = {
-  0: ['riverStart'],
-
-  '01': ['riverCornerSharp'],
-  '02': ['riverCorner'],
-  '03': ['riverBridge', 'riverWatermill', 'riverStraight'],
-
-  '012': ['riverIntersectionA'],
-  '034': ['riverIntersectionC'],
-  '024': ['riverIntersectionF'],
-
-  '023': ['riverIntersectionB'],
-
-  '0123': ['riverIntersectionH'],
-  '0234': ['riverIntersectionD'],
-  '0134': ['riverIntersectionE'],
-
-  '01234': ['riverIntersectionG'],
-
-  '012345': ['riverCrossing'],
-}
-
-const validLinks = ['', ...Object.keys(linksMap)]
-
-const getName = key => Random.oneOf(linksMap[key] || ['water', 'grassForest'])
-
 export default class Block {
   static colormapDefault = null
   static colormapDesert = null
 
+  #key = null
   #linked = false
 
-  get linked() {
-    return this.#linked
+  get key() {
+    if (!this.#key) {
+      this.#key = `${this.q},${this.r}`
+    }
+
+    return this.#key
   }
 
   get linksKey() {
     return this.links.sort((a, b) => a - b).join('')
   }
 
+  get linked() {
+    return this.#linked
+  }
+
+  // TODO improve
   set linked(value) {
     this.#linked = value
     this.material.uniforms.uLinked.value =
@@ -70,39 +46,42 @@ export default class Block {
     this.soundPlayer = this.experience.soundPlayer
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
-    this.grid = grid
 
+    this.grid = grid
     this.name = name
     this.q = q
     this.r = r
+
     this.links = []
     this.neighbors = []
   }
 
   init() {
     this.normalizeLinks()
-
-    if (!this.name) {
-      this.name = getName(this.linksKey)
-    }
+    this.setName()
 
     this.setColormaps()
     this.setMesh()
     this.setAnimation()
 
     this.rotate(Random.integer({ max: 5 }), false)
-
     this.linked = false
 
     if (this.name.includes('river')) {
       this.pointer.add(this)
     }
+
+    this.transitionIn()
   }
 
   normalizeLinks() {
-    while (!validLinks.includes(this.linksKey)) {
-      this.rotate(1, false)
-    }
+    if (!this.linksKey) return
+    while (!blocksConfig.links.includes(this.linksKey)) this.rotate(1, false)
+  }
+
+  setName() {
+    if (this.name) return
+    this.name = Random.oneOf(blocksConfig.linksMap[this.linksKey] || blocksConfig.others)
   }
 
   setColormaps() {
@@ -138,8 +117,16 @@ export default class Block {
     this.mesh.castShadow = true
 
     this.scene.add(this.mesh)
+  }
 
-    this.transitionIn()
+  setAnimation() {
+    const animation = this.resources.items[this.name].animations?.at(0)
+    if (!animation) return
+
+    this.animationMixer = new AnimationMixer(this.mesh)
+    const action = this.animationMixer.clipAction(animation)
+
+    action.play()
   }
 
   transitionIn() {
@@ -212,29 +199,6 @@ export default class Block {
     }
   }
 
-  setAnimation() {
-    const animation = this.resources.items[this.name].animations?.at(0)
-    if (!animation) return
-
-    this.animationMixer = new AnimationMixer(this.mesh)
-    const action = this.animationMixer.clipAction(animation)
-
-    action.play()
-  }
-
-  update() {
-    this.material.update()
-
-    if (this.#linked) {
-      this.animationMixer?.update(this.time.delta * 0.2)
-    }
-  }
-
-  onClick() {
-    this.rotate()
-    this.grid.checkLinks()
-  }
-
   onHover() {
     this.mesh.castShadow = false
     this.mesh.receiveShadow = false
@@ -245,6 +209,19 @@ export default class Block {
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true
     this.material.uniforms.uHovered.value = false
+  }
+
+  onClick() {
+    this.rotate()
+    this.grid.checkLinks()
+  }
+
+  update() {
+    this.material.update()
+
+    if (this.#linked) {
+      this.animationMixer?.update(this.time.delta * 0.2)
+    }
   }
 
   async dispose() {

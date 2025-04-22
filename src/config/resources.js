@@ -1,4 +1,4 @@
-export default [
+const resourcesConfig = [
   // sounds
   {
     name: 'splash',
@@ -410,3 +410,5 @@ export default [
     path: 'blocks/water-rocks.glb',
   },
 ]
+
+export default resourcesConfig.filter(s => !s.skip)

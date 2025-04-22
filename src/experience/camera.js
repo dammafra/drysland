@@ -49,7 +49,7 @@ export default class Camera {
   setControls() {
     this.controls = new CameraControls(this.instance, this.canvas)
     this.controls.minDistance = 5
-    this.controls.maxDistance = 20
+    this.controls.maxDistance = 25
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.001
   }

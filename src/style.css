@@ -34,8 +34,8 @@ body {
 }
 
 body {
-  @apply w-screen h-[100svh] bg-radial from-sky-200 to-primary;
-  background: -webkit-radial-gradient(#b8e6fe, #0084d1);
+  @apply w-screen h-[100svh] bg-radial from-sky-300 to-primary;
+  background: -webkit-radial-gradient(var(--color-sky-300), var(--color-primary));
 }
 
 .webgl {

@@ -1,8 +1,4 @@
 export default class Random {
-  static {
-    window.Random = Random
-  }
-
   static boolean(chance = 0.5) {
     return Math.random() < chance
   }

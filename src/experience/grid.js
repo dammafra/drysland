@@ -1,31 +1,35 @@
+import gridConfig from '@config/grid'
 import Random from '@utils/random'
 import Block from './block'
+
+const opposite = edge => (edge + 3) % 6
 
 export default class Grid {
   static instance = null
 
   static shuffle() {
     Grid.instance?.dispose()
-    Grid.instance = new Grid(Random.integer({ min: 2, max: 10 }))
+    Grid.instance = new Grid(
+      Random.integer({ min: gridConfig.minRadius, max: gridConfig.maxRadius }),
+    )
   }
 
   constructor(radius) {
     this.radius = radius
 
     this.setBlocks()
-    this.setBlocksNeighbors()
-    this.generateMaze(this.radius)
-    this.addExtraLinks(0)
-    this.addFarLinks(1)
-    this.blocks.forEach(b => b.init())
+    this.setNeighbors()
 
+    this.generateMaze()
+    this.addExtraLinks()
+
+    this.blocks.forEach(b => b.init())
     this.checkLinks()
   }
 
   setBlocks() {
     this.blocks = []
 
-    // Create hexagonal grid around center
     for (let q = -this.radius; q <= this.radius; q++) {
       const r1 = Math.max(-this.radius, -q - this.radius)
       const r2 = Math.min(this.radius, -q + this.radius)
@@ -36,7 +40,7 @@ export default class Grid {
     }
   }
 
-  setBlocksNeighbors() {
+  setNeighbors() {
     const directions = [
       { q: -1, r: 0 }, //edge 0: E
       { q: 0, r: -1 }, //edge 1: NE
@@ -55,25 +59,23 @@ export default class Grid {
     })
   }
 
-  generateMaze(minLength = this.radius) {
-    const getKey = (q, r) => `${q},${r}`
+  generateMaze() {
+    const minLength = this.radius + gridConfig.minPathLength
+
     const visited = new Set()
-    const blocks = this.blocks
     const blacklist = new Set()
 
     // Start from a random cell
-    const start = Random.oneOf(blocks)
-    visited.add(getKey(start.q, start.r))
+    const start = Random.oneOf(this.blocks)
+    visited.add(start.key)
 
-    let safety = 0
+    let attempts = 0
+    const maxAttempts = 10000
 
-    while (visited.size < blocks.length) {
-      if (++safety > 10000) break // safety limit
+    while (visited.size < this.blocks.length) {
+      if (++attempts > maxAttempts) break // safety limit
 
-      const unvisited = blocks.filter(b => {
-        const key = getKey(b.q, b.r)
-        return !visited.has(key) && !blacklist.has(key)
-      })
+      const unvisited = this.blocks.filter(b => !visited.has(b.key) && !blacklist.has(b.key))
 
       if (!unvisited.length) break
 
@@ -84,102 +86,70 @@ export default class Grid {
       let current = walkStart
       const seen = new Map()
 
-      while (!visited.has(getKey(current.q, current.r))) {
-        const k = getKey(current.q, current.r)
-
+      while (!visited.has(current.key)) {
         // Loop erase
-        if (seen.has(k)) {
-          const loopIndex = pathList.findIndex(b => getKey(b.q, b.r) === k)
+        if (seen.has(current.key)) {
+          const loopIndex = pathList.findIndex(b => b.key === current.key)
           pathList.splice(loopIndex + 1)
         } else {
-          seen.set(k, true)
+          seen.set(current.key, true)
           pathList.push(current)
         }
 
         const neighbors = current.neighbors
           .map((n, i) => ({ block: n, dir: i }))
-          .filter(({ block }) => block && blocks.includes(block))
+          .filter(({ block }) => !!block)
 
         if (!neighbors.length) break
 
         const { block: next, dir } = Random.oneOf(neighbors)
-        pathMap.set(getKey(current.q, current.r), { to: next, dir })
+        pathMap.set(current.key, { to: next, dir })
         current = next
       }
 
       if (pathList.length < minLength) {
         // Mark this start block as unusable
-        blacklist.add(getKey(walkStart.q, walkStart.r))
+        blacklist.add(walkStart.key)
         continue
       }
 
       // Commit the walk
       current = walkStart
-      while (!visited.has(getKey(current.q, current.r))) {
-        const { to, dir } = pathMap.get(getKey(current.q, current.r))
+      while (!visited.has(current.key)) {
+        const { to, dir } = pathMap.get(current.key)
         current.links.push(dir)
-        to.links.push((dir + 3) % 6)
-        visited.add(getKey(current.q, current.r))
+        to.links.push(opposite(dir))
+        visited.add(current.key)
         current = to
       }
 
-      visited.add(getKey(current.q, current.r))
+      visited.add(current.key)
     }
   }
 
-  addExtraLinks(chance = 0.1, preserveAtLeast = 1) {
-    const getKey = (q, r) => `${q},${r}`
+  addExtraLinks() {
+    if (!gridConfig.extraLinkChance) return
 
     // Find initial dead ends
-    const isDeadEnd = block => block.links.length === 1
-    const initialDeadEnds = this.blocks.filter(isDeadEnd)
-    const preserved = new Set(initialDeadEnds.slice(0, preserveAtLeast).map(b => getKey(b.q, b.r)))
+    const initialDeadEnds = this.blocks.filter(b => b.links.length === 1)
+    const preserveAtLeast = Math.floor(initialDeadEnds.length * gridConfig.preserveDeadEndsRatio)
+    const preserved = new Set(initialDeadEnds.slice(0, preserveAtLeast).map(b => b.key))
 
     for (const block of this.blocks) {
-      const key = getKey(block.q, block.r)
-      if (!block.links || !block.neighbors || preserved.has(key)) continue
+      if (!block.links || !block.neighbors || preserved.has(block.key)) continue
 
-      block.neighbors.forEach((neighbor, i) => {
+      block.neighbors.forEach((neighbor, dir) => {
+        if (!Random.boolean(gridConfig.extraLinkChance)) return
         if (!neighbor || !neighbor.links) return
 
-        const opp = (i + 3) % 6
-        const alreadyLinked = block.links.includes(i)
+        const alreadyLinked = block.links.includes(dir)
         const bothLinked = neighbor.links.length > 0 && block.links.length > 0
-        const neighborKey = getKey(neighbor.q, neighbor.r)
 
-        if (!alreadyLinked && bothLinked && !preserved.has(neighborKey) && Random.boolean(chance)) {
-          block.links.push(i)
-          neighbor.links.push(opp)
+        if (!alreadyLinked && bothLinked && !preserved.has(neighbor.key)) {
+          block.links.push(dir)
+          neighbor.links.push(opposite(dir))
         }
       })
-    }
-  }
-
-  addFarLinks(chance = 0.05, minDistance = 2) {
-    const blocks = this.blocks
-
-    for (const block of blocks) {
-      for (const [i, neighbor] of block.neighbors.entries()) {
-        if (!neighbor || block.links.includes(i)) continue
-
-        // Skip if they're already neighbors
-        const isAlreadyLinked = neighbor.links.includes((i + 3) % 6)
-        if (isAlreadyLinked) continue
-
-        // Check distance
-        const dx = block.q - neighbor.q
-        const dy = block.r - neighbor.r
-        const dz = -block.q - block.r - (-neighbor.q - neighbor.r)
-
-        const distance = Math.max(Math.abs(dx), Math.abs(dy), Math.abs(dz))
-        if (distance < minDistance) continue
-
-        // Both should be already in the maze
-        if (block.links.length && neighbor.links.length && Random.boolean(chance)) {
-          block.links.push(i)
-          neighbor.links.push((i + 3) % 6)
-        }
-      }
     }
   }
 
@@ -196,8 +166,7 @@ export default class Grid {
         const neighbor = block.neighbors.at(edge)
         if (!neighbor?.links.length) return
 
-        const oppositeEdge = (edge + 3) % 6
-        if (neighbor.links.includes(oppositeEdge)) {
+        if (neighbor.links.includes(opposite(edge))) {
           neighbor.linked = true
           checkNeighborLinks(neighbor, visited)
         }

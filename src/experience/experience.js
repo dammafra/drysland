@@ -1,3 +1,4 @@
+import gridConfig from '@config/grid'
 import Debug from '@utils/debug'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
@@ -71,7 +72,7 @@ export default class Experience {
   setDebug() {
     const folder = Debug.gui.root.addFolder({ title: '🌐 experience' })
 
-    const helpersSize = 24
+    const helpersSize = (gridConfig.maxRadius + gridConfig.padding) * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)
     this.axesHelper.visible = false
     this.axesHelper.position.x = -helpersSize * 0.5
