@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import Random from '@utils/random'
 import gsap from 'gsap'
 import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
 import BlockMaterial from './block-material'
@@ -36,10 +37,7 @@ const linksMap = {
 
 const validLinks = ['', ...Object.keys(linksMap)]
 
-const getName = key => {
-  const names = linksMap[key] || ['water']
-  return names[Math.floor(Math.random() * names.length)]
-}
+const getName = key => Random.oneOf(linksMap[key] || ['water'])
 
 export default class Block {
   static colormapDefault = null
@@ -88,7 +86,7 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
-    this.rotate(Math.floor(Math.random() * 6) + 1, false)
+    this.rotate(Random.integer({ max: 5 }))
 
     this.linked = false
 

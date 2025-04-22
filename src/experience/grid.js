@@ -1,3 +1,4 @@
+import Random from '@utils/random'
 import Block from './block'
 
 export default class Grid {
@@ -5,8 +6,7 @@ export default class Grid {
 
   static shuffle() {
     Grid.instance?.dispose()
-    const radius = Math.floor(Math.random() * 10) + 2
-    Grid.instance = new Grid(radius)
+    Grid.instance = new Grid(Random.integer({ min: 2, max: 10 }))
   }
 
   constructor(radius) {
@@ -76,7 +76,7 @@ export default class Grid {
     const blacklist = new Set()
 
     // Start from a random cell
-    const start = blocks[Math.floor(Math.random() * blocks.length)]
+    const start = Random.oneOf(blocks)
     visited.add(getKey(start.q, start.r))
 
     let safety = 0
@@ -91,7 +91,7 @@ export default class Grid {
 
       if (!unvisited.length) break
 
-      const walkStart = unvisited[Math.floor(Math.random() * unvisited.length)]
+      const walkStart = Random.oneOf(unvisited)
       const pathMap = new Map()
       const pathList = []
 
@@ -116,7 +116,7 @@ export default class Grid {
 
         if (!neighbors.length) break
 
-        const { block: next, dir } = neighbors[Math.floor(Math.random() * neighbors.length)]
+        const { block: next, dir } = Random.oneOf(neighbors)
         pathMap.set(getKey(current.q, current.r), { to: next, dir })
         current = next
       }
@@ -141,7 +141,7 @@ export default class Grid {
     }
   }
 
-  addExtraLinks(probability = 0.1, preserveAtLeast = 1) {
+  addExtraLinks(chance = 0.1, preserveAtLeast = 1) {
     const getKey = (q, r) => `${q},${r}`
 
     // Find initial dead ends
@@ -161,11 +161,9 @@ export default class Grid {
         const bothLinked = neighbor.links.length > 0 && block.links.length > 0
         const neighborKey = getKey(neighbor.q, neighbor.r)
 
-        if (!alreadyLinked && bothLinked && !preserved.has(neighborKey)) {
-          if (Math.random() < probability) {
-            block.links.push(i)
-            neighbor.links.push(opp)
-          }
+        if (!alreadyLinked && bothLinked && !preserved.has(neighborKey) && Random.boolean(chance)) {
+          block.links.push(i)
+          neighbor.links.push(opp)
         }
       })
     }
@@ -192,7 +190,7 @@ export default class Grid {
         if (distance < minDistance) continue
 
         // Both should be already in the maze
-        if (block.links.length && neighbor.links.length && Math.random() < chance) {
+        if (block.links.length && neighbor.links.length && Random.boolean(chance)) {
           block.links.push(i)
           neighbor.links.push((i + 3) % 6)
         }
