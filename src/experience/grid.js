@@ -5,7 +5,7 @@ export default class Grid {
 
   static shuffle() {
     Grid.instance?.dispose()
-    const radius = Math.floor(Math.random() * 5) + 1
+    const radius = Math.floor(Math.random() * 10) + 2
     Grid.instance = new Grid(radius)
   }
 
@@ -16,8 +16,12 @@ export default class Grid {
     this.setBlocks()
     this.setLinkableBlocks()
     this.setBlocksNeighbors()
-    this.generateMaze()
+    this.generateMaze(this.radius)
+    this.addExtraLinks(0)
+    this.addFarLinks(1)
     this.blocks.forEach(b => b.init())
+
+    this.linkableBlocks = this.blocks.filter(b => !!b.links.length)
 
     this.checkLinks()
   }
@@ -65,56 +69,134 @@ export default class Grid {
     })
   }
 
-  generateMaze(seedCount = 3, coverage = 0.8) {
+  generateMaze(minLength = this.radius) {
+    const getKey = (q, r) => `${q},${r}`
     const visited = new Set()
-    const frontier = []
-    const totalCells = this.linkableBlocks.length
-    const targetCells = Math.floor(totalCells * coverage)
+    const blocks = this.linkableBlocks
+    const blacklist = new Set()
 
+    // Start from a random cell
+    const start = blocks[Math.floor(Math.random() * blocks.length)]
+    visited.add(getKey(start.q, start.r))
+
+    let safety = 0
+
+    while (visited.size < blocks.length) {
+      if (++safety > 10000) break // safety limit
+
+      const unvisited = blocks.filter(b => {
+        const key = getKey(b.q, b.r)
+        return !visited.has(key) && !blacklist.has(key)
+      })
+
+      if (!unvisited.length) break
+
+      const walkStart = unvisited[Math.floor(Math.random() * unvisited.length)]
+      const pathMap = new Map()
+      const pathList = []
+
+      let current = walkStart
+      const seen = new Map()
+
+      while (!visited.has(getKey(current.q, current.r))) {
+        const k = getKey(current.q, current.r)
+
+        // Loop erase
+        if (seen.has(k)) {
+          const loopIndex = pathList.findIndex(b => getKey(b.q, b.r) === k)
+          pathList.splice(loopIndex + 1)
+        } else {
+          seen.set(k, true)
+          pathList.push(current)
+        }
+
+        const neighbors = current.neighbors
+          .map((n, i) => ({ block: n, dir: i }))
+          .filter(({ block }) => block && blocks.includes(block))
+
+        if (!neighbors.length) break
+
+        const { block: next, dir } = neighbors[Math.floor(Math.random() * neighbors.length)]
+        pathMap.set(getKey(current.q, current.r), { to: next, dir })
+        current = next
+      }
+
+      if (pathList.length < minLength) {
+        // Mark this start block as unusable
+        blacklist.add(getKey(walkStart.q, walkStart.r))
+        continue
+      }
+
+      // Commit the walk
+      current = walkStart
+      while (!visited.has(getKey(current.q, current.r))) {
+        const { to, dir } = pathMap.get(getKey(current.q, current.r))
+        current.links.push(dir)
+        to.links.push((dir + 3) % 6)
+        visited.add(getKey(current.q, current.r))
+        current = to
+      }
+
+      visited.add(getKey(current.q, current.r))
+    }
+  }
+
+  addExtraLinks(probability = 0.1, preserveAtLeast = 1) {
     const getKey = (q, r) => `${q},${r}`
 
-    // 1. Pick N random seeds
-    for (let i = 0; i < seedCount; i++) {
-      const seed = this.linkableBlocks[Math.floor(Math.random() * this.linkableBlocks.length)]
-      const key = getKey(seed.q, seed.r)
-      if (visited.has(key)) continue
+    // Find initial dead ends
+    const isDeadEnd = block => block.links.length === 1
+    const initialDeadEnds = this.linkableBlocks.filter(isDeadEnd)
+    const preserved = new Set(initialDeadEnds.slice(0, preserveAtLeast).map(b => getKey(b.q, b.r)))
 
-      visited.add(key)
-      // Add unvisited neighbors to frontier
-      seed.neighbors.forEach((neighbor, direction) => {
-        if (neighbor && !visited.has(getKey(neighbor.q, neighbor.r))) {
-          frontier.push({ from: seed, to: neighbor, direction })
+    for (const block of this.linkableBlocks) {
+      const key = getKey(block.q, block.r)
+      if (!block.links || !block.neighbors || preserved.has(key)) continue
+
+      block.neighbors.forEach((neighbor, i) => {
+        if (!neighbor || !neighbor.links) return
+
+        const opp = (i + 3) % 6
+        const alreadyLinked = block.links.includes(i)
+        const bothLinked = neighbor.links.length > 0 && block.links.length > 0
+        const neighborKey = getKey(neighbor.q, neighbor.r)
+
+        if (!alreadyLinked && bothLinked && !preserved.has(neighborKey)) {
+          if (Math.random() < probability) {
+            block.links.push(i)
+            neighbor.links.push(opp)
+          }
         }
       })
     }
+  }
 
-    let visitedCount = visited.size
+  addFarLinks(chance = 0.05, minDistance = 2) {
+    const getKey = (q, r) => `${q},${r}`
+    const blocks = this.linkableBlocks
 
-    while (frontier.length && visitedCount < targetCells) {
-      const index = Math.floor(Math.random() * frontier.length)
-      const { from, to, direction } = frontier.splice(index, 1)[0]
+    for (const block of blocks) {
+      for (const [i, neighbor] of block.neighbors.entries()) {
+        if (!neighbor || block.links.includes(i)) continue
 
-      const toKey = getKey(to.q, to.r)
-      if (visited.has(toKey)) continue
+        // Skip if they're already neighbors
+        const isAlreadyLinked = neighbor.links.includes((i + 3) % 6)
+        if (isAlreadyLinked) continue
 
-      // Link them
-      if (!from.links.includes(direction)) {
-        from.links.push(direction)
-      }
+        // Check distance
+        const dx = block.q - neighbor.q
+        const dy = block.r - neighbor.r
+        const dz = -block.q - block.r - (-neighbor.q - neighbor.r)
 
-      if (!to.links.includes((direction + 3) % 6)) {
-        to.links.push((direction + 3) % 6) // opposite direction on hex
-      }
+        const distance = Math.max(Math.abs(dx), Math.abs(dy), Math.abs(dz))
+        if (distance < minDistance) continue
 
-      visited.add(toKey)
-      visitedCount++
-
-      // Add unvisited neighbors of 'to' to frontier
-      to.neighbors.forEach((neighbor, direction) => {
-        if (neighbor && !visited.has(getKey(neighbor.q, neighbor.r))) {
-          frontier.push({ from: to, to: neighbor, direction })
+        // Both should be already in the maze
+        if (block.links.length && neighbor.links.length && Math.random() < chance) {
+          block.links.push(i)
+          neighbor.links.push((i + 3) % 6)
         }
-      })
+      }
     }
   }
 

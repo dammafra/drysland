@@ -13,7 +13,7 @@ import BlockMaterial from './block-material'
  */
 
 const linksMap = {
-  0: ['riverStart', 'riverEnd'],
+  0: ['riverStart'],
 
   '01': ['riverCornerSharp'],
   '02': ['riverCorner'],
@@ -36,7 +36,10 @@ const linksMap = {
 
 const validLinks = ['', ...Object.keys(linksMap)]
 
-const getName = key => (linksMap[key] || ['water']).at(0)
+const getName = key => {
+  const names = linksMap[key] || ['water']
+  return names[Math.floor(Math.random() * names.length)]
+}
 
 export default class Block {
   static colormapDefault = null
@@ -85,6 +88,8 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
+    this.rotate(Math.floor(Math.random() * 6) + 1, false)
+
     this.linked = false
 
     if (
@@ -98,7 +103,7 @@ export default class Block {
 
   normalizeLinks() {
     while (!validLinks.includes(this.linksKey)) {
-      this.rotate()
+      this.rotate(1, false)
     }
   }
 
@@ -186,23 +191,27 @@ export default class Block {
       )
   }
 
-  async rotate() {
+  async rotate(times = 1, animate = true) {
     this.soundPlayer.play('splash')
     this.rotationAnimation?.totalProgress(1)
 
-    this.links = this.links.map(edge => (edge + 1) % 6)
+    this.links = this.links.map(edge => (edge + times) % 6)
 
     if (!this.mesh) return
 
-    this.rotationAnimation = gsap
-      .timeline()
-      .to(this.mesh.rotation, {
-        y: this.mesh.rotation.y - Math.PI / 3,
-        duration: 0.5,
-        ease: 'back.inOut',
-      })
-      .to(this.mesh.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.25 }, '<')
-      .to(this.mesh.scale, { x: 1, y: 1, z: 1, duration: 0.25 })
+    if (animate) {
+      this.rotationAnimation = gsap
+        .timeline()
+        .to(this.mesh.rotation, {
+          y: this.mesh.rotation.y - (Math.PI / 3) * times,
+          duration: 0.5,
+          ease: 'back.inOut',
+        })
+        .to(this.mesh.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.25 }, '<')
+        .to(this.mesh.scale, { x: 1, y: 1, z: 1, duration: 0.25 })
+    } else {
+      this.mesh.rotation.y = this.mesh.rotation.y - (Math.PI / 3) * times
+    }
   }
 
   setAnimation() {
