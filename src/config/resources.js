@@ -29,11 +29,6 @@ export default [
   },
   // blocks models
   {
-    name: 'bridge',
-    type: 'gltfModel',
-    path: 'blocks/bridge.glb',
-  },
-  {
     name: 'buildingArchery',
     type: 'gltfModel',
     path: 'blocks/building-archery.glb',
@@ -112,11 +107,6 @@ export default [
     name: 'buildingWalls',
     type: 'gltfModel',
     path: 'blocks/building-walls.glb',
-  },
-  {
-    name: 'buildingWatermill',
-    type: 'gltfModel',
-    path: 'blocks/building-watermill.glb',
   },
   {
     name: 'buildingWizardTower',
@@ -247,6 +237,11 @@ export default [
     skip: true,
   },
   {
+    name: 'riverBridge',
+    type: 'gltfModel',
+    path: 'blocks/bridge.glb',
+  },
+  {
     name: 'riverCorner',
     type: 'gltfModel',
     path: 'blocks/river-corner.glb',
@@ -315,6 +310,11 @@ export default [
     name: 'riverStraight',
     type: 'gltfModel',
     path: 'blocks/river-straight.glb',
+  },
+  {
+    name: 'riverWatermill',
+    type: 'gltfModel',
+    path: 'blocks/building-watermill.glb',
   },
   {
     name: 'sand',

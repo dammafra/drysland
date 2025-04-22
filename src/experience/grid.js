@@ -11,17 +11,13 @@ export default class Grid {
 
   constructor(radius) {
     this.radius = radius
-    this.totalRadius = this.radius + 3
 
     this.setBlocks()
-    this.setLinkableBlocks()
     this.setBlocksNeighbors()
     this.generateMaze(this.radius)
     this.addExtraLinks(0)
     this.addFarLinks(1)
     this.blocks.forEach(b => b.init())
-
-    this.linkableBlocks = this.blocks.filter(b => !!b.links.length)
 
     this.checkLinks()
   }
@@ -30,24 +26,14 @@ export default class Grid {
     this.blocks = []
 
     // Create hexagonal grid around center
-    for (let q = -this.totalRadius; q <= this.totalRadius; q++) {
-      const r1 = Math.max(-this.totalRadius, -q - this.totalRadius)
-      const r2 = Math.min(this.totalRadius, -q + this.totalRadius)
+    for (let q = -this.radius; q <= this.radius; q++) {
+      const r1 = Math.max(-this.radius, -q - this.radius)
+      const r2 = Math.min(this.radius, -q + this.radius)
 
       for (let r = r1; r <= r2; r++) {
-        // Check if this position is within the inner radius
-        const isInnerGrid =
-          Math.abs(q) <= this.radius && Math.abs(r) <= this.radius && Math.abs(q + r) <= this.radius
-
-        const name = isInnerGrid ? null : 'water'
-
-        this.blocks.push(new Block({ grid: this, name, q, r }))
+        this.blocks.push(new Block({ grid: this, q, r }))
       }
     }
-  }
-
-  setLinkableBlocks() {
-    this.linkableBlocks = this.blocks.filter(b => !b.name)
   }
 
   setBlocksNeighbors() {
@@ -60,7 +46,7 @@ export default class Grid {
       { q: -1, r: 1 }, //edge 5: SE
     ]
 
-    this.linkableBlocks.forEach(block => {
+    this.blocks.forEach(block => {
       const neighbors = directions.map(dir =>
         this.blocks.find(b => b.q === block.q + dir.q && b.r === block.r + dir.r),
       )
@@ -72,7 +58,7 @@ export default class Grid {
   generateMaze(minLength = this.radius) {
     const getKey = (q, r) => `${q},${r}`
     const visited = new Set()
-    const blocks = this.linkableBlocks
+    const blocks = this.blocks
     const blacklist = new Set()
 
     // Start from a random cell
@@ -146,10 +132,10 @@ export default class Grid {
 
     // Find initial dead ends
     const isDeadEnd = block => block.links.length === 1
-    const initialDeadEnds = this.linkableBlocks.filter(isDeadEnd)
+    const initialDeadEnds = this.blocks.filter(isDeadEnd)
     const preserved = new Set(initialDeadEnds.slice(0, preserveAtLeast).map(b => getKey(b.q, b.r)))
 
-    for (const block of this.linkableBlocks) {
+    for (const block of this.blocks) {
       const key = getKey(block.q, block.r)
       if (!block.links || !block.neighbors || preserved.has(key)) continue
 
@@ -170,8 +156,7 @@ export default class Grid {
   }
 
   addFarLinks(chance = 0.05, minDistance = 2) {
-    const getKey = (q, r) => `${q},${r}`
-    const blocks = this.linkableBlocks
+    const blocks = this.blocks
 
     for (const block of blocks) {
       for (const [i, neighbor] of block.neighbors.entries()) {
@@ -199,9 +184,9 @@ export default class Grid {
   }
 
   checkLinks() {
-    this.linkableBlocks.forEach(block => (block.linked = false))
+    this.blocks.forEach(block => (block.linked = false))
 
-    const riverStarts = this.linkableBlocks.filter(block => block.name === 'riverStart')
+    const riverStarts = this.blocks.filter(block => block.name === 'riverStart')
 
     const checkNeighborLinks = (block, visited = new Set()) => {
       if (visited.has(block)) return

@@ -18,7 +18,7 @@ const linksMap = {
 
   '01': ['riverCornerSharp'],
   '02': ['riverCorner'],
-  '03': ['bridge', 'buildingWatermill', 'riverStraight'],
+  '03': ['riverBridge', 'riverWatermill', 'riverStraight'],
 
   '012': ['riverIntersectionA'],
   '034': ['riverIntersectionC'],
@@ -37,7 +37,7 @@ const linksMap = {
 
 const validLinks = ['', ...Object.keys(linksMap)]
 
-const getName = key => Random.oneOf(linksMap[key] || ['water'])
+const getName = key => Random.oneOf(linksMap[key] || ['water', 'grassForest'])
 
 export default class Block {
   static colormapDefault = null
@@ -55,8 +55,12 @@ export default class Block {
 
   set linked(value) {
     this.#linked = value
-    this.material.uniforms.uLinked.value = this.name === 'water' || this.#linked
-    this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
+    this.material.uniforms.uLinked.value =
+      this.name === 'water' || !this.name.includes('river') || this.#linked
+    this.mesh.material.map =
+      this.name === 'water' || !this.name.includes('river') || this.#linked
+        ? Block.colormapDefault
+        : Block.colormapDesert
   }
 
   constructor({ grid, name, q, r }) {
@@ -86,15 +90,11 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
-    this.rotate(Random.integer({ max: 5 }))
+    this.rotate(Random.integer({ max: 5 }), false)
 
     this.linked = false
 
-    if (
-      this.name === 'bridge' ||
-      this.name === 'buildingWatermill' ||
-      this.name.includes('river')
-    ) {
+    if (this.name.includes('river')) {
       this.pointer.add(this)
     }
   }
@@ -129,7 +129,10 @@ export default class Block {
 
     // Convert axial coordinates to cartesian
     this.mesh.position.x = this.q + this.r * 0.5
+    this.mesh.position.y = -2
     this.mesh.position.z = this.r * 0.866 // sqrt(3)/2
+
+    this.mesh.scale.setScalar(0)
 
     this.mesh.receiveShadow = true
     this.mesh.castShadow = true
@@ -142,9 +145,6 @@ export default class Block {
   transitionIn() {
     const center = new Vector3(0, 0, 0)
     const delay = this.mesh.position.distanceTo(center) * 0.05
-
-    this.mesh.position.y = -2
-    this.mesh.scale.setScalar(0.001)
 
     return gsap
       .timeline({ delay })
@@ -172,9 +172,9 @@ export default class Block {
     return gsap
       .timeline({ delay })
       .to(this.mesh.scale, {
-        x: 0.001,
-        y: 0.001,
-        z: 0.001,
+        x: 0,
+        y: 0,
+        z: 0,
         duration: 0.5,
         ease: 'back.inOut',
       })
