@@ -27,7 +27,8 @@ export default class Grid {
     this.setBlocks()
     this.setNeighbors()
 
-    this.generateMaze()
+    this.generateLinks()
+    this.addExtraLinks()
 
     this.blocks.forEach(b => b.setName())
     // TODO: grid tweaks...
@@ -74,7 +75,7 @@ export default class Grid {
    * Growing Tree algorithm
    * https://weblog.jamisbuck.org/2011/1/27/maze-generation-growing-tree-algorithm
    */
-  generateMaze() {
+  generateLinks() {
     const visited = new Set()
     const frontier = []
     const targetVisits = Math.floor(this.blocks.length * gridConfig.coverageRatio)
@@ -101,7 +102,7 @@ export default class Grid {
     visited.add(start.key)
     frontier.push(start)
 
-    debug.groupCollapsed('Grid.generateMaze')
+    debug.groupCollapsed('Grid.generateLinks')
     debug.log(this.toString())
     debug.log('start from', start.key)
 
@@ -135,6 +136,30 @@ export default class Grid {
     }
 
     debug.groupEnd()
+  }
+
+  addExtraLinks() {
+    //  Find all dead ends (blocks with only one link) and preserve a number of them
+    const deadEnds = this.blocks.filter(b => b.links.length === 1)
+    const preserved = new Set(deadEnds.slice(0, gridConfig.minDeadEnds).map(b => b.key))
+
+    // Try to create extra links
+    for (const block of this.blocks) {
+      if (preserved.has(block.key)) continue
+
+      block.neighbors.forEach((neighbor, dir) => {
+        if (!neighbor || block.links.includes(dir)) return
+        if (neighbor.links.includes(opposite(dir))) return
+
+        const bothLinked = block.links.length > 0 && neighbor.links.length > 0
+        const neighborPreserved = preserved.has(neighbor.key)
+
+        if (bothLinked && !neighborPreserved && Random.boolean(gridConfig.extraLinksChance)) {
+          block.links.push(dir)
+          neighbor.links.push(opposite(dir))
+        }
+      })
+    }
   }
 
   updateLinks() {
