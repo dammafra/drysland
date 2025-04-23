@@ -7,6 +7,7 @@ const opposite = edge => (edge + 3) % 6
 
 export default class Grid {
   static instance = null
+  static radius = gridConfig.minRadius
 
   static {
     document.getElementById('shuffle').onclick = Grid.shuffle
@@ -14,16 +15,14 @@ export default class Grid {
 
   static shuffle() {
     Grid.instance?.dispose()
-    Grid.instance = new Grid(
-      Random.integer({ min: gridConfig.minRadius, max: gridConfig.maxRadius }),
-    )
+    Grid.instance = new Grid()
   }
 
-  constructor(radius) {
+  constructor() {
     this.experience = Experience.instance
     this.camera = this.experience.camera
 
-    this.radius = radius
+    this.radius = Grid.radius++
 
     this.setBlocks()
     this.setNeighbors()
@@ -34,7 +33,7 @@ export default class Grid {
     // TODO: grid tweaks...
     this.blocks.forEach(b => b.init())
 
-    this.checkLinks()
+    this.updateLinks()
 
     this.camera.intro()
   }
@@ -138,7 +137,7 @@ export default class Grid {
     debug.groupEnd()
   }
 
-  checkLinks() {
+  updateLinks() {
     this.blocks.forEach(block => (block.linked = false))
 
     const riverStarts = this.blocks.filter(block => block.name === 'riverStart')
@@ -162,6 +161,15 @@ export default class Grid {
       startBlock.linked = true
       checkNeighborLinks(startBlock)
     })
+  }
+
+  async checkSolution() {
+    // TODO improve
+    if (this.blocks.every(b => b.linksKey === b.targetKey)) {
+      await this.camera.intro()
+      alert('Level Completed 🎉')
+      Grid.shuffle()
+    }
   }
 
   update() {

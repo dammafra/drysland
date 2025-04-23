@@ -72,7 +72,7 @@ export default class Camera {
   }
 
   intro() {
-    this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
+    return this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
   }
 
   canView(position) {

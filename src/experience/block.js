@@ -24,6 +24,10 @@ export default class Block {
     return this.links.sort((a, b) => a - b).join('')
   }
 
+  get targetKey() {
+    return this.target.sort((a, b) => a - b).join('')
+  }
+
   get linked() {
     return this.#linked
   }
@@ -73,6 +77,8 @@ export default class Block {
   }
 
   normalizeLinks() {
+    this.target = this.links
+
     if (!this.linksKey) return
     while (!blocksConfig.links.includes(this.linksKey)) this.rotate(1, false)
   }
@@ -215,7 +221,8 @@ export default class Block {
 
   onClick() {
     this.rotate()
-    this.grid.checkLinks()
+    this.grid.updateLinks()
+    this.grid.checkSolution()
 
     // TODO improve
     if (
