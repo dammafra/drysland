@@ -58,7 +58,7 @@ export default class Block {
     this.r = r
 
     this.links = []
-    this.neighbors = []
+    this.target = []
   }
 
   init() {
@@ -88,8 +88,10 @@ export default class Block {
 
     this.normalizeLinks()
 
-    const others = Random.boolean() ? blocksConfig.grass : blocksConfig.water
-    this.name = Random.oneOf(blocksConfig.linksMap[this.linksKey] || others)
+    const riverBlocks = blocksConfig.linksMap[this.linksKey]
+    if (!riverBlocks) return
+
+    this.name = Random.oneOf(riverBlocks)
   }
 
   setColormaps() {
@@ -227,7 +229,7 @@ export default class Block {
     // TODO improve
     if (
       this.camera.controls.polarAngle > 0.5 ||
-      this.neighbors.some(n => n && !this.camera.canView(n.mesh.position))
+      this.neighbors.some(n => n && n.mesh && !this.camera.canView(n.mesh.position))
     ) {
       this.camera.controls.fitToBox(this.mesh, true)
       this.camera.controls.rotatePolarTo(0, true)
@@ -238,7 +240,8 @@ export default class Block {
   update() {
     this.material.update()
 
-    if (this.#linked) {
+    // TODO improve
+    if (!this.name.includes('river') || this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }
   }

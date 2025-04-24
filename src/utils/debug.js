@@ -15,6 +15,7 @@ export default class Debug {
       }
     }
 
+    debugConsole.ping = () => debugConsole.log('pong')
     window.debug = debugConsole
   }
 

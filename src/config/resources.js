@@ -408,7 +408,6 @@ const resourcesConfig = [
     name: 'waterRocks',
     type: 'gltfModel',
     path: 'blocks/water-rocks.glb',
-    skip: true,
   },
 ]
 
