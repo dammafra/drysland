@@ -91,5 +91,7 @@ export default class Experience {
       this.renderer.instance.setClearColor(event.value ? 0x333333 : 'black', event.value ? 1 : 0)
       this.environment.shadowHelper.visible = event.value
     })
+
+    folder.addButton({ title: 'shuffle' }).on('click', () => Grid.shuffle())
   }
 }

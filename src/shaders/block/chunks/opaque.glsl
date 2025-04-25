@@ -5,15 +5,17 @@ float alpha = diffuseColor.a;
 
 // water
 if (isWater(vUv)) {
-  color = uLinked ? color : vec3(0.3, 0.15, 0.05);
+  if (uLinked) {
+    float waveAltitude = smoothstep(0.05, 0.1, vWorldPosition.y);
+    vec3 oceanColor = color - 0.2;
+    color = mix(oceanColor, color, waveAltitude);
 
-  float distanceToCenter = distance(vWorldPosition.xz, vec2(0.0));
-  float fadeStartAt = uRadius + 10.0;
-  float fadeEndAt = fadeStartAt + 5.0;
-  alpha = smoothstep(fadeEndAt, fadeStartAt, distanceToCenter);
-
-  if (isTopFace(vNormal)) {
-    // TODO: perlin
+    float distanceToCenter = distance(vWorldPosition.xz, vec2(0.0));
+    float fadeStartAt = uRadius + 15.0;
+    float fadeEndAt = fadeStartAt + 5.0;
+    alpha = smoothstep(fadeEndAt, fadeStartAt, distanceToCenter);
+  } else {
+    color = vec3(0.3, 0.15, 0.05);
   }
 }
 

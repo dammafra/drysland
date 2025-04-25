@@ -1,9 +1,11 @@
 import Experience from '@experience'
 import gsap from 'gsap'
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three'
+import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
 import BlockMaterial from './block-material'
 
 export default class WaterBlock {
+  static noise = new SimplexNoise()
   static maxCount = 5000
   static material = null
 
@@ -25,6 +27,7 @@ export default class WaterBlock {
 
   constructor({ grid, q, r }) {
     this.experience = Experience.instance
+    this.time = this.experience.time
     this.resources = this.experience.resources
     this.scene = this.experience.scene
 
@@ -112,6 +115,27 @@ export default class WaterBlock {
       )
   }
 
+  idle() {
+    const position = new Vector3()
+    const quaternion = new Quaternion()
+    const scale = new Vector3()
+    this.meshMatrix.decompose(position, quaternion, scale)
+
+    const frequency = 0.025
+    const speed = 0.05
+    const elevation = 0.15
+
+    const x = position.x * frequency
+    const z = position.z * frequency
+    const t = this.time.elapsed * speed
+
+    position.y = WaterBlock.noise.noise(x + t, z + t * 0.5) * elevation
+
+    this.meshMatrix.compose(position, quaternion, scale)
+    WaterBlock.mesh.setMatrixAt(this.meshIndex, this.meshMatrix)
+    WaterBlock.mesh.instanceMatrix.needsUpdate = true
+  }
+
   transitionOut() {
     const position = new Vector3()
     const quaternion = new Quaternion()
@@ -150,6 +174,7 @@ export default class WaterBlock {
 
   update() {
     WaterBlock.material?.update()
+    this.idle()
   }
 
   async dispose() {

@@ -1,13 +1,10 @@
 #include <common>
 
 uniform float uTime;
-// uniform sampler2D uPerlinTexture;
 uniform float uRadius;
 uniform bool uHovered;
 uniform bool uLinked;
 
-varying vec3 vObjectNormal;
-varying vec3 vPosition;
 varying vec3 vWorldPosition;
 
 bool isWater(vec2 uv) {
