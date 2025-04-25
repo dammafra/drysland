@@ -69,6 +69,10 @@ export default class Experience {
     Grid.instance?.update()
   }
 
+  dispose() {
+    Grid.instance?.dispose()
+  }
+
   setDebug() {
     const folder = Debug.gui.root.addFolder({ title: '🌐 experience' })
 

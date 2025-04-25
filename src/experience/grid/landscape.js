@@ -1,9 +1,11 @@
 import Random from '@utils/random'
+import Wind from './wind'
 
 // TODO improve
 export default class Landscape {
   constructor(grid) {
     this.grid = grid
+    this.wind = new Wind()
     this.riverBlocks = this.grid.blocks.filter(b => b.name !== 'riverStart' && b.links.length)
 
     this.grid.deadEnds.forEach((b, i) => {
@@ -14,7 +16,9 @@ export default class Landscape {
       b.neighbors.forEach(n =>
         this.grid.addNeighbors(
           n,
-          i % 2 ? 'buildingHouse' : () => (Random.boolean(0.5) ? 'stoneMountain' : 'stoneHill'),
+          i % 2
+            ? 'buildingHouse'
+            : () => Random.oneOf('stoneMountain', 'stoneHill', 'buildingCabin'),
         ),
       )
     })
@@ -60,5 +64,14 @@ export default class Landscape {
     })
 
     return closestBlock
+  }
+
+  update() {
+    this.wind.update()
+  }
+
+  dispose() {
+    this.wind.dispose()
+    delete this.wind
   }
 }

@@ -5,7 +5,7 @@ import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
 import BlockMaterial from './block-material'
 
 export default class WaterBlock {
-  static noise = new SimplexNoise()
+  static simplex = new SimplexNoise()
   static maxCount = 5000
   static material = null
 
@@ -129,7 +129,7 @@ export default class WaterBlock {
     const z = position.z * frequency
     const t = this.time.elapsed * speed
 
-    position.y = WaterBlock.noise.noise(x + t, z + t * 0.5) * elevation
+    position.y = WaterBlock.simplex.noise(x + t, z + t * 0.5) * elevation
 
     this.meshMatrix.compose(position, quaternion, scale)
     WaterBlock.mesh.setMatrixAt(this.meshIndex, this.meshMatrix)
@@ -174,7 +174,7 @@ export default class WaterBlock {
 
   update() {
     WaterBlock.material?.update()
-    this.idle()
+    if (WaterBlock.mesh) this.idle()
   }
 
   async dispose() {

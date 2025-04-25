@@ -245,11 +245,16 @@ export default class Grid {
 
   update() {
     this.blocks.forEach(block => block.update())
+    this.landscape?.update()
   }
 
   dispose() {
     this.blocks.forEach(block => block.dispose())
-    this.blocksMap = new Map()
+    this.landscape?.dispose()
+
+    delete this.landscape
+    delete this.ocean
+    delete Grid.instance
   }
 
   toString() {
