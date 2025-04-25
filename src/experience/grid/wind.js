@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import Random from '@utils/random'
 import { CanvasTexture, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise'
 
@@ -34,7 +35,9 @@ export default class Wind {
   setLines() {
     this.lines = []
 
-    for (let i = 0; i < 2; i++) {
+    const count = Random.integer({ min: 1, max: 3 })
+
+    for (let i = 0; i < count; i++) {
       const line = new Mesh(
         new PlaneGeometry(1, 1, 20, 1),
         new MeshBasicMaterial({

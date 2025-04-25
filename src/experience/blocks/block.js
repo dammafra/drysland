@@ -196,7 +196,7 @@ export default class Block {
         .timeline()
         .to(this.mesh.rotation, {
           y: this.mesh.rotation.y - (Math.PI / 3) * times,
-          duration: 0.5,
+          duration: 0.25,
           ease: 'back.inOut',
         })
         .to(this.mesh.scale, { x: 0.8, y: 0.8, z: 0.8, duration: 0.25 }, '<')

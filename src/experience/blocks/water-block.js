@@ -115,21 +115,25 @@ export default class WaterBlock {
       )
   }
 
-  idle() {
-    const position = new Vector3()
-    const quaternion = new Quaternion()
-    const scale = new Vector3()
-    this.meshMatrix.decompose(position, quaternion, scale)
-
+  static getElevation(position, elapsed) {
     const frequency = 0.025
     const speed = 0.05
     const elevation = 0.15
 
     const x = position.x * frequency
     const z = position.z * frequency
-    const t = this.time.elapsed * speed
+    const t = elapsed * speed
 
-    position.y = WaterBlock.simplex.noise(x + t, z + t * 0.5) * elevation
+    return WaterBlock.simplex.noise(x + t, z + t * 0.5) * elevation
+  }
+
+  idle() {
+    const position = new Vector3()
+    const quaternion = new Quaternion()
+    const scale = new Vector3()
+    this.meshMatrix.decompose(position, quaternion, scale)
+
+    position.y = WaterBlock.getElevation(position, this.time.elapsed)
 
     this.meshMatrix.compose(position, quaternion, scale)
     WaterBlock.mesh.setMatrixAt(this.meshIndex, this.meshMatrix)
