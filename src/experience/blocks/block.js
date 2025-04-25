@@ -105,9 +105,10 @@ export default class Block {
   }
 
   async setMesh() {
-    this.mesh = this.resources.items[this.name].scene.children.at(0).clone()
     this.material = new BlockMaterial()
+    this.material.uniforms.uRadius.value = this.grid.radius
 
+    this.mesh = this.resources.items[this.name].scene.children.at(0).clone()
     this.mesh.material = this.mesh.material.clone()
     this.mesh.material.onBeforeCompile = this.material.inject
     this.mesh.children.forEach(m => (m.material = this.mesh.material))

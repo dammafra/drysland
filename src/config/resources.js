@@ -10,6 +10,7 @@ const resourcesConfig = [
     name: 'perlin',
     type: 'texture',
     path: 'textures/perlin.png',
+    skip: true,
   },
   // blocks textures
   {
@@ -352,6 +353,7 @@ const resourcesConfig = [
     name: 'stoneRocks',
     type: 'gltfModel',
     path: 'blocks/stone-rocks.glb',
+    skip: true,
   },
   {
     name: 'unitHouse',

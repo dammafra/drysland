@@ -1,9 +1,9 @@
 import Block from '@blocks/block'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
-import Landscape from '@grid/landscape'
-import Ocean from '@grid/ocean'
 import Random from '@utils/random'
+import Landscape from './landscape'
+import Ocean from './ocean'
 
 const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
@@ -230,7 +230,7 @@ export default class Grid {
         startBlock.linked = true
         updateNeighborLinks(startBlock)
 
-        this.landscape.updateLinks()
+        this.landscape?.updateLinks()
       })
   }
 

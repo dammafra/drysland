@@ -4,7 +4,7 @@ import blockBeginNormalVertexChunk from '@shaders/block/chunks/beginnormal-verte
 import blockCommonChunk from '@shaders/block/chunks/common.glsl'
 import blockOpaqueChunk from '@shaders/block/chunks/opaque.glsl'
 import blockWorkdposVertexChunk from '@shaders/block/chunks/worldpos_vertex.glsl'
-import { RepeatWrapping, Uniform } from 'three'
+import { Uniform } from 'three'
 
 export default class BlockMaterial {
   constructor() {
@@ -12,12 +12,12 @@ export default class BlockMaterial {
     this.resources = this.experience.resources
     this.time = this.experience.time
 
-    this.resources.items.perlin.wrapT = RepeatWrapping
-    this.resources.items.perlin.wrapS = RepeatWrapping
+    // this.resources.items.perlin.wrapT = RepeatWrapping
+    // this.resources.items.perlin.wrapS = RepeatWrapping
 
     this.uniforms = {
       uTime: new Uniform(0),
-      uPerlinTexture: new Uniform(this.resources.items.perlin),
+      // uPerlinTexture: new Uniform(this.resources.items.perlin),
       uRadius: new Uniform(0),
       uHovered: new Uniform(false),
       uLinked: new Uniform(false),
@@ -30,7 +30,7 @@ export default class BlockMaterial {
 
     // uniforms
     shader.uniforms.uTime = this.uniforms.uTime
-    shader.uniforms.uPerlinTexture = this.uniforms.uPerlinTexture
+    // shader.uniforms.uPerlinTexture = this.uniforms.uPerlinTexture
     shader.uniforms.uRadius = this.uniforms.uRadius
     shader.uniforms.uHovered = this.uniforms.uHovered
     shader.uniforms.uLinked = this.uniforms.uLinked
