@@ -2,6 +2,7 @@
 
 uniform float uTime;
 uniform sampler2D uPerlinTexture;
+uniform float uRadius;
 uniform bool uHovered;
 uniform bool uLinked;
 

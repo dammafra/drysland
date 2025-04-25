@@ -6,19 +6,15 @@ import Landscape from './landscape'
 import Ocean from './ocean'
 
 const opposite = edge => (edge + 3) % 6
-
-const DIRECTIONS = [
-  { q: -1, r: 0 }, //edge 0: E
-  { q: 0, r: -1 }, //edge 1: NE
-  { q: 1, r: -1 }, //edge 2: NW
-  { q: 1, r: 0 }, //edge 3: W
-  { q: 0, r: 1 }, //edge 4: SW
-  { q: -1, r: 1 }, //edge 5: SE
-]
+const key = (q, r) => `${q},${r}`
 
 export default class Grid {
   static instance = null
   static radius = gridConfig.minRadius
+
+  get blocks() {
+    return Array.from(this.blocksMap.values())
+  }
 
   get deadEnds() {
     return this.blocks.filter(b => b.links.length === 1)
@@ -26,9 +22,7 @@ export default class Grid {
 
   get perimeter() {
     return this.blocks.filter(block =>
-      DIRECTIONS.some(
-        dir => !this.blocks.find(b => b.q === block.q + dir.q && b.r === block.r + dir.r),
-      ),
+      gridConfig.directions.some(dir => !this.getBlock(block.q + dir.q, block.r + dir.r)),
     )
   }
 
@@ -46,14 +40,14 @@ export default class Grid {
     this.camera = this.experience.camera
 
     this.radius = Grid.radius++
+    this.blocksMap = new Map()
 
-    this.setBlocks()
-
+    this.generateGrid()
     this.generateLinks()
     this.addExtraLinks()
 
     this.blocks.forEach(b => b.setName())
-    this.blocks = this.blocks.filter(b => !!b.name)
+    this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
 
     new Landscape(this)
     new Ocean(this)
@@ -63,25 +57,22 @@ export default class Grid {
     this.camera.intro()
   }
 
-  getBlock(q, r, create = false) {
-    let block = this.blocks.find(b => b.q === q && b.r === r)
-
-    if (create && !block) {
-      block = new Block({ grid: this, q, r })
-      this.blocks.push(block)
-    }
-
+  setBlock(q, r) {
+    const block = new Block({ grid: this, q, r })
+    this.blocksMap.set(block.key, block)
     return block
   }
 
-  setBlocks() {
-    this.blocks = []
+  getBlock(q, r) {
+    return this.blocksMap.get(key(q, r))
+  }
 
+  generateGrid() {
     for (let q = -this.radius; q <= this.radius; q++) {
       const r1 = Math.max(-this.radius, -q - this.radius)
       const r2 = Math.min(this.radius, -q + this.radius)
 
-      for (let r = r1; r <= r2; r++) this.getBlock(q, r, true)
+      for (let r = r1; r <= r2; r++) this.setBlock(q, r)
     }
 
     this.blocks.forEach(b => this.addNeighbors(b))
@@ -182,9 +173,12 @@ export default class Grid {
   }
 
   addNeighbors(block, nameExpression) {
-    // prettier-ignore
-    block.neighbors = DIRECTIONS
-      .map(dir =>this.getBlock(block.q + dir.q, block.r + dir.r, !!nameExpression))
+    block.neighbors = gridConfig.directions
+      .map(dir => {
+        const q = block.q + dir.q
+        const r = block.r + dir.r
+        return nameExpression ? this.getBlock(q, r) || this.setBlock(q, r) : this.getBlock(q, r)
+      })
       .map(n => this.renameBlock(n, nameExpression))
   }
 
@@ -244,7 +238,7 @@ export default class Grid {
 
   dispose() {
     this.blocks.forEach(block => block.dispose())
-    this.blocks = []
+    this.blocksMap = new Map()
   }
 
   toString() {
@@ -257,7 +251,7 @@ export default class Grid {
       row += '\t'.repeat(indent)
 
       for (let q = -this.radius; q <= this.radius; q++) {
-        const block = this.blocks.find(b => b.q === q && b.r === r)
+        const block = this.getBlock(q, r)
         if (block) {
           row += block + '\t'
         }
