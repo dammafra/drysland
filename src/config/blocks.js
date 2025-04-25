@@ -3,6 +3,7 @@ const rivers = [
   'riverCorner',
   'riverCornerSharp',
   'riverCrossing',
+  'riverEnd',
   'riverIntersectionA',
   'riverIntersectionB',
   'riverIntersectionC',
@@ -16,7 +17,8 @@ const rivers = [
   'riverWatermill',
 ]
 
-const water = ['water']
+const water = ['water', 'waterRocks']
+const sand = ['sand', 'sandRocks']
 const grass = ['grass', 'grassForest']
 
 /**
@@ -30,7 +32,7 @@ const grass = ['grass', 'grassForest']
 
 const linksMap = {
   // one edge
-  0: ['riverStart'],
+  0: ['riverStart', 'riverEnd'],
 
   // two edges
   '01': ['riverCornerSharp'],
@@ -59,8 +61,9 @@ const links = Object.keys(linksMap)
 
 const blocksConfig = {
   rivers,
-  grass,
   water,
+  sand,
+  grass,
 
   links,
   linksMap,

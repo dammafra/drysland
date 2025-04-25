@@ -1,9 +1,9 @@
+import Block from '@blocks/block'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
+import Landscape from '@grid/landscape'
+import Ocean from '@grid/ocean'
 import Random from '@utils/random'
-import Block from './block'
-import Landscape from './landscape'
-import Ocean from './ocean'
 
 const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
@@ -17,7 +17,7 @@ export default class Grid {
   }
 
   get deadEnds() {
-    return this.blocks.filter(b => b.links.length === 1)
+    return this.blocks.filter(b => b.links && b.links.length === 1)
   }
 
   get perimeter() {
@@ -198,11 +198,7 @@ export default class Grid {
   }
 
   updateLinks() {
-    this.blocks.forEach(block => (block.linked = false))
-
-    const riverStarts = this.blocks.filter(block => block.name === 'riverStart')
-
-    const checkNeighborLinks = (block, visited = new Set()) => {
+    const updateNeighborLinks = (block, visited = new Set()) => {
       if (visited.has(block)) return
       visited.add(block)
 
@@ -212,15 +208,20 @@ export default class Grid {
 
         if (neighbor.links.includes(opposite(edge))) {
           neighbor.linked = true
-          checkNeighborLinks(neighbor, visited)
+          updateNeighborLinks(neighbor, visited)
         }
       })
     }
 
-    riverStarts.forEach(startBlock => {
-      startBlock.linked = true
-      checkNeighborLinks(startBlock)
-    })
+    this.blocks
+      .filter(b => {
+        b.linked = false
+        return b.name === 'riverStart'
+      })
+      .forEach(startBlock => {
+        startBlock.linked = true
+        updateNeighborLinks(startBlock)
+      })
   }
 
   async checkSolution() {

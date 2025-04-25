@@ -34,13 +34,9 @@ export default class Block {
 
   // TODO improve
   set linked(value) {
-    this.#linked = value
-    this.material.uniforms.uLinked.value =
-      this.name === 'water' || !this.name.includes('river') || this.#linked
-    this.mesh.material.map =
-      this.name === 'water' || !this.name.includes('river') || this.#linked
-        ? Block.colormapDefault
-        : Block.colormapDesert
+    this.#linked = blocksConfig.water.includes(this.name) || value
+    this.material.uniforms.uLinked.value = this.#linked
+    this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
   constructor({ grid, name, q, r }) {
@@ -69,7 +65,7 @@ export default class Block {
     this.rotate(Random.integer({ max: 5 }), false)
     this.linked = false
 
-    if (this.name.includes('river')) {
+    if (blocksConfig.rivers.includes(this.name)) {
       this.pointer.add(this)
     }
 
@@ -154,7 +150,7 @@ export default class Block {
       .to(
         this.mesh.position,
         {
-          y: 0,
+          y: blocksConfig.sand.includes(this.name) ? -0.1 : 0,
           duration: 0.5,
           ease: 'back.inOut',
         },
@@ -241,7 +237,7 @@ export default class Block {
     this.material.update()
 
     // TODO improve
-    if (!this.name.includes('river') || this.#linked) {
+    if (!blocksConfig.rivers.includes(this.name) || this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }
   }

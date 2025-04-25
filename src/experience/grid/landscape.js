@@ -4,9 +4,7 @@ import Random from '@utils/random'
 export default class Landscape {
   constructor(grid) {
     grid.deadEnds.forEach((b, i) => {
-      if (i % 2) {
-        b.name = 'riverEnd'
-      }
+      b.name = i % 2 ? 'riverEnd' : 'riverStart'
 
       grid.addNeighbors(b, i % 2 ? 'buildingVillage' : 'stoneHill')
 

@@ -1,6 +1,6 @@
+import WaterBlock from '@blocks/water-block'
 import gridConfig from '@config/grid'
 import Random from '@utils/random'
-import WaterBlock from './water-block'
 
 // TODO improve
 export default class Ocean {

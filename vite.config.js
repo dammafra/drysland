@@ -22,8 +22,10 @@ export default {
   ],
   resolve: {
     alias: {
+      '@blocks': path.resolve(__dirname, 'src/experience/blocks'),
       '@config': path.resolve(__dirname, 'src/config'),
       '@experience': path.resolve(__dirname, 'src/experience/experience.js'),
+      '@grid': path.resolve(__dirname, 'src/experience/grid'),
       '@shaders': path.resolve(__dirname, 'src/shaders'),
       '@utils': path.resolve(__dirname, 'src/utils'),
     },
