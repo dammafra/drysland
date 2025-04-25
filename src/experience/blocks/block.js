@@ -65,7 +65,7 @@ export default class Block {
     this.rotate(Random.integer({ max: 5 }), false)
     this.linked = false
 
-    if (blocksConfig.rivers.includes(this.name)) {
+    if (this.links.length) {
       this.pointer.add(this)
     }
 
@@ -237,7 +237,7 @@ export default class Block {
     this.material.update()
 
     // TODO improve
-    if (!blocksConfig.rivers.includes(this.name) || this.#linked) {
+    if (!this.links.length || this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }
   }

@@ -54,10 +54,6 @@ body {
   @apply !cursor-grabbing;
 }
 
-#shuffle {
-  @apply hex absolute z-10 bottom-4 left-4 bg-white shadow-2xl text-2xl size-14 hover:bg-sky-200 cursor-pointer;
-}
-
 /* loading */
 .loading {
   @apply fixed top-0 w-full h-full z-20;

@@ -32,6 +32,8 @@ export default class WaterBlock {
     this.name = 'water'
     this.q = q
     this.r = r
+
+    this.links = []
   }
 
   init() {

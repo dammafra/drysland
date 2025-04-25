@@ -12,22 +12,30 @@ export default class Grid {
   static instance = null
   static radius = gridConfig.minRadius
 
+  #deadEnds = null
+  #perimeter = { totalCount: 0, blocks: [] }
+
   get blocks() {
     return Array.from(this.blocksMap.values())
   }
 
   get deadEnds() {
-    return this.blocks.filter(b => b.links && b.links.length === 1)
+    if (!this.#deadEnds) {
+      this.#deadEnds = this.blocks.filter(b => b.links.length === 1)
+    }
+
+    return this.#deadEnds
   }
 
   get perimeter() {
-    return this.blocks.filter(block =>
-      gridConfig.directions.some(dir => !this.getBlock(block.q + dir.q, block.r + dir.r)),
-    )
-  }
+    if (this.#perimeter.totalCount !== this.blocksMap.size) {
+      this.#perimeter.totalCount = this.blocksMap.size
+      this.#perimeter.blocks = this.blocks.filter(block =>
+        gridConfig.directions.some(dir => !this.getBlock(block.q + dir.q, block.r + dir.r)),
+      )
+    }
 
-  static {
-    document.getElementById('shuffle').onclick = Grid.shuffle
+    return this.#perimeter.blocks
   }
 
   static shuffle() {
@@ -49,8 +57,8 @@ export default class Grid {
     this.blocks.forEach(b => b.setName())
     this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
 
-    new Landscape(this)
-    new Ocean(this)
+    this.landscape = new Landscape(this)
+    this.ocean = new Ocean(this)
 
     this.blocks.forEach(b => b.init())
     this.updateLinks()
@@ -85,7 +93,7 @@ export default class Grid {
   generateLinks() {
     const visited = new Set()
     const frontier = []
-    const targetVisits = Math.floor(this.blocks.length * gridConfig.coverageRatio)
+    const targetVisits = Math.floor(this.blocksMap.size * gridConfig.coverageRatio)
 
     // Selection strategy:
     // 1. DFS style: pick last           --> frontier.at(-1)
@@ -221,6 +229,8 @@ export default class Grid {
       .forEach(startBlock => {
         startBlock.linked = true
         updateNeighborLinks(startBlock)
+
+        this.landscape.updateLinks()
       })
   }
 
