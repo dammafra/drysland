@@ -72,15 +72,16 @@ export default class Experience {
   setDebug() {
     const folder = Debug.gui.root.addFolder({ title: '🌐 experience' })
 
-    const helpersSize = (gridConfig.maxRadius + gridConfig.padding) * 2 + 4
+    const helpersSize = gridConfig.maxRadius * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)
     this.axesHelper.visible = false
     this.axesHelper.position.x = -helpersSize * 0.5
-    this.axesHelper.position.y = 0.01
+    this.axesHelper.position.y = 1.01
     this.axesHelper.position.z = -helpersSize * 0.5
 
     this.gridHelper = new GridHelper(helpersSize, helpersSize * 2, 'gray', 'gray')
     this.gridHelper.visible = false
+    this.gridHelper.position.y = 1
 
     this.scene.add(this.axesHelper, this.gridHelper)
 

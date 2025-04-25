@@ -26,7 +26,7 @@ export default class Environment {
     this.directionalLight.shadow.camera.near = 0
     this.directionalLight.shadow.camera.far = gridConfig.maxRadius * 3
 
-    const offset = (gridConfig.maxRadius + gridConfig.padding) * 2
+    const offset = gridConfig.maxRadius * 2
     this.directionalLight.shadow.camera.right = offset
     this.directionalLight.shadow.camera.left = -offset
     this.directionalLight.shadow.camera.top = offset / 1.5
