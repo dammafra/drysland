@@ -49,6 +49,7 @@ export default class Loading {
   stop() {
     return gsap
       .timeline()
+      .to('.loading', { opacity: 0 })
       .to('.spinner', {
         scale: 0,
         duration: 0.5,
