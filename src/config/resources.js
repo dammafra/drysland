@@ -1,9 +1,34 @@
 const resourcesConfig = [
   // sounds
   {
-    name: 'splash',
+    name: 'link',
     type: 'sound',
-    path: 'sounds/splash.mp3',
+    path: 'sounds/link.mp3',
+  },
+  {
+    name: 'loop',
+    type: 'sound',
+    path: 'sounds/loop.mp3',
+  },
+  {
+    name: 'multiPop',
+    type: 'sound',
+    path: 'sounds/multi-pop.mp3',
+  },
+  {
+    name: 'success',
+    type: 'sound',
+    path: 'sounds/success.mp3',
+  },
+  {
+    name: 'swing',
+    type: 'sound',
+    path: 'sounds/swing.mp3',
+  },
+  {
+    name: 'waves',
+    type: 'sound',
+    path: 'sounds/waves.mp3',
   },
   // textures
   {

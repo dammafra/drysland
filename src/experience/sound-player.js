@@ -6,7 +6,8 @@ export class SoundPlayer {
     this.resources = this.experience.resources
 
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    this.muted = true
+    this.muted = false
+    this.backgrounds = new Map()
   }
 
   setMuted(value) {
@@ -34,5 +35,27 @@ export class SoundPlayer {
     }
 
     playSound()
+  }
+
+  async playBackground(sound, volume) {
+    if (this.backgrounds.has(sound)) return
+
+    const buffer = this.resources.items[sound]
+
+    const source = this.audioContext.createBufferSource()
+    source.buffer = buffer
+    source.loop = true
+
+    const gainNode = this.audioContext.createGain()
+    gainNode.gain.value = volume
+    source.connect(gainNode).connect(this.audioContext.destination)
+    source.start()
+
+    this.backgrounds.set(sound, source)
+  }
+
+  async stopBackground(sound) {
+    this.backgrounds.get(sound)?.stop()
+    this.backgrounds.delete(sound)
   }
 }

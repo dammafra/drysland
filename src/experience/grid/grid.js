@@ -46,6 +46,7 @@ export default class Grid {
   constructor() {
     this.experience = Experience.instance
     this.camera = this.experience.camera
+    this.soundPlayer = this.experience.soundPlayer
 
     this.radius = Grid.radius++
     this.blocksMap = new Map()
@@ -57,12 +58,18 @@ export default class Grid {
     this.blocks.forEach(b => b.setName())
     this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
 
+    this.init()
+  }
+
+  async init() {
     this.landscape = new Landscape(this)
     this.ocean = new Ocean(this)
 
-    this.blocks.forEach(b => b.init())
-    this.updateLinks()
     this.camera.intro()
+    this.soundPlayer.play('multiPop')
+
+    await Promise.all(this.blocks.map(b => b.init()))
+    this.landscape.init()
   }
 
   setBlock(q, r) {
@@ -169,6 +176,7 @@ export default class Grid {
         if (bothLinked && !neighborPreserved && Random.boolean(gridConfig.extraLinksChance)) {
           block.links.push(dir)
           neighbor.links.push(opposite(dir))
+          this.#deadEnds = null // a dead end could be lost, so recompute on next getter access
         }
       })
     }
@@ -227,16 +235,19 @@ export default class Grid {
         return b.name === 'riverStart'
       })
       .forEach(startBlock => {
-        startBlock.linked = true
         updateNeighborLinks(startBlock)
-
         this.landscape?.updateLinks()
       })
+
+    const linkedCount = this.blocks.filter(b => b.linked).length
+    if (linkedCount > this.lastLinkedCount) this.soundPlayer.play('link')
+    this.lastLinkedCount = linkedCount
   }
 
   async checkSolution() {
     // TODO improve
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
+      this.soundPlayer.play('success')
       await this.camera.intro()
       alert('Level Completed 🎉')
       Grid.shuffle()

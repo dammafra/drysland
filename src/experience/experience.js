@@ -58,6 +58,9 @@ export default class Experience {
     this.loading.ready()
 
     this.soundPlayer = new SoundPlayer()
+    this.soundPlayer.playBackground('loop', 0.5)
+    this.soundPlayer.playBackground('waves', 0.1)
+
     Grid.shuffle()
   }
 

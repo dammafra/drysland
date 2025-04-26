@@ -1,5 +1,6 @@
 import Experience from '@experience'
 import Random from '@utils/random'
+import gsap from 'gsap'
 import { CanvasTexture, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise'
 
@@ -13,6 +14,11 @@ export default class Wind {
 
     this.setTexture()
     this.setLines()
+    this.init()
+  }
+
+  init() {
+    this.lines.forEach(line => gsap.to(line.material, { opacity: 1, duration: 2 }))
   }
 
   setTexture() {
@@ -45,6 +51,7 @@ export default class Wind {
           side: DoubleSide,
           transparent: true,
           depthWrite: false,
+          opacity: 0,
         }),
       )
       line.pos = line.geometry.getAttribute('position')

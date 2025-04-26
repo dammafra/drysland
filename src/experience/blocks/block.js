@@ -34,7 +34,7 @@ export default class Block {
 
   // TODO improve
   set linked(value) {
-    this.#linked = blocksConfig.water.includes(this.name) || value
+    this.#linked = blocksConfig.water.includes(this.name) || this.name === 'riverStart' || value
     this.material.uniforms.uLinked.value = this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
@@ -69,7 +69,7 @@ export default class Block {
       this.pointer.add(this)
     }
 
-    this.transitionIn()
+    return this.transitionIn()
   }
 
   normalizeLinks() {
@@ -184,7 +184,6 @@ export default class Block {
   }
 
   async rotate(times = 1, animate = true) {
-    this.soundPlayer.play('splash')
     this.rotationAnimation?.totalProgress(1)
 
     this.links = this.links.map(edge => (edge + times) % 6)
@@ -222,6 +221,7 @@ export default class Block {
     this.rotate()
     this.grid.updateLinks()
     this.grid.checkSolution()
+    this.soundPlayer.play('swing')
 
     // TODO improve
     if (
