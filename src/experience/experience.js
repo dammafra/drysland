@@ -63,7 +63,7 @@ export default class Experience {
     this.soundPlayer.playBackground('loop', 0.5)
     this.soundPlayer.playBackground('waves', 0.1)
 
-    Grid.shuffle()
+    Grid.next()
   }
 
   update = () => {
@@ -103,7 +103,5 @@ export default class Experience {
       this.scene.backgroundIntensity = event.value ? 0 : 1
       this.environment.shadowHelper.visible = event.value
     })
-
-    folder.addButton({ title: 'shuffle' }).on('click', () => Grid.shuffle())
   }
 }

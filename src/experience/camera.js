@@ -53,9 +53,6 @@ export default class Camera {
     this.controls.maxDistance = 25
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.001
-
-    this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
-    this.controls.touches.two = CameraControls.ACTION.TOUCH_DOLLY_ROTATE
   }
 
   resize() {

@@ -11,6 +11,7 @@ const key = (q, r) => `${q},${r}`
 export default class Grid {
   static instance = null
   static radius = gridConfig.minRadius
+  static nextButton = null
 
   #deadEnds = null
   #perimeter = { totalCount: 0, blocks: [] }
@@ -38,7 +39,13 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  static shuffle() {
+  static {
+    Grid.nextButton = document.getElementById('next')
+    Grid.nextButton.onclick = Grid.next
+  }
+
+  static next() {
+    Grid.nextButton.classList.add('hidden')
     Grid.instance?.dispose()
     Grid.instance = new Grid()
   }
@@ -47,6 +54,7 @@ export default class Grid {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
+    this.pointer = this.experience.pointer
 
     this.radius = Grid.radius++
     this.blocksMap = new Map()
@@ -248,9 +256,15 @@ export default class Grid {
     // TODO improve
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
-      await this.camera.intro()
-      alert('Level Completed 🎉')
-      Grid.shuffle()
+      this.camera.intro()
+
+      Grid.nextButton.classList.remove('hidden')
+      this.blocks.forEach(b => {
+        if (b.onLeave) {
+          b.onLeave()
+          this.pointer.remove(b)
+        }
+      })
     }
   }
 
