@@ -19,21 +19,14 @@ export default class Debug {
     window.debug = debugConsole
   }
 
-  static async init(experience) {
+  static async init() {
     if (!Debug.enabled) return
 
     const { default: GUI } = await import('./gui.js')
-    this.gui = new GUI()
+    const gui = new GUI()
+    gui.storeDefaults()
+    gui.loadState()
 
-    // Global access
-    window.experience = experience
-
-    experience.setDebug()
-    for (const prop of Object.keys(experience)) {
-      experience[prop].setDebug && experience[prop].setDebug()
-    }
-
-    this.gui.storeDefaults()
-    this.gui.loadState()
+    return gui
   }
 }

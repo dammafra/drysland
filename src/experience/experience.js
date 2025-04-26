@@ -1,10 +1,8 @@
 import gridConfig from '@config/grid'
 import Grid from '@grid/grid'
-import Debug from '@utils/debug'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
-import Loading from './loading'
 import Pointer from './pointer'
 import Renderer from './renderer'
 import Resources from './resources'
@@ -16,11 +14,11 @@ export default class Experience {
   /** @type {Experience} */
   static instance
 
-  static init(canvasSelector) {
-    return new Experience(document.querySelector(canvasSelector))
+  static async init(canvasSelector, loading, debug) {
+    return new Experience(document.querySelector(canvasSelector), loading, await debug)
   }
 
-  constructor(canvas) {
+  constructor(canvas, loading, debug) {
     // Singleton
     if (Experience.instance) {
       return Experience.instance
@@ -30,18 +28,21 @@ export default class Experience {
 
     // Options
     this.canvas = canvas
+    this.loading = loading
+    this.debug = debug
 
     // Setup
     this.time = new Time()
     this.sizes = new Sizes()
     this.resources = new Resources()
-    this.loading = new Loading()
-
     this.scene = new Scene()
     this.camera = new Camera()
     this.renderer = new Renderer()
-    this.environment = new Environment()
+
+    this.setDebug()
+
     this.pointer = new Pointer()
+    this.environment = new Environment()
 
     // Events
     this.sizes.addEventListener('resize', this.resize)
@@ -79,7 +80,9 @@ export default class Experience {
   }
 
   setDebug() {
-    const folder = Debug.gui.root.addFolder({ title: '🌐 experience' })
+    if (!this.debug) return
+
+    const folder = this.debug.root.addFolder({ title: '🌐 experience' })
 
     const helpersSize = gridConfig.maxRadius * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)

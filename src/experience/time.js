@@ -1,5 +1,4 @@
 import Experience from '@experience'
-import Debug from '@utils/debug'
 import { EventDispatcher } from 'three'
 import { Timer } from 'three/addons/misc/Timer.js'
 
@@ -13,6 +12,7 @@ export default class Time extends EventDispatcher {
 
     // Setup
     this.experience = Experience.instance
+    this.debug = this.experience.debug
     this.timer = new Timer()
 
     // Events
@@ -21,7 +21,7 @@ export default class Time extends EventDispatcher {
   }
 
   tick = () => {
-    Debug.gui?.stats.begin()
+    this.debug?.stats.begin()
     this.timer.update()
 
     this.delta = this.timer.getDelta()
@@ -29,7 +29,7 @@ export default class Time extends EventDispatcher {
 
     this.dispatchEvent({ type: 'tick' })
 
-    Debug.gui?.stats.end()
+    this.debug?.stats.end()
     window.requestAnimationFrame(this.tick)
   }
 }

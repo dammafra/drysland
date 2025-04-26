@@ -1,9 +1,20 @@
 import gsap from 'gsap'
-import Experience from './experience'
+
 export default class Loading {
+  /** @type {Loading} */
+  static instance
+
+  static init() {
+    return new Loading()
+  }
+
   constructor() {
-    this.experience = Experience.instance
-    this.time = this.experience.time
+    // Singleton
+    if (Loading.instance) {
+      return Loading.instance
+    }
+
+    Loading.instance = this
 
     this.element = document.querySelector('.loading')
     this.start()

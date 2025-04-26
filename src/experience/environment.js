@@ -1,5 +1,4 @@
 import gridConfig from '@config/grid'
-import Debug from '@utils/debug'
 import {
   CameraHelper,
   DirectionalLight,
@@ -13,11 +12,13 @@ export default class Environment {
   constructor() {
     // Setup
     this.experience = Experience.instance
+    this.debug = this.experience.debug
 
     this.scene = this.experience.scene
     this.resources = this.experience.resources
 
     this.setLight()
+    this.setDebug()
   }
 
   setLight() {
@@ -59,11 +60,13 @@ export default class Environment {
   }
 
   setDebug() {
+    if (!this.debug) return
+
     this.shadowHelper = new CameraHelper(this.directionalLight.shadow.camera)
     this.shadowHelper.visible = false
     this.scene.add(this.shadowHelper)
 
-    const folder = Debug.gui.root.addFolder({ title: '💡 environment' })
+    const folder = this.debug.root.addFolder({ title: '💡 environment' })
     folder.addBinding(this.directionalLight, 'position', {
       label: 'light position',
     })
