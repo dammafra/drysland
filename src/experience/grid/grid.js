@@ -10,7 +10,7 @@ const key = (q, r) => `${q},${r}`
 
 export default class Grid {
   static instance = null
-  static radius = gridConfig.minRadius
+  static level = 0
   static nextButton = null
 
   #deadEnds = null
@@ -55,9 +55,13 @@ export default class Grid {
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
     this.pointer = this.experience.pointer
-
-    this.radius = Grid.radius++
     this.blocksMap = new Map()
+
+    const level = gridConfig.levels.at(Grid.level++) || gridConfig.levels.at(-1)
+    console.log(Grid.level, level)
+    this.radius = level.radius
+    this.coverage = level.coverage
+    this.extraLinks = level.extraLinks
 
     this.generateGrid()
     this.generateLinks()
@@ -108,7 +112,7 @@ export default class Grid {
   generateLinks() {
     const visited = new Set()
     const frontier = []
-    const targetVisits = Math.floor(this.blocksMap.size * gridConfig.coverageRatio)
+    const targetVisits = Math.floor(this.blocksMap.size * this.coverage)
 
     // Selection strategy:
     // 1. DFS style: pick last           --> frontier.at(-1)
@@ -181,7 +185,7 @@ export default class Grid {
         const bothLinked = block.links.length > 0 && neighbor.links.length > 0
         const neighborPreserved = preserved.has(neighbor.key)
 
-        if (bothLinked && !neighborPreserved && Random.boolean(gridConfig.extraLinksChance)) {
+        if (bothLinked && !neighborPreserved && Random.boolean(this.extraLinks)) {
           block.links.push(dir)
           neighbor.links.push(opposite(dir))
           this.#deadEnds = null // a dead end could be lost, so recompute on next getter access
