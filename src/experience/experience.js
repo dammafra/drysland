@@ -56,6 +56,7 @@ export default class Experience {
 
   ready = () => {
     this.loading.ready()
+    this.environment.ready()
 
     this.soundPlayer = new SoundPlayer()
     this.soundPlayer.playBackground('loop', 0.5)

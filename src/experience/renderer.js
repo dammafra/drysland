@@ -1,5 +1,5 @@
 import Experience from '@experience'
-import { NeutralToneMapping, PCFSoftShadowMap, WebGLRenderer } from 'three'
+import { PCFSoftShadowMap, WebGLRenderer } from 'three'
 
 export default class Renderer {
   constructor() {
@@ -20,9 +20,6 @@ export default class Renderer {
 
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-    this.instance.toneMapping = NeutralToneMapping
-
-    this.instance.setClearColor('black', 0)
 
     this.resize()
   }

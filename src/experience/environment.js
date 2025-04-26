@@ -1,6 +1,12 @@
 import gridConfig from '@config/grid'
 import Debug from '@utils/debug'
-import { AmbientLight, CameraHelper, DirectionalLight } from 'three'
+import {
+  CameraHelper,
+  DirectionalLight,
+  EquirectangularReflectionMapping,
+  FogExp2,
+  SRGBColorSpace,
+} from 'three'
 import Experience from './experience'
 
 export default class Environment {
@@ -15,9 +21,7 @@ export default class Environment {
   }
 
   setLight() {
-    this.ambientLight = new AmbientLight('white', 1)
-
-    this.directionalLight = new DirectionalLight('white', 3)
+    this.directionalLight = new DirectionalLight('#ffddb1', 3)
     this.directionalLight.position.set(3, 10, 10)
 
     this.directionalLight.castShadow = true
@@ -35,7 +39,23 @@ export default class Environment {
     this.directionalLight.shadow.bias = -0.003
     this.directionalLight.shadow.normalBias = 0.01
 
-    this.scene.add(this.ambientLight, this.directionalLight)
+    this.scene.add(this.directionalLight)
+  }
+
+  setEnvironmentMap() {
+    const environmentMap = this.resources.items.envMap
+    environmentMap.mapping = EquirectangularReflectionMapping
+    environmentMap.colorSpace = SRGBColorSpace
+
+    this.scene.environment = environmentMap
+    this.scene.background = environmentMap
+
+    this.scene.backgroundBlurriness = 0.1
+    this.scene.fog = new FogExp2('#8FBAC2', 0.025)
+  }
+
+  ready() {
+    this.setEnvironmentMap()
   }
 
   setDebug() {

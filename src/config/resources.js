@@ -1,4 +1,9 @@
 const resourcesConfig = [
+  {
+    name: 'envMap',
+    type: 'texture',
+    path: 'textures/env-map.png',
+  },
   // sounds
   {
     name: 'link',

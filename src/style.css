@@ -11,7 +11,6 @@
 }
 
 @theme {
-  --color-sky-300-fallback: #74d4ff;
   --color-primary: #0084d1;
 }
 
@@ -35,8 +34,7 @@ body {
 }
 
 body {
-  @apply w-screen h-[100svh] bg-radial from-sky-300-fallback to-primary;
-  background: -webkit-radial-gradient(var(--color-sky-300-fallback), var(--color-primary));
+  @apply w-screen h-[100svh];
 }
 
 .webgl {
