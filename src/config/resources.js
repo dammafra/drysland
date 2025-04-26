@@ -4,6 +4,16 @@ const resourcesConfig = [
     type: 'texture',
     path: 'textures/env-map.png',
   },
+  {
+    name: 'lensflare0',
+    type: 'texture',
+    path: 'textures/lensflare0.png',
+  },
+  {
+    name: 'lensflare1',
+    type: 'texture',
+    path: 'textures/lensflare1.png',
+  },
   // sounds
   {
     name: 'link',

@@ -100,7 +100,7 @@ export default class Experience {
     folder.addBinding(this.axesHelper, 'visible', { label: 'helpers' }).on('change', event => {
       this.axesHelper.visible = event.value
       this.gridHelper.visible = event.value
-      this.renderer.instance.setClearColor(event.value ? 0x333333 : 'black', event.value ? 1 : 0)
+      this.scene.backgroundIntensity = event.value ? 0 : 1
       this.environment.shadowHelper.visible = event.value
     })
 

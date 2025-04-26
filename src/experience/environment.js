@@ -4,8 +4,10 @@ import {
   DirectionalLight,
   EquirectangularReflectionMapping,
   FogExp2,
+  PointLight,
   SRGBColorSpace,
 } from 'three'
+import { Lensflare, LensflareElement } from 'three/examples/jsm/Addons.js'
 import Experience from './experience'
 
 export default class Environment {
@@ -23,7 +25,7 @@ export default class Environment {
 
   setLight() {
     this.directionalLight = new DirectionalLight('#ffddb1', 3)
-    this.directionalLight.position.set(3, 10, 10)
+    this.directionalLight.position.set(10, 6, 0)
 
     this.directionalLight.castShadow = true
     this.directionalLight.shadow.mapSize.setScalar(2048)
@@ -41,6 +43,10 @@ export default class Environment {
     this.directionalLight.shadow.normalBias = 0.01
 
     this.scene.add(this.directionalLight)
+
+    this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
+    this.pointLight.position.set(800, 150, 10)
+    this.scene.add(this.pointLight)
   }
 
   setEnvironmentMap() {
@@ -55,8 +61,22 @@ export default class Environment {
     this.scene.fog = new FogExp2('#8FBAC2', 0.025)
   }
 
+  setLensflare() {
+    const sunTexture = this.resources.items.lensflare0
+    const flareTexture = this.resources.items.lensflare1
+
+    this.lensflare = new Lensflare()
+    this.lensflare.addElement(new LensflareElement(sunTexture, 200, 0, this.pointLight.color))
+    this.lensflare.addElement(new LensflareElement(flareTexture, 60, 0.6))
+    this.lensflare.addElement(new LensflareElement(flareTexture, 70, 0.7))
+    this.lensflare.addElement(new LensflareElement(flareTexture, 120, 0.9))
+    this.lensflare.addElement(new LensflareElement(flareTexture, 70, 1))
+    this.pointLight.add(this.lensflare)
+  }
+
   ready() {
     this.setEnvironmentMap()
+    this.setLensflare()
   }
 
   setDebug() {
@@ -69,6 +89,10 @@ export default class Environment {
     const folder = this.debug.root.addFolder({ title: '💡 environment' })
     folder.addBinding(this.directionalLight, 'position', {
       label: 'light position',
+    })
+
+    folder.addBinding(this.pointLight, 'position', {
+      label: 'sun position',
     })
 
     folder.addBinding(this.directionalLight.shadow.camera, 'near', {
