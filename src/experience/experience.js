@@ -73,6 +73,7 @@ export default class Experience {
   }
 
   dispose() {
+    this.pointer.dispose()
     Grid.instance?.dispose()
   }
 
