@@ -165,12 +165,11 @@ export default class Experience {
   }
 
   load = () => {
+    if (this.loaded) return
+    this.loaded = true
+
     const state = localStorage.getItem('state')
     if (state) return JSON.parse(state)
-  }
-
-  reset = () => {
-    localStorage.removeItem('state')
   }
 
   setDebug() {

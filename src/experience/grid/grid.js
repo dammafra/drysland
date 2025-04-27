@@ -269,7 +269,6 @@ export default class Grid {
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
       this.experience.setExplorationMode()
-      this.experience.reset()
 
       UI.nextButton.show()
 
