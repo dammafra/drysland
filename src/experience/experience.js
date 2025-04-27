@@ -1,6 +1,8 @@
 import gridConfig from '@config/grid'
 import Grid from '@grid/grid'
+import Menu from '@ui/menu'
 import { UI } from '@ui/ui'
+import Touch from '@utils/touch'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -57,28 +59,56 @@ export default class Experience {
   }
 
   ready = () => {
-    this.loading.ready()
+    this.loading.stop()
     this.environment.ready()
 
+    this.menu = new Menu()
     this.soundPlayer = new SoundPlayer()
 
-    this.level = 0
-    this.soundPlayer.playBackground('loop', 0.5)
-    this.soundPlayer.playBackground('waves', 0.1)
-    this.nextLevel()
-
+    UI.startButton.onClick(this.start.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
+
+    UI.hintText.set(
+      Touch.support ? 'Touch any river tile to start' : 'Click any river tile to start',
+    )
+  }
+
+  start() {
+    this.menu.close()
+
+    this.level = 0
+
+    UI.soundsButton.show()
+    UI.loopButton.show()
+    UI.wavesButton.show()
+
+    UI.soundsButton.onClick(this.toggleSounds.bind(this))
+    UI.loopButton.onClick(this.toggleLoop.bind(this))
+    UI.wavesButton.onClick(this.toggleWaves.bind(this))
+
+    this.toggleLoop()
+    this.toggleWaves()
+
+    this.nextLevel()
   }
 
   nextLevel() {
-    UI.nextButton.hide()
     this.grid?.dispose()
-    this.grid = new Grid(this.level++)
+    this.grid = new Grid()
+
+    UI.nextButton.hide()
+    UI.levelText.set(`Level ${this.level + 1}`)
+    UI.levelText.show()
+    UI.hintText.show()
+
+    this.level++
   }
 
   setGameMode(block) {
     UI.backButton.show()
+    UI.hintText.hide()
+
     this.camera.setGameControls(block)
     this.environment.directionalLight.castShadow = false
   }
@@ -87,6 +117,25 @@ export default class Experience {
     UI.backButton.hide()
     this.camera.setExplorationControls()
     this.environment.directionalLight.castShadow = true
+  }
+
+  toggleSounds() {
+    this.soundPlayer.setMuted(!this.soundPlayer.muted)
+    UI.soundsButton.toggle()
+  }
+
+  toggleLoop() {
+    this.soundPlayer.backgrounds.has('loop')
+      ? this.soundPlayer.stopBackground('loop')
+      : this.soundPlayer.playBackground('loop', 0.5)
+    UI.loopButton.toggle()
+  }
+
+  toggleWaves() {
+    this.soundPlayer.backgrounds.has('waves')
+      ? this.soundPlayer.stopBackground('waves')
+      : this.soundPlayer.playBackground('waves', 0.1)
+    UI.wavesButton.toggle()
   }
 
   update = () => {

@@ -16,7 +16,7 @@
 }
 
 @utility hex {
-  @apply aspect-square;
+  @apply !aspect-square min-w-12 min-h-12;
   clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
 }
 
@@ -46,10 +46,6 @@ body {
   @apply !cursor-pointer;
 }
 
-button.hex {
-  @apply bg-white shadow-2xl size-16 hover:bg-sky-200 cursor-pointer font-hex text-primary;
-}
-
 /* loading */
 .loading {
   @apply fixed top-0 w-full h-full z-20;
@@ -61,6 +57,36 @@ button.hex {
 }
 
 .loading .title {
-  @apply font-hex text-5xl text-white absolute z-10 scale-0 uppercase;
+  @apply font-hex text-5xl text-white absolute  scale-0 uppercase z-10;
+  text-shadow: 1px 1px 2px black;
+}
+
+/* menu */
+.menu {
+  @apply fixed top-0 w-full h-full z-20;
+  @apply flex flex-col justify-center items-center;
+}
+
+.menu .title {
+  @apply font-hex text-7xl text-primary scale-0 uppercase;
+  text-shadow: 1px 1px 2px white;
+}
+
+.menu button {
+  @apply text-3xl scale-0;
+}
+
+/* UI */
+button.hex {
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 cursor-pointer font-hex text-primary;
+}
+
+#level {
+  @apply bg-gradient-to-b to-80% from-white to-transparent py-2 absolute top-0 font-hex w-full text-center text-5xl text-primary;
+  text-shadow: 1px 1px 2px white;
+}
+
+#hint {
+  @apply absolute bottom-40 font-hex w-full text-center text-3xl text-white animate-pulse;
   text-shadow: 1px 1px 2px black;
 }

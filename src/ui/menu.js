@@ -1,38 +1,39 @@
 import gsap from 'gsap'
 
-export default class Loading {
-  /** @type {Loading} */
+export default class Menu {
+  /** @type {Menu} */
   static instance
 
   static init() {
-    return new Loading()
+    return new Menu()
   }
 
   constructor() {
     // Singleton
-    if (Loading.instance) {
-      return Loading.instance
+    if (Menu.instance) {
+      return Menu.instance
     }
 
-    Loading.instance = this
+    Menu.instance = this
 
-    this.element = document.querySelector('.loading')
+    this.element = document.querySelector('.menu')
     this.title = this.element.querySelector('.title')
-    this.spinner = this.element.querySelector('.spinner')
+    this.button = this.element.querySelector('button')
 
-    this.start()
+    this.open()
   }
 
-  start() {
+  open() {
     return gsap
       .timeline()
-      .to(this.spinner, {
+      .to(this.element, { opacity: 1 })
+      .to(this.title, {
         scale: 1,
         duration: 0.5,
         ease: 'back.out',
       })
       .to(
-        this.title,
+        this.button,
         {
           scale: 1,
           duration: 0.5,
@@ -40,16 +41,9 @@ export default class Loading {
         },
         '<+0.2',
       )
-      .to(this.spinner, {
-        rotation: '+=30',
-        duration: 0.5,
-        ease: 'back.inOut',
-        repeat: -1,
-        repeatRefresh: true,
-      })
   }
 
-  async stop() {
+  async close() {
     await gsap.to(this.element, {
       scale: 0,
       duration: 0.5,

@@ -1,17 +1,25 @@
-export default class Button {
+import gsap from 'gsap'
+import Element from './element'
+
+export default class Button extends Element {
   constructor(id) {
-    this.element = document.getElementById(id)
+    super(id)
   }
 
   show() {
-    this.element.classList.remove('hidden')
-  }
-
-  hide() {
-    this.element.classList.add('hidden')
+    gsap.set(this.element, { rotation: 0 })
+    super.show()
   }
 
   onClick(callback) {
-    this.element.onclick = callback
+    this.element.onclick = async () => {
+      await gsap.to(this.element, { rotation: 60, duration: 0.25, ease: 'back.inOut' })
+      callback()
+    }
+  }
+
+  toggle() {
+    gsap.to(this.element, { rotation: 0, duration: 0.25, ease: 'back.inOut' })
+    this.element.classList.toggle('!text-red-700')
   }
 }

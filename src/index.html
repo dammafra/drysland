@@ -14,20 +14,40 @@
     <link rel="shortcut icon" href="favicon/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
     <link rel="manifest" href="favicon/site.webmanifest" />
+
+    <script src="https://kit.fontawesome.com/7fdff1040a.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <main>
       <div class="loading">
-        <div class="title">Drysland</div>
+        <div class="title">Loading</div>
         <div class="spinner"></div>
+      </div>
+
+      <div class="menu">
+        <div class="title">Drysland</div>
+        <button id="start" class="hex">Start</button>
       </div>
 
       <canvas class="webgl"></canvas>
 
-      <div class="w-full h-fit z-10 absolute bottom-4 px-1 flex justify-center">
-        <button id="back" class="hex text-2xl mr-auto hidden">Back</button>
-        <button id="next" class="hex text-2xl hidden">Next</button>
-      </div>
+      <h1 id="level" class="hidden">Level 1</h1>
+      <p id="hint" class="hidden">Touch any river tile to start</p>
+
+      <button id="back" class="hex text-2xl hidden absolute bottom-4 left-4">Back</button>
+      <button id="next" class="hex text-2xl hidden absolute bottom-4 left-1/2 -translate-x-1/2">
+        Next
+      </button>
+
+      <button id="sounds" class="hex absolute bottom-14 right-10">
+        <i class="fa-solid fa-volume-low"></i>
+      </button>
+      <button id="loop" class="hex absolute bottom-4 right-16 !text-red-700">
+        <i class="fa-solid fa-music"></i>
+      </button>
+      <button id="waves" class="hex absolute bottom-4 right-4 !text-red-700">
+        <i class="fa-solid fa-water"></i>
+      </button>
     </main>
 
     <script type="module" src="./script.js"></script>
