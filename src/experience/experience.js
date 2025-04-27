@@ -97,7 +97,6 @@ export default class Experience {
     this.grid?.dispose()
     this.grid = new Grid(this.level, blocks)
 
-    UI.nextButton.hide()
     UI.levelText.set(`Level ${this.level}`)
     UI.levelText.show()
 

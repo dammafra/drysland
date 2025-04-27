@@ -71,8 +71,12 @@ export default class Grid {
       this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
     }
 
+    UI.nextButton.hide()
+
     this.init()
     this.updateLinks()
+    this.checkSolution()
+
     this.setTutorial()
   }
 
@@ -247,6 +251,7 @@ export default class Grid {
     this.blocks
       .filter(b => {
         b.linked = false
+        b.invalid = false
         return b.name === 'riverStart'
       })
       .forEach(startBlock => {
@@ -265,8 +270,15 @@ export default class Grid {
       UI.hintText.show()
     }
 
+    if (!this.riverBlocks.every(b => b.linked)) return
+
     // TODO improve
-    if (this.blocks.every(b => b.linksKey === b.targetKey)) {
+    if (this.riverBlocks.every(b => b.linksKey === b.targetKey)) {
+      this.riverBlocks.forEach(b => {
+        b.onLeave()
+        this.pointer.remove(b)
+      })
+
       this.soundPlayer.play('success')
       this.experience.setExplorationMode()
 
@@ -275,12 +287,15 @@ export default class Grid {
       if (this.level === 1) {
         UI.hintText.set('Great job! Now sail to the next Drysland!')
       }
+    } else {
+      this.riverBlocks.forEach(block => {
+        const invalid = block.links.some(edge => {
+          const neighbor = block.neighbors?.at(edge)
+          if (!neighbor) return true // no neighbor where there should be one
+          return !neighbor.links.includes(opposite(edge)) // neighbor does not link back
+        })
 
-      this.blocks.forEach(b => {
-        if (b.onLeave) {
-          b.onLeave()
-          this.pointer.remove(b)
-        }
+        block.invalid = invalid
       })
     }
   }

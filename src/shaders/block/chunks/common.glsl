@@ -5,6 +5,7 @@ uniform float uRadius;
 uniform bool uHovered;
 uniform bool uLinked;
 uniform bool uTutorial;
+uniform bool uInvalid;
 
 varying vec3 vWorldPosition;
 

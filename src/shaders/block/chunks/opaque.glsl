@@ -22,4 +22,8 @@ if (isWater(vUv)) {
 // hover
 color *= uHovered || uTutorial ? 1.5 : 1.0;
 
+if (uInvalid) {
+  color = mix(color, vec3(1.0, 0.0, 0.0), 0.8);
+}
+
 gl_FragColor = vec4(color, alpha);

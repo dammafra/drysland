@@ -41,6 +41,10 @@ export default class Block {
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
+  set invalid(value) {
+    this.material.uniforms.uInvalid.value = value
+  }
+
   constructor({ grid, name, q, r, links, target, rotation }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera

@@ -17,6 +17,7 @@ export default class BlockMaterial {
       uHovered: new Uniform(false),
       uLinked: new Uniform(false),
       uTutorial: new Uniform(false),
+      uInvalid: new Uniform(false),
     }
   }
 
@@ -30,6 +31,7 @@ export default class BlockMaterial {
     shader.uniforms.uHovered = this.uniforms.uHovered
     shader.uniforms.uLinked = this.uniforms.uLinked
     shader.uniforms.uTutorial = this.uniforms.uTutorial
+    shader.uniforms.uInvalid = this.uniforms.uInvalid
 
     // common
     shader.vertexShader = shader.vertexShader.replace('#include <common>', blockCommonChunk)
