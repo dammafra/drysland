@@ -1,4 +1,5 @@
 import Random from '@utils/random'
+import Seagull from './seagull'
 import Ship from './ship'
 import Wind from './wind'
 
@@ -40,6 +41,7 @@ export default class Landscape {
   init() {
     this.wind = new Wind()
     this.ship = new Ship(this.grid.radius)
+    this.seagulls = Array.from({ length: Random.integer({ min: 1, max: 3 }) }, () => new Seagull())
   }
 
   updateLinks() {
@@ -75,6 +77,7 @@ export default class Landscape {
   update() {
     this.wind?.update()
     this.ship?.update()
+    this.seagulls?.forEach(s => s.update())
   }
 
   dispose() {
@@ -83,5 +86,8 @@ export default class Landscape {
 
     this.ship?.dispose()
     delete this.ship
+
+    this.seagulls?.forEach(s => s.dispose())
+    delete this.seagulls
   }
 }

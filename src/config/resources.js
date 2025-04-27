@@ -52,6 +52,22 @@ const resourcesConfig = [
     path: 'textures/perlin.png',
     skip: true,
   },
+  // models
+  {
+    name: 'seagull',
+    type: 'gltfModel',
+    path: 'models/seagull.glb',
+  },
+  {
+    name: 'boat',
+    type: 'gltfModel',
+    path: 'models/boat.glb',
+  },
+  {
+    name: 'ship',
+    type: 'gltfModel',
+    path: 'models/ship.glb',
+  },
   // blocks textures
   {
     name: 'colormap',
@@ -399,41 +415,49 @@ const resourcesConfig = [
     name: 'unitHouse',
     type: 'gltfModel',
     path: 'blocks/unit-house.glb',
+    skip: true,
   },
   {
     name: 'unitMill',
     type: 'gltfModel',
     path: 'blocks/unit-mill.glb',
+    skip: true,
   },
   {
     name: 'unitMansion',
     type: 'gltfModel',
     path: 'blocks/unit-mansion.glb',
+    skip: true,
   },
   {
     name: 'unitShip',
     type: 'gltfModel',
     path: 'blocks/unit-ship.glb',
+    skip: true,
   },
   {
     name: 'unitShipLarge',
     type: 'gltfModel',
     path: 'blocks/unit-ship-large.glb',
+    skip: true,
   },
   {
     name: 'unitTower',
     type: 'gltfModel',
     path: 'blocks/unit-tower.glb',
+    skip: true,
   },
   {
     name: 'unitTree',
     type: 'gltfModel',
     path: 'blocks/unit-tree.glb',
+    skip: true,
   },
   {
     name: 'unitWallTower',
     type: 'gltfModel',
     path: 'blocks/unit-wall-tower.glb',
+    skip: true,
   },
   {
     name: 'water',

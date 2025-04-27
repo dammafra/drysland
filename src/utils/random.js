@@ -3,13 +3,13 @@ export default class Random {
     return Math.random() < chance
   }
 
-  static integer({ min, max }) {
+  static integer({ min, max } = {}) {
     min = min || 0
     max = max || 10
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
-  static float({ min, max, precision }) {
+  static float({ min, max, precision } = {}) {
     min = min || 0
     max = max || 10
     precision = precision || 2

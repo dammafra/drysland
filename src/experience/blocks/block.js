@@ -1,5 +1,6 @@
 import blocksConfig from '@config/blocks'
 import Experience from '@experience'
+import { dispose } from '@utils/dispose'
 import Random from '@utils/random'
 import gsap from 'gsap'
 import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
@@ -248,8 +249,7 @@ export default class Block {
 
     await this.transitionOut()
 
-    this.mesh.geometry.dispose()
-    this.mesh.material.dispose()
+    dispose(this.mesh)
     this.scene.remove(this.mesh)
   }
 

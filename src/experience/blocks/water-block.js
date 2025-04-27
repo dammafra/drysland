@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import { dispose } from '@utils/dispose'
 import gsap from 'gsap'
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
@@ -194,9 +195,7 @@ export default class WaterBlock {
     WaterBlock.toDisposeCount--
 
     if (!WaterBlock.toDisposeCount) {
-      WaterBlock.toDisposeMesh.geometry.dispose()
-      WaterBlock.toDisposeMesh.material.dispose()
-      WaterBlock.toDisposeMesh.dispose()
+      dispose(WaterBlock.toDisposeMesh)
       this.scene.remove(WaterBlock.toDisposeMesh)
       WaterBlock.toDisposeMesh = null
     }

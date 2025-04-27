@@ -58,7 +58,6 @@ export default class Grid {
     this.blocksMap = new Map()
 
     const level = gridConfig.levels.at(Grid.level++) || gridConfig.levels.at(-1)
-    console.log(Grid.level, level)
     this.radius = level.radius
     this.coverage = level.coverage
     this.extraLinks = level.extraLinks
