@@ -20,6 +20,6 @@ if (isWater(vUv)) {
 }
 
 // hover
-color *= uHovered ? 1.5 : 1.0;
+color *= uHovered || uTutorial ? 1.5 : 1.0;
 
 gl_FragColor = vec4(color, alpha);

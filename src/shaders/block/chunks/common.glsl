@@ -4,6 +4,7 @@ uniform float uTime;
 uniform float uRadius;
 uniform bool uHovered;
 uniform bool uLinked;
+uniform bool uTutorial;
 
 varying vec3 vWorldPosition;
 

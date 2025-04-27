@@ -69,10 +69,6 @@ export default class Experience {
     UI.startButton.onClick(this.start.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
-
-    UI.hintText.set(
-      Touch.support ? 'Touch any river tile to start' : 'Click any river tile to start',
-    )
   }
 
   start() {
@@ -105,19 +101,25 @@ export default class Experience {
     UI.nextButton.hide()
     UI.levelText.set(`Level ${this.level}`)
     UI.levelText.show()
-    UI.hintText.show()
+
+    if (this.level === 1) {
+      UI.hintText.set(
+        Touch.support ? 'Touch any river tile to start' : 'Click any river tile to start',
+      )
+      UI.hintText.show()
+    } else {
+      UI.hintText.hide()
+    }
   }
 
   setGameMode(block) {
     UI.backButton.show()
-    UI.hintText.hide()
 
     this.camera.setGameControls(block)
     this.environment.directionalLight.castShadow = false
   }
 
   setExplorationMode() {
-    UI.nextButton.show()
     UI.backButton.hide()
     this.camera.setExplorationControls()
     this.environment.directionalLight.castShadow = true

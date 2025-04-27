@@ -1,6 +1,7 @@
 import Block from '@blocks/block'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
+import { UI } from '@ui/ui'
 import Random from '@utils/random'
 import Landscape from './landscape'
 import Ocean from './ocean'
@@ -9,11 +10,20 @@ const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
 
 export default class Grid {
+  #riverBlocks = null
   #deadEnds = null
   #perimeter = { totalCount: 0, blocks: [] }
 
   get blocks() {
     return Array.from(this.blocksMap.values())
+  }
+
+  get riverBlocks() {
+    if (!this.#riverBlocks) {
+      this.#riverBlocks = this.blocks.filter(b => b.links.length)
+    }
+
+    return this.#riverBlocks
   }
 
   get deadEnds() {
@@ -42,8 +52,9 @@ export default class Grid {
     this.pointer = this.experience.pointer
     this.blocksMap = new Map()
 
+    this.level = level
     const { radius, coverage, extraLinks } =
-      gridConfig.levels.at(level - 1) || gridConfig.levels.at(-1)
+      gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
     this.radius = radius
     this.coverage = coverage
     this.extraLinks = extraLinks
@@ -62,6 +73,7 @@ export default class Grid {
 
     this.init()
     this.updateLinks()
+    this.setTutorial()
   }
 
   async init() {
@@ -248,10 +260,20 @@ export default class Grid {
   }
 
   async checkSolution() {
+    if (this.level === 1) {
+      UI.hintText.set('Rotate the tiles to restore the course of the river and un-Dry the Island')
+      UI.hintText.show()
+    }
+
     // TODO improve
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
       this.experience.setExplorationMode()
+      UI.nextButton.show()
+
+      if (this.level === 1) {
+        UI.hintText.set('Great job! Now sail to the next Drysland!')
+      }
 
       this.blocks.forEach(b => {
         if (b.onLeave) {
@@ -260,6 +282,11 @@ export default class Grid {
         }
       })
     }
+  }
+
+  setTutorial() {
+    if (this.level > 1) return
+    this.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = true))
   }
 
   update() {
@@ -276,17 +303,15 @@ export default class Grid {
   }
 
   serialize() {
-    return this.blocks
-      .filter(b => b.links.length)
-      .map(b => ({
-        key: b.key,
-        name: b.name,
-        q: b.q,
-        r: b.r,
-        links: b.links,
-        target: b.target,
-        rotation: b.mesh.rotation.y,
-      }))
+    return this.riverBlocks.map(b => ({
+      key: b.key,
+      name: b.name,
+      q: b.q,
+      r: b.r,
+      links: b.links,
+      target: b.target,
+      rotation: b.mesh.rotation.y,
+    }))
   }
 
   toString() {

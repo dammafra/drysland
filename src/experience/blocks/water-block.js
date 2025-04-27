@@ -49,6 +49,7 @@ export default class WaterBlock {
     if (!WaterBlock.material) {
       WaterBlock.material = new BlockMaterial()
       WaterBlock.material.uniforms.uLinked.value = true
+      WaterBlock.material.uniforms.uTutorial.value = false
       WaterBlock.material.uniforms.uRadius.value = this.grid.radius
     }
 
