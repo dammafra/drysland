@@ -207,32 +207,20 @@ export default class Block {
   }
 
   onHover() {
-    this.mesh.castShadow = false
-    this.mesh.receiveShadow = false
     this.material.uniforms.uHovered.value = true
   }
 
   onLeave() {
-    this.mesh.castShadow = true
-    this.mesh.receiveShadow = true
     this.material.uniforms.uHovered.value = false
   }
 
   onClick() {
     this.rotate()
+    this.soundPlayer.play('swing')
+    this.experience.setGameMode(this)
+
     this.grid.updateLinks()
     this.grid.checkSolution()
-    this.soundPlayer.play('swing')
-
-    // TODO improve
-    if (
-      this.camera.controls.polarAngle > 0.5 ||
-      this.neighbors.some(n => n && n.mesh && !this.camera.canView(n.mesh.position))
-    ) {
-      this.camera.controls.fitToBox(this.mesh, true)
-      this.camera.controls.rotatePolarTo(0, true)
-      this.camera.controls.dollyTo(10, true)
-    }
   }
 
   update() {

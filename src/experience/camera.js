@@ -53,6 +53,7 @@ export default class Camera {
     this.controls.maxDistance = 25
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.001
+    this.controls.smoothTime = 0.25
   }
 
   resize() {
@@ -70,6 +71,24 @@ export default class Camera {
 
   intro() {
     return this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
+  }
+
+  setExplorationControls() {
+    this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
+    this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
+
+    this.intro()
+  }
+
+  setGameControls(block) {
+    this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
+    this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
+
+    this.controls.rotatePolarTo(0, true)
+    if (block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))) {
+      this.controls.fitToBox(block.mesh, true)
+      this.controls.dollyTo(10, true)
+    }
   }
 
   canView(position) {

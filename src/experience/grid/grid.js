@@ -2,6 +2,7 @@ import Block from '@blocks/block'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
 import Random from '@utils/random'
+import { UI } from '../ui'
 import Landscape from './landscape'
 import Ocean from './ocean'
 
@@ -9,10 +10,6 @@ const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
 
 export default class Grid {
-  static instance = null
-  static level = 0
-  static nextButton = null
-
   #deadEnds = null
   #perimeter = { totalCount: 0, blocks: [] }
 
@@ -39,28 +36,17 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  static {
-    Grid.nextButton = document.getElementById('next')
-    Grid.nextButton.onclick = Grid.next
-  }
-
-  static next() {
-    Grid.nextButton.classList.add('hidden')
-    Grid.instance?.dispose()
-    Grid.instance = new Grid()
-  }
-
-  constructor() {
+  constructor(level) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
     this.pointer = this.experience.pointer
     this.blocksMap = new Map()
 
-    const level = gridConfig.levels.at(Grid.level++) || gridConfig.levels.at(-1)
-    this.radius = level.radius
-    this.coverage = level.coverage
-    this.extraLinks = level.extraLinks
+    const { radius, coverage, extraLinks } = gridConfig.levels.at(level) || gridConfig.levels.at(-1)
+    this.radius = radius
+    this.coverage = coverage
+    this.extraLinks = extraLinks
 
     this.generateGrid()
     this.generateLinks()
@@ -259,9 +245,10 @@ export default class Grid {
     // TODO improve
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
-      this.camera.intro()
+      this.experience.setExplorationMode()
 
-      Grid.nextButton.classList.remove('hidden')
+      UI.nextButton.classList.remove('hidden')
+
       this.blocks.forEach(b => {
         if (b.onLeave) {
           b.onLeave()
@@ -282,7 +269,6 @@ export default class Grid {
 
     delete this.landscape
     delete this.ocean
-    delete Grid.instance
   }
 
   toString() {

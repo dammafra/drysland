@@ -9,6 +9,7 @@ import Resources from './resources'
 import Sizes from './sizes'
 import { SoundPlayer } from './sound-player'
 import Time from './time'
+import { UI } from './ui'
 
 export default class Experience {
   /** @type {Experience} */
@@ -63,7 +64,29 @@ export default class Experience {
     this.soundPlayer.playBackground('loop', 0.5)
     this.soundPlayer.playBackground('waves', 0.1)
 
-    Grid.next()
+    this.level = 0
+    this.nextLevel()
+
+    UI.nextButton.onclick = this.nextLevel.bind(this)
+    UI.backButton.onclick = this.setExplorationMode.bind(this)
+  }
+
+  nextLevel() {
+    UI.nextButton.classList.add('hidden')
+    this.grid?.dispose()
+    this.grid = new Grid(this.level++)
+  }
+
+  setGameMode(block) {
+    UI.backButton.classList.remove('hidden')
+    this.camera.setGameControls(block)
+    this.environment.directionalLight.castShadow = false
+  }
+
+  setExplorationMode() {
+    UI.backButton.classList.add('hidden')
+    this.camera.setExplorationControls()
+    this.environment.directionalLight.castShadow = true
   }
 
   update = () => {
@@ -71,12 +94,12 @@ export default class Experience {
     this.renderer.update()
     this.pointer.update()
 
-    Grid.instance?.update()
+    this.grid?.update()
   }
 
   dispose() {
     this.pointer.dispose()
-    Grid.instance?.dispose()
+    this.grid?.dispose()
   }
 
   setDebug() {

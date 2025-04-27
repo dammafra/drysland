@@ -45,8 +45,8 @@ body {
   @apply !cursor-pointer;
 }
 
-#next {
-  @apply hex absolute z-10 bottom-4 left-4 bg-white shadow-2xl text-2xl size-16 hover:bg-sky-200 cursor-pointer font-hex text-primary;
+button {
+  @apply hex bg-white shadow-2xl size-16 hover:bg-sky-200 cursor-pointer font-hex text-primary;
 }
 
 /* loading */
