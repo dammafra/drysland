@@ -1,7 +1,6 @@
 import Block from '@blocks/block'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
-import { UI } from '@ui/ui'
 import Random from '@utils/random'
 import Landscape from './landscape'
 import Ocean from './ocean'
@@ -253,8 +252,6 @@ export default class Grid {
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
       this.experience.setExplorationMode()
-
-      UI.nextButton.show()
 
       this.blocks.forEach(b => {
         if (b.onLeave) {

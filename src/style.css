@@ -48,7 +48,7 @@ body {
 
 /* loading */
 .loading {
-  @apply fixed top-0 w-full h-full z-20;
+  @apply fixed top-0 w-full h-full z-10;
   @apply flex flex-col gap-8 justify-center items-center;
 }
 
@@ -63,7 +63,7 @@ body {
 
 /* menu */
 .menu {
-  @apply fixed top-0 w-full h-full z-20;
+  @apply fixed top-0 w-full h-full z-10;
   @apply flex flex-col justify-center items-center;
 }
 
@@ -74,6 +74,15 @@ body {
 
 .menu button {
   @apply text-3xl scale-0;
+}
+
+.menu .credits {
+  @apply font-hex text-white text-base pt-10 text-center opacity-0;
+  text-shadow: 0.5px 0.5px 0.5px black;
+}
+
+.menu .credits a {
+  @apply underline hover:text-sky-200;
 }
 
 /* UI */

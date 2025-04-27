@@ -19,6 +19,7 @@ export default class Menu {
     this.element = document.querySelector('.menu')
     this.title = this.element.querySelector('.title')
     this.button = this.element.querySelector('button')
+    this.credits = this.element.querySelector('.credits')
 
     this.open()
   }
@@ -41,14 +42,30 @@ export default class Menu {
         },
         '<+0.2',
       )
+      .to(this.credits, {
+        opacity: 1,
+        duration: 1,
+        ease: 'back.out',
+      })
   }
 
   async close() {
-    await gsap.to(this.element, {
-      scale: 0,
-      duration: 0.5,
-      ease: 'back.in',
-    })
+    await gsap
+      .timeline()
+      .to(this.credits, {
+        opacity: 0,
+        duration: 0.25,
+        ease: 'back.in',
+      })
+      .to(
+        this.element,
+        {
+          scale: 0,
+          duration: 0.5,
+          ease: 'back.in',
+        },
+        '<',
+      )
 
     this.dispose()
   }

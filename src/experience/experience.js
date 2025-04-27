@@ -117,6 +117,7 @@ export default class Experience {
   }
 
   setExplorationMode() {
+    UI.nextButton.show()
     UI.backButton.hide()
     this.camera.setExplorationControls()
     this.environment.directionalLight.castShadow = true
