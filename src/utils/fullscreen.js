@@ -27,7 +27,7 @@ export default class Fullscreen {
     }
 
     if (!Fullscreen.isSupported) {
-      toggle.remove()
+      Fullscreen.toggle.remove()
       return
     }
 

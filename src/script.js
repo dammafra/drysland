@@ -8,9 +8,12 @@ import { inject } from '@vercel/analytics'
 
 inject()
 
-DoubleTapPreventer.init()
+DoubleTapPreventer.init('1.0', () => {
+  localStorage.removeItem('debug')
+  localStorage.removeItem('state')
+})
 Versioning.init()
-Fullscreen.init()
+Fullscreen.init('#fullscreen')
 
 const loading = Loading.init()
 const debug = Debug.init()

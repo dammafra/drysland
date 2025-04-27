@@ -79,6 +79,7 @@ export default class Experience {
     UI.soundsButton.show()
     UI.loopButton.show()
     UI.wavesButton.show()
+    UI.fullscreenButton.show()
 
     UI.soundsButton.onClick(this.toggleSounds.bind(this))
     UI.loopButton.onClick(this.toggleLoop.bind(this))

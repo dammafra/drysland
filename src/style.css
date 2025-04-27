@@ -99,3 +99,13 @@ button.hex {
   @apply absolute bottom-28 px-10 font-hex w-full text-center text-3xl text-white animate-pulse;
   text-shadow: 1px 1px 2px black;
 }
+
+body.fullscreen .fa-expand,
+body:not(.fullscreen) .fa-compress {
+  @apply hidden;
+}
+
+body.fullscreen .fa-compress,
+body:not(.fullscreen) .fa-expand {
+  @apply inline-block;
+}
