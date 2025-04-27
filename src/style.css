@@ -82,7 +82,7 @@ button.hex {
 }
 
 #level {
-  @apply bg-gradient-to-b to-80% from-white to-transparent py-2 absolute top-0 font-hex w-full text-center text-5xl text-primary;
+  @apply bg-gradient-to-b to-80% from-background to-transparent py-2 absolute top-0 font-hex w-full text-center text-5xl text-primary;
   text-shadow: 1px 1px 2px white;
 }
 
