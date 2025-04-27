@@ -52,7 +52,7 @@ export default class Loading {
   async stop() {
     await gsap.to(this.element, {
       scale: 0,
-      duration: 0.5,
+      duration: 0.25,
       ease: 'back.in',
     })
 
