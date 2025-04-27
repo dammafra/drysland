@@ -1,5 +1,6 @@
 import gridConfig from '@config/grid'
 import Grid from '@grid/grid'
+import { UI } from '@ui/ui'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -9,7 +10,6 @@ import Resources from './resources'
 import Sizes from './sizes'
 import { SoundPlayer } from './sound-player'
 import Time from './time'
-import { UI } from './ui'
 
 export default class Experience {
   /** @type {Experience} */
@@ -67,24 +67,24 @@ export default class Experience {
     this.level = 0
     this.nextLevel()
 
-    UI.nextButton.onclick = this.nextLevel.bind(this)
-    UI.backButton.onclick = this.setExplorationMode.bind(this)
+    UI.nextButton.onClick(this.nextLevel.bind(this))
+    UI.backButton.onClick(this.setExplorationMode.bind(this))
   }
 
   nextLevel() {
-    UI.nextButton.classList.add('hidden')
+    UI.nextButton.hide()
     this.grid?.dispose()
     this.grid = new Grid(this.level++)
   }
 
   setGameMode(block) {
-    UI.backButton.classList.remove('hidden')
+    UI.backButton.show()
     this.camera.setGameControls(block)
     this.environment.directionalLight.castShadow = false
   }
 
   setExplorationMode() {
-    UI.backButton.classList.add('hidden')
+    UI.backButton.hide()
     this.camera.setExplorationControls()
     this.environment.directionalLight.castShadow = true
   }

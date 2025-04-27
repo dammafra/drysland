@@ -1,8 +1,8 @@
 import Experience from '@experience'
+import Loading from '@ui/loading'
 import Debug from '@utils/debug'
 import DoubleTapPreventer from '@utils/double-tap-preventer'
 import Fullscreen from '@utils/fullscreen'
-import Loading from '@utils/loading'
 import Versioning from '@utils/versioning'
 import { inject } from '@vercel/analytics'
 

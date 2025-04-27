@@ -27,6 +27,7 @@ export default {
       '@experience': path.resolve(__dirname, 'src/experience/experience.js'),
       '@grid': path.resolve(__dirname, 'src/experience/grid'),
       '@shaders': path.resolve(__dirname, 'src/shaders'),
+      '@ui': path.resolve(__dirname, 'src/ui'),
       '@utils': path.resolve(__dirname, 'src/utils'),
     },
   },

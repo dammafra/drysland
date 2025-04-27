@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "paths": {
-      "@blocks": ["./src/experience/blocks/*"],
+      "@blocks/*": ["./src/experience/blocks/*"],
       "@config/*": ["./src/config/*"],
       "@experience": ["./src/experience/experience.js"],
-      "@grid": ["./src/experience/grid/*"],
-      "@shaders": ["./src/shaders/*"],
+      "@grid/*": ["./src/experience/grid/*"],
+      "@shaders/*": ["./src/shaders/*"],
+      "@ui/*": ["./src/ui/*"],
       "@utils/*": ["./src/utils/*"]
     }
   }
