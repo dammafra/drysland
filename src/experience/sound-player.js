@@ -6,8 +6,24 @@ export class SoundPlayer {
     this.resources = this.experience.resources
 
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
+    this.unlockAudioContext()
+
     this.muted = false
     this.backgrounds = new Map()
+  }
+
+  unlockAudioContext() {
+    if (this.audioContext.state !== 'suspended') return
+
+    const b = document.body
+    const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
+    events.forEach(e => b.addEventListener(e, unlock.bind(this), false))
+    function unlock() {
+      this.audioContext.resume().then(clean)
+    }
+    function clean() {
+      events.forEach(e => b.removeEventListener(e, unlock))
+    }
   }
 
   setMuted(value) {
