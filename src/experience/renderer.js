@@ -20,7 +20,6 @@ export default class Renderer {
 
     this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-    this.instance.setClearColor(0x333333)
 
     this.resize()
   }
