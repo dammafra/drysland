@@ -51,7 +51,6 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
-    addEventListener('beforeunload', this.save)
   }
 
   resize = () => {
@@ -167,9 +166,11 @@ export default class Experience {
 
   load = () => {
     const state = localStorage.getItem('state')
-    localStorage.removeItem('state')
-
     if (state) return JSON.parse(state)
+  }
+
+  reset = () => {
+    localStorage.removeItem('state')
   }
 
   setDebug() {

@@ -269,6 +269,8 @@ export default class Grid {
     if (this.blocks.every(b => b.linksKey === b.targetKey)) {
       this.soundPlayer.play('success')
       this.experience.setExplorationMode()
+      this.experience.reset()
+
       UI.nextButton.show()
 
       if (this.level === 1) {
@@ -310,7 +312,7 @@ export default class Grid {
       r: b.r,
       links: b.links,
       target: b.target,
-      rotation: b.mesh.rotation.y,
+      rotation: b.rotation,
     }))
   }
 

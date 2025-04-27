@@ -197,12 +197,13 @@ export default class Block {
     this.links = this.links.map(edge => (edge + times) % 6)
 
     if (!this.mesh) return
+    this.rotation = this.mesh.rotation.y - (Math.PI / 3) * times
 
     if (animate) {
       this.rotationAnimation = gsap
         .timeline()
         .to(this.mesh.rotation, {
-          y: this.mesh.rotation.y - (Math.PI / 3) * times,
+          y: this.rotation,
           duration: 0.25,
           ease: 'back.inOut',
         })
@@ -226,6 +227,7 @@ export default class Block {
     this.soundPlayer.play('swing')
     this.experience.setGameMode(this)
 
+    this.experience.save()
     this.grid.updateLinks()
     this.grid.checkSolution()
   }
