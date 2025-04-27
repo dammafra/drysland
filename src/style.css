@@ -38,6 +38,10 @@ body {
   @apply w-screen h-[100svh] bg-background;
 }
 
+main {
+  @apply text-center;
+}
+
 .webgl {
   @apply fixed top-0 left-0 outline-none;
 }
@@ -91,12 +95,12 @@ button.hex {
 }
 
 #level {
-  @apply bg-gradient-to-b to-80% from-background to-transparent py-4 absolute top-0 font-hex w-full text-center text-4xl text-primary;
+  @apply bg-gradient-to-b to-80% from-background to-transparent py-4 absolute top-0 font-hex w-full text-center text-4xl text-primary pointer-events-none;
   text-shadow: 1px 1px 2px white;
 }
 
 #hint {
-  @apply absolute bottom-28 px-10 font-hex w-full text-center text-2xl text-white animate-pulse;
+  @apply absolute bottom-28 px-10 font-hex w-full text-center text-2xl text-white animate-pulse pointer-events-none;
   text-shadow: 1px 1px 2px black;
 }
 
