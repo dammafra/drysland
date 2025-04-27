@@ -5,6 +5,7 @@ import { UI } from '@ui/ui'
 import Random from '@utils/random'
 import Landscape from './landscape'
 import Ocean from './ocean'
+import Tutorial from './tutorial'
 
 const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
@@ -74,10 +75,10 @@ export default class Grid {
     UI.nextButton.hide()
 
     this.init()
+    this.tutorial = new Tutorial(this)
+
     this.updateLinks()
     this.checkSolution()
-
-    this.setTutorial()
   }
 
   async init() {
@@ -265,11 +266,6 @@ export default class Grid {
   }
 
   async checkSolution() {
-    if (this.level === 1) {
-      UI.hintText.set('Rotate the tiles to restore the course of the river and un-Dry the Island')
-      UI.hintText.show()
-    }
-
     if (!this.riverBlocks.every(b => b.linked)) return
 
     // TODO improve
@@ -283,26 +279,20 @@ export default class Grid {
       this.experience.setExplorationMode()
 
       UI.nextButton.show()
-
-      if (this.level === 1) {
-        UI.hintText.set('Great job! Now sail to the next Drysland!')
-      }
+      this.tutorial.third()
     } else {
-      this.riverBlocks.forEach(block => {
-        const invalid = block.links.some(edge => {
-          const neighbor = block.neighbors?.at(edge)
+      this.riverBlocks.forEach(b => {
+        if (b.name === 'riverStart') return
+
+        const invalid = b.links.some(edge => {
+          const neighbor = b.neighbors?.at(edge)
           if (!neighbor) return true // no neighbor where there should be one
           return !neighbor.links.includes(opposite(edge)) // neighbor does not link back
         })
 
-        block.invalid = invalid
+        b.invalid = invalid
       })
     }
-  }
-
-  setTutorial() {
-    if (this.level > 1) return
-    this.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = true))
   }
 
   update() {

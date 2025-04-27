@@ -37,7 +37,6 @@ export default class Block {
   set linked(value) {
     this.#linked = blocksConfig.water.includes(this.name) || this.name === 'riverStart' || value
     this.material.uniforms.uLinked.value = this.#linked
-    this.material.uniforms.uTutorial.value = false
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
@@ -232,6 +231,7 @@ export default class Block {
     this.experience.setGameMode(this)
 
     this.experience.save()
+    this.grid.tutorial.second()
     this.grid.updateLinks()
     this.grid.checkSolution()
   }

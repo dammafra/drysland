@@ -3,7 +3,6 @@ import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import { UI } from '@ui/ui'
 import debounce from '@utils/debounce'
-import Touch from '@utils/touch'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -99,15 +98,6 @@ export default class Experience {
 
     UI.levelText.set(`Level ${this.level}`)
     UI.levelText.show()
-
-    if (this.level === 1) {
-      UI.hintText.set(
-        Touch.support ? 'Touch any river tile to start' : 'Click any river tile to start',
-      )
-      UI.hintText.show()
-    } else {
-      UI.hintText.hide()
-    }
   }
 
   setGameMode(block) {
@@ -177,7 +167,7 @@ export default class Experience {
       'change',
       debounce(() => {
         controller.disabled = true
-        setTimeout(() => (controller.disabled = false), 500)
+        setTimeout(() => (controller.disabled = false), 2000)
 
         this.level--
         this.nextLevel()
