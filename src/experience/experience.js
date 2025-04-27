@@ -2,6 +2,7 @@ import gridConfig from '@config/grid'
 import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import { UI } from '@ui/ui'
+import debounce from '@utils/debounce'
 import Touch from '@utils/touch'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
@@ -42,10 +43,7 @@ export default class Experience {
     this.camera = new Camera()
     this.renderer = new Renderer()
 
-    this.setDebug()
-
     this.pointer = new Pointer()
-    this.environment = new Environment()
 
     // Events
     this.sizes.addEventListener('resize', this.resize)
@@ -59,30 +57,31 @@ export default class Experience {
   }
 
   ready = () => {
+    this.level = 0
+    this.setDebug()
+
     this.loading.stop()
-    this.environment.ready()
 
     this.menu = new Menu()
     this.soundPlayer = new SoundPlayer()
+    this.environment = new Environment()
 
     UI.startButton.onClick(this.start.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
+
+    UI.soundsButton.onClick(this.toggleSounds.bind(this))
+    UI.loopButton.onClick(this.toggleLoop.bind(this))
+    UI.wavesButton.onClick(this.toggleWaves.bind(this))
   }
 
   start() {
     this.menu.close()
 
-    this.level = 0
-
     UI.soundsButton.show()
     UI.loopButton.show()
     UI.wavesButton.show()
     UI.fullscreenButton.show()
-
-    UI.soundsButton.onClick(this.toggleSounds.bind(this))
-    UI.loopButton.onClick(this.toggleLoop.bind(this))
-    UI.wavesButton.onClick(this.toggleWaves.bind(this))
 
     this.toggleLoop()
     this.toggleWaves()
@@ -175,7 +174,18 @@ export default class Experience {
   setDebug() {
     if (!this.debug) return
 
-    const folder = this.debug.root.addFolder({ title: '🌐 experience' })
+    const controller = this.debug.root.addBinding(this, 'level', { min: 1, max: 100, step: 1 }).on(
+      'change',
+      debounce(() => {
+        controller.disabled = true
+        setTimeout(() => (controller.disabled = false), 500)
+
+        this.level--
+        this.nextLevel()
+      }, 500),
+    )
+
+    const folder = this.debug.root.addFolder({ title: '🌐 experience', expanded: false })
 
     const helpersSize = gridConfig.maxRadius * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)

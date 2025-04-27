@@ -20,6 +20,9 @@ export default class Environment {
     this.resources = this.experience.resources
 
     this.setLight()
+    this.setEnvironmentMap()
+    this.setLensflare()
+
     this.setDebug()
   }
 
@@ -74,11 +77,6 @@ export default class Environment {
     this.pointLight.add(this.lensflare)
   }
 
-  ready() {
-    this.setEnvironmentMap()
-    this.setLensflare()
-  }
-
   setDebug() {
     if (!this.debug) return
 
@@ -86,7 +84,7 @@ export default class Environment {
     this.shadowHelper.visible = false
     this.scene.add(this.shadowHelper)
 
-    const folder = this.debug.root.addFolder({ title: '💡 environment' })
+    const folder = this.debug.root.addFolder({ title: '💡 environment', expanded: false })
     folder.addBinding(this.directionalLight, 'position', {
       label: 'light position',
     })
