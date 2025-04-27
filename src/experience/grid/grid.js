@@ -36,26 +36,33 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  constructor(level) {
+  constructor(level, blocks) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
     this.pointer = this.experience.pointer
     this.blocksMap = new Map()
 
-    const { radius, coverage, extraLinks } = gridConfig.levels.at(level) || gridConfig.levels.at(-1)
+    const { radius, coverage, extraLinks } =
+      gridConfig.levels.at(level - 1) || gridConfig.levels.at(-1)
     this.radius = radius
     this.coverage = coverage
     this.extraLinks = extraLinks
 
-    this.generateGrid()
-    this.generateLinks()
-    this.addExtraLinks()
+    if (blocks) {
+      blocks.forEach(b => this.blocksMap.set(b.key, new Block({ grid: this, ...b })))
+      this.blocks.forEach(b => this.addNeighbors(b))
+    } else {
+      this.generateGrid()
+      this.generateLinks()
+      this.addExtraLinks()
 
-    this.blocks.forEach(b => b.setName())
-    this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
+      this.blocks.forEach(b => b.setName())
+      this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
+    }
 
     this.init()
+    this.updateLinks()
   }
 
   async init() {
@@ -66,7 +73,7 @@ export default class Grid {
     this.soundPlayer.play('multiPop')
 
     await Promise.all(this.blocks.map(b => b.init()))
-    this.landscape.init()
+    this.landscape?.init()
   }
 
   setBlock(q, r) {
@@ -269,6 +276,20 @@ export default class Grid {
 
     delete this.landscape
     delete this.ocean
+  }
+
+  serialize() {
+    return this.blocks
+      .filter(b => b.links.length)
+      .map(b => ({
+        key: b.key,
+        name: b.name,
+        q: b.q,
+        r: b.r,
+        links: b.links,
+        target: b.target,
+        rotation: b.mesh.rotation.y,
+      }))
   }
 
   toString() {

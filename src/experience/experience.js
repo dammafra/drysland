@@ -51,6 +51,7 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
+    addEventListener('beforeunload', this.save)
   }
 
   resize = () => {
@@ -94,15 +95,17 @@ export default class Experience {
   }
 
   nextLevel() {
+    const state = this.load()
+    this.level = state ? state.level : this.level + 1
+    const blocks = state?.blocks
+
     this.grid?.dispose()
-    this.grid = new Grid()
+    this.grid = new Grid(this.level, blocks)
 
     UI.nextButton.hide()
-    UI.levelText.set(`Level ${this.level + 1}`)
+    UI.levelText.set(`Level ${this.level}`)
     UI.levelText.show()
     UI.hintText.show()
-
-    this.level++
   }
 
   setGameMode(block) {
@@ -149,6 +152,20 @@ export default class Experience {
   dispose() {
     this.pointer.dispose()
     this.grid?.dispose()
+  }
+
+  save = () => {
+    if (!this.level) return
+    const blocks = this.grid?.serialize()
+    const level = this.level
+    localStorage.setItem('state', JSON.stringify({ level, blocks }))
+  }
+
+  load = () => {
+    const state = localStorage.getItem('state')
+    localStorage.removeItem('state')
+
+    if (state) return JSON.parse(state)
   }
 
   setDebug() {

@@ -40,7 +40,7 @@ export default class Block {
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
-  constructor({ grid, name, q, r }) {
+  constructor({ grid, name, q, r, links, target, rotation }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.time = this.experience.time
@@ -54,8 +54,9 @@ export default class Block {
     this.q = q
     this.r = r
 
-    this.links = []
-    this.target = []
+    this.links = links || []
+    this.target = target || []
+    this.rotation = rotation
   }
 
   init() {
@@ -63,7 +64,12 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
-    this.rotate(Random.integer({ max: 5 }), false)
+    if (this.rotation) {
+      this.mesh.rotation.y = this.rotation
+    } else {
+      this.rotate(Random.integer({ max: 5 }), false)
+    }
+
     this.linked = false
 
     if (this.links.length) {
