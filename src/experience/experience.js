@@ -50,7 +50,7 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
-    addEventListener('beforeunload', () => this.save())
+    addEventListener('beforeunload', () => State.instance.saveLocal())
   }
 
   resize = () => {
