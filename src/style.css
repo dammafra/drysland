@@ -61,8 +61,8 @@ main {
 }
 
 .loading .title {
-  @apply font-hex text-5xl text-white absolute  scale-0 uppercase z-10;
-  text-shadow: 1px 1px 2px black;
+  @apply font-hex text-5xl text-white absolute scale-0 uppercase z-10;
+  text-shadow: 5px 5px 2px var(--color-primary);
 }
 
 /* menu */
@@ -72,8 +72,8 @@ main {
 }
 
 .menu .title {
-  @apply font-hex text-7xl text-primary scale-0 uppercase;
-  text-shadow: 1px 1px 2px white;
+  @apply font-hex text-7xl text-white scale-0 uppercase;
+  text-shadow: 5px 5px 2px var(--color-primary);
 }
 
 .menu button {

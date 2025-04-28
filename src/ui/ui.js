@@ -13,6 +13,7 @@ export class UI {
   static wavesToggle = new Toggle('waves')
   static fullscreenToggle = new Toggle('fullscreen')
 
+  static authText = new Text('auth-label')
   static levelText = new Text('level')
   static hintText = new Text('hint')
 }

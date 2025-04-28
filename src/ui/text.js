@@ -7,5 +7,6 @@ export default class Text extends Element {
 
   set(content) {
     this.element.textContent = content
+    return this
   }
 }

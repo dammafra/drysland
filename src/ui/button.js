@@ -25,5 +25,7 @@ export default class Button extends Element {
 
       callback()
     }
+
+    return this
   }
 }

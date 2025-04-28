@@ -68,29 +68,24 @@ export default class Experience {
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
 
-    UI.authToggle.onClick(() =>
-      Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn(),
-    )
     Auth.instance.subscribe(user => {
-      UI.authToggle.set(user)
+      UI.authToggle.set(!user)
+      UI.authText.set(user ? 'Logout' : 'Login').show()
       user && State.instance.sync()
     })
 
+    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()) //prettier-ignore
     UI.startButton.onClick(this.start.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
-
-    UI.soundsToggle.onToggle(this.toggleSounds.bind(this))
-    UI.loopToggle.onToggle(this.toggleLoop.bind(this))
-    UI.wavesToggle.onToggle(this.toggleWaves.bind(this))
   }
 
   start() {
     this.menu.close()
 
-    UI.soundsToggle.show()
-    UI.loopToggle.show()
-    UI.wavesToggle.show()
+    UI.soundsToggle.onToggle(this.toggleSounds.bind(this)).show()
+    UI.loopToggle.onToggle(this.toggleLoop.bind(this)).show()
+    UI.wavesToggle.onToggle(this.toggleWaves.bind(this)).show()
     UI.fullscreenToggle.show()
 
     this.toggleLoop()
@@ -107,8 +102,7 @@ export default class Experience {
     this.grid?.dispose()
     this.grid = new Grid(this.level, blocks)
 
-    UI.levelText.set(`Level ${this.level}`)
-    UI.levelText.show()
+    UI.levelText.set(`Level ${this.level}`).show()
   }
 
   setGameMode(block) {

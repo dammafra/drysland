@@ -26,6 +26,15 @@ export default class Menu {
   }
 
   open() {
+    this.idle = gsap.to(this.bgHex, {
+      rotate: '+=60',
+      duration: 0.5,
+      repeatDelay: 0.5,
+      ease: 'back.inOut',
+      repeat: -1,
+      repeatRefresh: true,
+    })
+
     return gsap
       .timeline()
       .to(this.element, { opacity: 1 })
@@ -96,6 +105,7 @@ export default class Menu {
   }
 
   dispose = () => {
+    this.idle.kill()
     this.element.remove()
     this.element = null
   }

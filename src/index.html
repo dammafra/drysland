@@ -30,10 +30,13 @@
             class="hex bg-primary/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0"
           ></div>
           <div class="title">Drysland</div>
-          <button id="start" class="hex shrink-0 size-24">Start</button>
-          <button id="auth" class="hex shrink-0 size-24 !text-red-700">
-            <i class="fa-brands fa-google"></i>
-          </button>
+          <div class="w-full flex flex-row justify-center">
+            <button id="start" class="hex size-24">Start</button>
+            <button id="auth" class="hex size-24 flex flex-col justify-center gap-1">
+              <div id="auth-label" class="text-xl leading-4">Login</div>
+              <i class="fa-brands fa-google"></i>
+            </button>
+          </div>
         </div>
 
         <div class="credits">
@@ -120,13 +123,13 @@
         <i class="fa-solid fa-expand"></i>
         <i class="fa-solid fa-compress"></i>
       </button>
-      <button id="sounds" class="hex absolute bottom-14 right-10 !text-green-700 hidden">
+      <button id="sounds" class="hex absolute bottom-14 right-10 hidden">
         <i class="fa-solid fa-volume-low"></i>
       </button>
-      <button id="loop" class="hex absolute bottom-4 right-16 !text-green-700 hidden">
+      <button id="loop" class="hex absolute bottom-4 right-16 hidden">
         <i class="fa-solid fa-music"></i>
       </button>
-      <button id="waves" class="hex absolute bottom-4 right-4 !text-green-700 hidden">
+      <button id="waves" class="hex absolute bottom-4 right-4 hidden">
         <i class="fa-solid fa-water"></i>
       </button>
     </main>

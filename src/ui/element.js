@@ -14,6 +14,8 @@ export default class Element {
       duration: 0.5,
       ease: 'back.out',
     })
+
+    return this
   }
 
   hide() {
@@ -22,13 +24,17 @@ export default class Element {
       duration: 0.5,
       ease: 'back.in',
     })
+
+    return this
   }
 
   disable() {
     this.element.style.pointerEvents = 'none'
+    return this
   }
 
   enable() {
     this.element.style.pointerEvents = 'auto'
+    return this
   }
 }

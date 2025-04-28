@@ -24,6 +24,14 @@ export default class Loading {
   }
 
   start() {
+    this.idle = gsap.to(this.spinner, {
+      rotation: '+=60',
+      duration: 0.5,
+      ease: 'back.inOut',
+      repeat: -1,
+      repeatRefresh: true,
+    })
+
     return gsap
       .timeline()
       .to(this.spinner, {
@@ -40,13 +48,6 @@ export default class Loading {
         },
         '<+0.2',
       )
-      .to(this.spinner, {
-        rotation: '+=30',
-        duration: 0.5,
-        ease: 'back.inOut',
-        repeat: -1,
-        repeatRefresh: true,
-      })
   }
 
   async stop() {
@@ -60,6 +61,7 @@ export default class Loading {
   }
 
   dispose = () => {
+    this.idle.kill()
     this.element.remove()
     this.element = null
   }
