@@ -3,6 +3,7 @@ import gsap from 'gsap'
 export default class Element {
   constructor(id) {
     this.element = document.getElementById(id)
+
     gsap.set(this.element, { scale: 0 })
     this.element.classList.remove('hidden')
   }
@@ -21,5 +22,13 @@ export default class Element {
       duration: 0.5,
       ease: 'back.in',
     })
+  }
+
+  disable() {
+    this.element.style.pointerEvents = 'none'
+  }
+
+  enable() {
+    this.element.style.pointerEvents = 'auto'
   }
 }

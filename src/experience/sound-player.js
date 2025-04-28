@@ -28,6 +28,7 @@ export class SoundPlayer {
 
   setMuted(value) {
     this.muted = value
+    return !this.muted
   }
 
   async play(sound, times = 1) {
@@ -68,10 +69,12 @@ export class SoundPlayer {
     source.start()
 
     this.backgrounds.set(sound, source)
+    return true
   }
 
   async stopBackground(sound) {
     this.backgrounds.get(sound)?.stop()
     this.backgrounds.delete(sound)
+    return false
   }
 }

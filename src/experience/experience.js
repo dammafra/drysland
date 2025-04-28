@@ -69,18 +69,18 @@ export default class Experience {
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
 
-    UI.soundsButton.onClick(this.toggleSounds.bind(this))
-    UI.loopButton.onClick(this.toggleLoop.bind(this))
-    UI.wavesButton.onClick(this.toggleWaves.bind(this))
+    UI.soundsToggle.onToggle(this.toggleSounds.bind(this))
+    UI.loopToggle.onToggle(this.toggleLoop.bind(this))
+    UI.wavesToggle.onToggle(this.toggleWaves.bind(this))
   }
 
   start() {
     this.menu.close()
 
-    UI.soundsButton.show()
-    UI.loopButton.show()
-    UI.wavesButton.show()
-    UI.fullscreenButton.show()
+    UI.soundsToggle.show()
+    UI.loopToggle.show()
+    UI.wavesToggle.show()
+    UI.fullscreenToggle.show()
 
     this.toggleLoop()
     this.toggleWaves()
@@ -114,22 +114,19 @@ export default class Experience {
   }
 
   toggleSounds() {
-    this.soundPlayer.setMuted(!this.soundPlayer.muted)
-    UI.soundsButton.toggle()
+    return this.soundPlayer.setMuted(!this.soundPlayer.muted)
   }
 
   toggleLoop() {
-    this.soundPlayer.backgrounds.has('loop')
+    return this.soundPlayer.backgrounds.has('loop')
       ? this.soundPlayer.stopBackground('loop')
       : this.soundPlayer.playBackground('loop', 0.5)
-    UI.loopButton.toggle()
   }
 
   toggleWaves() {
-    this.soundPlayer.backgrounds.has('waves')
+    return this.soundPlayer.backgrounds.has('waves')
       ? this.soundPlayer.stopBackground('waves')
       : this.soundPlayer.playBackground('waves', 0.1)
-    UI.wavesButton.toggle()
   }
 
   update = () => {
