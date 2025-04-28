@@ -36,7 +36,7 @@ export default class Block {
   // TODO improve
   set linked(value) {
     this.#linked = blocksConfig.water.includes(this.name) || this.name === 'riverStart' || value
-    this.material.uniforms.uLinked.value = this.#linked
+    this.material.uniforms.uLinked.value = blocksConfig.docks.includes(this.name) || this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
@@ -68,7 +68,7 @@ export default class Block {
     this.setMesh()
     this.setAnimation()
 
-    if (this.rotation) {
+    if (this.rotation !== undefined) {
       this.mesh.rotation.y = this.rotation
     } else {
       this.rotate(Random.integer({ max: 5 }), false)

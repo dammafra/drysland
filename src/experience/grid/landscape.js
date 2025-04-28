@@ -11,28 +11,31 @@ export default class Landscape {
     this.grid.deadEnds.forEach((b, i) => {
       b.name = i % 2 ? 'riverEnd' : 'riverStart'
 
-      this.grid.addNeighbors(b, i % 2 ? 'buildingVillage' : 'stoneHill')
+      this.grid.addNeighbors(b, i % 2 ? 'buildingVillage' : 'stoneMountain')
 
       b.neighbors.forEach(n =>
         this.grid.addNeighbors(
           n,
           i % 2
-            ? 'buildingHouse'
-            : () => Random.oneOf('stoneMountain', 'stoneHill', 'buildingCabin'),
+            ? Random.weightedOneOf({ buildingHouse: 1, buildingVillage: 0.5, buildingMarket: 0.2 })
+            : () => Random.weightedOneOf({ stoneHill: 1, buildingCabin: 0.5, buildingMine: 0.2 }),
         ),
       )
     })
 
     this.grid.addPerimeter(() =>
-      Random.oneOf(
-        'grass',
-        'grassForest',
-        'grassHill',
-        'buildingMill',
-        'buildingSheep',
-        // 'buildingCastle',
-        // 'buildingFarm',
-      ),
+      Random.weightedOneOf({
+        grass: 1,
+        grassForest: 0.8,
+        grassHill: 0.3,
+        buildingMill: 0.4,
+        buildingSheep: 0.3,
+        buildingCastle: 0.2,
+        buildingWall: 0.2,
+        buildingWizardTower: 0.2,
+        buildingArchery: 0.2,
+        buildingSmelter: 0.2,
+      }),
     )
     this.grid.addPerimeter(() => Random.oneOf('grass', 'grassForest'))
     this.grid.addPerimeter(() => Random.oneOf('sand', 'sandRocks'))

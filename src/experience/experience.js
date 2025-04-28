@@ -163,16 +163,30 @@ export default class Experience {
   setDebug() {
     if (!this.debug) return
 
-    const controller = this.debug.root.addBinding(this, 'level', { min: 1, max: 100, step: 1 }).on(
-      'change',
-      debounce(() => {
-        controller.disabled = true
-        setTimeout(() => (controller.disabled = false), 2000)
+    window.experience = Experience.instance
 
-        this.level--
-        this.nextLevel()
-      }, 500),
-    )
+    const levelController = this.debug.root
+      .addBinding(this, 'level', { min: 1, max: 100, step: 1 })
+      .on(
+        'change',
+        debounce(() => {
+          levelController.disabled = true
+          setTimeout(() => (levelController.disabled = false), 2000)
+
+          localStorage.removeItem('state')
+          this.level--
+          this.nextLevel()
+        }, 500),
+      )
+
+    const shuffleController = this.debug.root.addButton({ title: 'shuffle' }).on('click', () => {
+      shuffleController.disabled = true
+      setTimeout(() => (shuffleController.disabled = false), 2000)
+
+      localStorage.removeItem('state')
+      this.grid?.dispose()
+      this.grid = new Grid(this.level)
+    })
 
     const folder = this.debug.root.addFolder({ title: '🌐 experience', expanded: false })
 

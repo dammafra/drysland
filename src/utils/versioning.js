@@ -17,6 +17,6 @@ export default class Versioning {
       onVersionChange()
     }
 
-    localStorage.setItem('version', v)
+    localStorage.setItem('version', version)
   }
 }

@@ -23,6 +23,20 @@ export default class Random {
     return array[Math.floor(Math.random() * array.length)]
   }
 
+  static weightedOneOf(options) {
+    const entries = Object.entries(options)
+    const candidates = entries.filter(([, weight]) => weight < 1)
+    const fallback = entries.find(([, weight]) => weight === 1)
+
+    if (!fallback) throw new Error('You must provide one option with weight 1 as fallback.')
+
+    for (const [key, weight] of candidates) {
+      if (Math.random() < weight) return key
+    }
+
+    return fallback[0]
+  }
+
   static color() {
     return `#${Math.floor(Math.random() * 16777215)
       .toString(16)

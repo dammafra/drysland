@@ -19,6 +19,7 @@ const rivers = [
 
 const water = ['water', 'waterRocks']
 const sand = ['sand', 'sandRocks']
+const docks = ['buildingDock', 'buildingPort']
 
 /**
  * Hexagon Edges:
@@ -62,6 +63,7 @@ const blocksConfig = {
   rivers,
   water,
   sand,
+  docks,
 
   links,
   linksMap,

@@ -73,6 +73,7 @@ export default class Grid {
     }
 
     UI.nextButton.hide()
+    this.experience.setExplorationMode()
 
     this.init()
     this.tutorial = new Tutorial(this)
@@ -276,9 +277,9 @@ export default class Grid {
       })
 
       this.soundPlayer.play('success')
+      UI.nextButton.show()
       this.experience.setExplorationMode()
 
-      UI.nextButton.show()
       this.tutorial.third()
     } else {
       this.riverBlocks.forEach(b => {
