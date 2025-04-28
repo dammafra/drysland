@@ -54,6 +54,11 @@ export default class Camera {
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.001
     this.controls.smoothTime = 0.25
+
+    const box = new Box3()
+    box.min.set(-10, 0, -10)
+    box.max.set(10, 10, 10)
+    this.controls.setBoundary(box)
   }
 
   resize() {
