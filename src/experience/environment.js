@@ -4,8 +4,11 @@ import {
   DirectionalLight,
   EquirectangularReflectionMapping,
   FogExp2,
+  MathUtils,
   PointLight,
+  Spherical,
   SRGBColorSpace,
+  Vector3,
 } from 'three'
 import { Lensflare, LensflareElement } from 'three/examples/jsm/Addons.js'
 import Experience from './experience'
@@ -27,14 +30,14 @@ export default class Environment {
   }
 
   setLight() {
-    this.directionalLight = new DirectionalLight('#ffddb1', 3)
-    this.directionalLight.position.set(10, 6, 0)
+    this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
+    this.directionalLight = new DirectionalLight('#ffddb1', 4)
 
     this.directionalLight.castShadow = true
     this.directionalLight.shadow.mapSize.setScalar(2048)
 
-    this.directionalLight.shadow.camera.near = 0
-    this.directionalLight.shadow.camera.far = gridConfig.maxRadius * 3
+    this.directionalLight.shadow.camera.near = 80
+    this.directionalLight.shadow.camera.far = 120
 
     const offset = gridConfig.maxRadius * 2
     this.directionalLight.shadow.camera.right = offset
@@ -45,11 +48,18 @@ export default class Environment {
     this.directionalLight.shadow.bias = -0.003
     this.directionalLight.shadow.normalBias = 0.01
 
-    this.scene.add(this.directionalLight)
+    this.sunSpherical = new Spherical(1, MathUtils.degToRad(60), MathUtils.degToRad(120))
+    this.sunDirection = new Vector3()
+    this.updateSun()
 
-    this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
-    this.pointLight.position.set(800, 150, 10)
-    this.scene.add(this.pointLight)
+    this.scene.add(this.pointLight, this.directionalLight)
+  }
+
+  updateSun = () => {
+    this.sunDirection.setFromSpherical(this.sunSpherical)
+    this.pointLight.position.copy(this.sunDirection).multiplyScalar(1000)
+    this.pointLight.position.y -= 350
+    this.directionalLight.position.copy(this.sunDirection).multiplyScalar(100)
   }
 
   setEnvironmentMap() {
@@ -85,25 +95,36 @@ export default class Environment {
     this.scene.add(this.shadowHelper)
 
     const folder = this.debug.root.addFolder({ title: '💡 environment', expanded: false })
-    folder.addBinding(this.directionalLight, 'position', {
-      label: 'light position',
-    })
 
-    folder.addBinding(this.pointLight, 'position', {
-      label: 'sun position',
-    })
+    folder
+      .addBinding(this.sunSpherical, 'phi', {
+        min: 0,
+        max: Math.PI,
+        label: 'sun polar',
+        format: value => MathUtils.radToDeg(value),
+      })
+      .on('change', this.updateSun)
+
+    folder
+      .addBinding(this.sunSpherical, 'theta', {
+        min: -Math.PI,
+        max: Math.PI,
+        label: 'sun azimuth',
+        format: value => MathUtils.radToDeg(value),
+      })
+      .on('change', this.updateSun)
 
     folder.addBinding(this.directionalLight.shadow.camera, 'near', {
       label: 'shadow near',
-      min: -100,
-      max: 100,
+      min: -500,
+      max: 500,
       step: 1,
     })
 
     folder.addBinding(this.directionalLight.shadow.camera, 'far', {
       label: 'shadow far',
-      min: -100,
-      max: 100,
+      min: -500,
+      max: 500,
       step: 1,
     })
 
