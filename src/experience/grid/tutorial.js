@@ -6,6 +6,7 @@ export default class Tutorial {
     this.grid = grid
     this.show = this.grid.level === 1
 
+    if (!this.show) UI.hintText.hide()
     this.first()
   }
 
