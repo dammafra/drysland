@@ -31,7 +31,10 @@ export default class State {
 
     if (remoteState && (!localState || remoteState.timestamp > localState.timestamp)) {
       this.saveLocal(remoteState)
-    } else if (localState && (!remoteState || localState.timestamp > remoteState.timestamp)) {
+    } else if (
+      localState &&
+      (!remoteState || !localState.timestamp || localState.timestamp > remoteState.timestamp)
+    ) {
       this.saveRemote(localState)
     }
   }
