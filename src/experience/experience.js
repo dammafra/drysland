@@ -1,4 +1,6 @@
 import gridConfig from '@config/grid'
+import Auth from '@fire/auth'
+import State from '@fire/state'
 import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import { UI } from '@ui/ui'
@@ -48,6 +50,7 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
+    addEventListener('beforeunload', () => this.save())
   }
 
   resize = () => {
@@ -64,6 +67,14 @@ export default class Experience {
     this.menu = new Menu()
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
+
+    UI.authToggle.onClick(() =>
+      Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn(),
+    )
+    Auth.instance.subscribe(user => {
+      UI.authToggle.set(user)
+      user && State.instance.sync()
+    })
 
     UI.startButton.onClick(this.start.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
@@ -88,8 +99,8 @@ export default class Experience {
     this.nextLevel()
   }
 
-  nextLevel() {
-    const state = this.load()
+  async nextLevel() {
+    const state = await this.load()
     this.level = state ? state.level : this.level + 1
     const blocks = state?.blocks
 
@@ -142,19 +153,21 @@ export default class Experience {
     this.grid?.dispose()
   }
 
-  save = () => {
+  save() {
     if (!this.level) return
+
     const blocks = this.grid?.serialize()
     const level = this.level
-    localStorage.setItem('state', JSON.stringify({ level, blocks }))
+    const timestamp = Date.now()
+
+    State.instance.save({ level, blocks, timestamp })
   }
 
-  load = () => {
+  async load() {
     if (this.loaded) return
     this.loaded = true
 
-    const state = localStorage.getItem('state')
-    if (state) return JSON.parse(state)
+    return await State.instance.load()
   }
 
   setDebug() {

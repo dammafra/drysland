@@ -4,6 +4,7 @@
       "@blocks/*": ["./src/experience/blocks/*"],
       "@config/*": ["./src/config/*"],
       "@experience": ["./src/experience/experience.js"],
+      "@fire/*": ["./src/firebase/*"],
       "@grid/*": ["./src/experience/grid/*"],
       "@shaders/*": ["./src/shaders/*"],
       "@ui/*": ["./src/ui/*"],

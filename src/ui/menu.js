@@ -19,7 +19,7 @@ export default class Menu {
     this.element = document.querySelector('.menu')
     this.title = this.element.querySelector('.title')
     this.bgHex = this.title.previousElementSibling
-    this.button = this.element.querySelector('button')
+    this.buttons = this.element.querySelectorAll('button')
     this.credits = this.element.querySelector('.credits')
 
     this.open()
@@ -49,7 +49,7 @@ export default class Menu {
         ease: 'back.out',
       })
       .to(
-        this.button,
+        this.buttons,
         {
           scale: 1,
           duration: 0.5,
@@ -62,7 +62,7 @@ export default class Menu {
   async close() {
     await gsap
       .timeline()
-      .to(this.button, {
+      .to(this.buttons, {
         scale: 0,
         duration: 0.25,
         ease: 'back.in',

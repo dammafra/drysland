@@ -90,7 +90,9 @@ export default class Grid {
     this.soundPlayer.play('multiPop')
 
     await Promise.all(this.blocks.map(b => b.init()))
+
     this.landscape?.init()
+    this.experience.save()
   }
 
   setBlock(q, r) {
