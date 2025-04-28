@@ -29,12 +29,9 @@ export default class State {
     const localState = this.loadLocal()
     const remoteState = await this.loadRemote()
 
-    if (remoteState && (!localState || remoteState.timestamp > localState.timestamp)) {
+    if (remoteState && (!localState || remoteState.level > localState.level)) {
       this.saveLocal(remoteState)
-    } else if (
-      localState &&
-      (!remoteState || !localState.timestamp || localState.timestamp > remoteState.timestamp)
-    ) {
+    } else if (localState && (!remoteState || localState.level > remoteState.level)) {
       this.saveRemote(localState)
     }
   }

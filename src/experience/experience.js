@@ -152,9 +152,7 @@ export default class Experience {
 
     const blocks = this.grid?.serialize()
     const level = this.level
-    const timestamp = Date.now()
-
-    State.instance.save({ level, blocks, timestamp })
+    State.instance.save({ level, blocks })
   }
 
   async load() {
