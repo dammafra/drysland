@@ -29,7 +29,7 @@ export default class Menu {
     this.idle = gsap.to(this.bgHex, {
       rotate: '+=60',
       duration: 0.5,
-      repeatDelay: 0.5,
+      repeatDelay: 1.5,
       ease: 'back.inOut',
       repeat: -1,
       repeatRefresh: true,

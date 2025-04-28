@@ -38,7 +38,6 @@ export default class Landscape {
       }),
     )
     this.grid.addPerimeter(() => Random.oneOf('grass', 'grassForest'))
-    this.grid.addPerimeter(() => Random.oneOf('sand', 'sandRocks'))
   }
 
   init() {

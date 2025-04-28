@@ -9,44 +9,50 @@ export default class Ocean {
     this.grid = grid
     this.size = 20
 
+    this.grid.addPerimeter(() => Random.oneOf('sand', 'sandRocks'))
     this.grid.addPerimeter(() => Random.weightedOneOf({ water: 1, waterRocks: 0.05 }))
 
-    this.grid.blocks
-      .filter(b => blocksConfig.sand.includes(b.name))
-      .forEach(b => {
-        if (Random.boolean(0.98)) return
-        b.name = Random.oneOf(blocksConfig.docks)
-        this.rotateTowardsOcean(b)
-      })
+    this.placeDocks()
 
     for (let i = 0; i < this.size; i++) {
-      this.grid.perimeter.forEach(block => {
-        block.neighbors = gridConfig.directions.map(dir => {
-          const q = block.q + dir.q
-          const r = block.r + dir.r
-          const existingBlock = this.grid.getBlock(q, r)
-          if (existingBlock) return existingBlock
-
-          const waterBlock = new WaterBlock({ grid: this.grid, q, r })
-          this.grid.blocksMap.set(waterBlock.key, waterBlock)
-          return waterBlock
-        })
-      })
+      this.addWaterPerimeter()
     }
   }
 
-  rotateTowardsOcean = block => {
-    const directions = block.neighbors
-      .map((b, i) => (b.name.includes('water') ? i : undefined))
-      .filter(b => b >= 0)
+  placeDocks() {
+    const sands = this.grid.blocks.filter(b => blocksConfig.sand.includes(b.name))
 
-    let direction
-    if (directions.length === 3) {
-      direction = directions.join('') === '015' ? 0 : directions.at(1)
-    } else {
-      direction = Random.oneOf(directions)
-    }
+    sands.forEach(b => {
+      const firstWater = b.neighbors.findIndex(n => n.name.includes('water'))
+      const lastWater = b.neighbors.findLastIndex(n => n.name.includes('water'))
 
-    block.rotation = -((Math.PI / 3) * direction)
+      if (firstWater === lastWater) {
+        b.name = Random.oneOf(blocksConfig.docks)
+        b.rotation = -((Math.PI / 3) * firstWater)
+        b.neighbors.forEach(n => {
+          if (n.name.includes('sand') || n.name.includes('sand')) n.name = 'water'
+        })
+      }
+    })
+
+    sands.forEach(b => {
+      const waterNeighbors = b.neighbors.filter(n => n.name.includes('water'))
+      if (waterNeighbors.length === 4) b.name = 'water'
+    })
+  }
+
+  addWaterPerimeter() {
+    this.grid.perimeter.forEach(block => {
+      block.neighbors = gridConfig.directions.map(dir => {
+        const q = block.q + dir.q
+        const r = block.r + dir.r
+        const existingBlock = this.grid.getBlock(q, r)
+        if (existingBlock) return existingBlock
+
+        const waterBlock = new WaterBlock({ grid: this.grid, q, r })
+        this.grid.blocksMap.set(waterBlock.key, waterBlock)
+        return waterBlock
+      })
+    })
   }
 }
