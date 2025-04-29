@@ -28,25 +28,16 @@ export default class Menu {
   init() {
     this.element.classList.remove('hidden')
     gsap.set(this.element, { scale: 1 })
-    gsap.set(this.bgHex, { scale: 0, rotate: 0 })
+    gsap.set(this.bgHex, { scale: 0, rotate: -60 })
     gsap.set(this.title, { scale: 0 })
     gsap.set(this.footer, { opacity: 0 })
     gsap.set(this.buttons, { scale: 0 })
   }
 
-  open() {
+  async open() {
     this.init()
 
-    this.idle = gsap.to(this.bgHex, {
-      rotate: '+=60',
-      duration: 0.5,
-      repeatDelay: 1.5,
-      ease: 'back.inOut',
-      repeat: -1,
-      repeatRefresh: true,
-    })
-
-    return gsap
+    await gsap
       .timeline()
       .to(this.element, { opacity: 1 })
       .to(this.title, {
@@ -58,6 +49,7 @@ export default class Menu {
         this.bgHex,
         {
           scale: 1,
+          rotate: 0,
           duration: 0.5,
           ease: 'back.out',
         },
@@ -77,6 +69,15 @@ export default class Menu {
         },
         '<+0.2',
       )
+
+    this.idle = gsap.to(this.bgHex, {
+      rotate: '+=60',
+      duration: 0.5,
+      repeatDelay: 1.5,
+      ease: 'back.inOut',
+      repeat: -1,
+      repeatRefresh: true,
+    })
   }
 
   async close() {

@@ -24,12 +24,12 @@ export default class Modal extends Element {
 
     this.beforeOpenCallback && this.beforeOpenCallback(this.content)
 
-    gsap.set(this.element, { rotate: 60 })
+    gsap.set(this.element, { rotate: -60 })
     gsap.timeline().to(this.element, {
       scale: 1,
       rotate: 0,
-      duration: 0.25,
-      ease: 'back.inOut',
+      duration: 0.5,
+      ease: 'back.out',
       onComplete: () => {
         this.#closeable && this.closeButton.show()
         delete this.beforeOpenCallback
@@ -43,9 +43,9 @@ export default class Modal extends Element {
   close() {
     gsap.timeline().to(this.element, {
       scale: 0,
-      rotate: 60,
+      rotate: -60,
       duration: 0.25,
-      ease: 'back.inOut',
+      ease: 'back.in',
       onStart: () => this.closeButton.hide(),
       onComplete: () => this.content.remove(),
     })
