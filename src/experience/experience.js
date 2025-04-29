@@ -34,6 +34,9 @@ export default class Experience {
 
     // Options
     this.canvas = canvas
+    this.canvas.addEventListener('mousedown', () => this.canvas.classList.add('grabbing'))
+    this.canvas.addEventListener('mouseup', () => this.canvas.classList.remove('grabbing'))
+
     this.loading = loading
     this.debug = debug
 

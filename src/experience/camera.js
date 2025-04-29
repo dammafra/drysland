@@ -112,6 +112,7 @@ export default class Camera {
 
   setExplorationControls() {
     this.autoRotate = true
+    this.canvas.classList.remove('move')
 
     this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
@@ -121,6 +122,7 @@ export default class Camera {
 
   setGameControls(block) {
     this.autoRotate = false
+    this.canvas.classList.add('move')
 
     this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK

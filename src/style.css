@@ -23,13 +23,40 @@
   -webkit-mask-size: cover;
 }
 
+@utility my-cursor-auto {
+  cursor: url('/cursors/auto.png'), auto;
+}
+
+@utility my-cursor-pointer {
+  cursor: url('/cursors/pointer.png'), pointer;
+}
+
+@utility my-cursor-grab {
+  cursor: url('/cursors/grab.png'), grab;
+}
+
+@utility my-cursor-grabbing {
+  cursor: url('/cursors/grabbing.png'), grabbing;
+}
+
+@utility my-cursor-move {
+  cursor: url('/cursors/move.png'), move;
+}
+
 /* styles */
 * {
-  @apply select-none touch-manipulation;
+  @apply select-none touch-manipulation !my-cursor-auto;
 }
 
 a {
   @apply inline-block underline;
+}
+
+a,
+button,
+a *,
+button * {
+  @apply !my-cursor-pointer;
 }
 
 html,
@@ -49,8 +76,20 @@ main {
   @apply fixed top-0 left-0 outline-none;
 }
 
+.webgl.grab {
+  @apply !my-cursor-grab;
+}
+
+.webgl.grabbing {
+  @apply !my-cursor-grabbing;
+}
+
+.webgl.move {
+  @apply !my-cursor-move;
+}
+
 .webgl.pointer {
-  @apply !cursor-pointer;
+  @apply !my-cursor-pointer;
 }
 
 /* loading */
@@ -122,7 +161,7 @@ main {
 
 /* UI */
 button.hex {
-  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 cursor-pointer text-primary;
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary;
 }
 
 button.hex:has(label) {
@@ -130,7 +169,7 @@ button.hex:has(label) {
 }
 
 button.hex label {
-  @apply text-xl leading-4 cursor-pointer;
+  @apply text-xl leading-4;
 }
 
 #level {
