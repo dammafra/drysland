@@ -104,10 +104,8 @@ export default class Camera {
     )
   }
 
-  async intro() {
-    this.autoRotate = false
-    await this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
-    this.autoRotate = true
+  intro() {
+    this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
   }
 
   setExplorationControls() {
