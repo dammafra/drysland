@@ -17,7 +17,10 @@
 
 @utility hex {
   @apply !aspect-square min-w-12 min-h-12;
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  mask-image: url('/hex-mask.svg');
+  mask-size: cover;
+  -webkit-mask-image: url('/hex-mask.svg');
+  -webkit-mask-size: cover;
 }
 
 /* styles */
@@ -110,8 +113,6 @@ main {
 
 .modal-container #modal {
   @apply hex bg-white text-slate-600 size-96 min-w-96 z-10 items-center justify-center px-12;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: scale(1);
 }
 
 /* state conflict */
@@ -121,7 +122,7 @@ main {
 
 /* UI */
 button.hex {
-  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 cursor-pointer  text-primary;
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 cursor-pointer text-primary;
 }
 
 button.hex:has(label) {
@@ -133,12 +134,12 @@ button.hex label {
 }
 
 #level {
-  @apply bg-gradient-to-b to-100% from-background to-transparent py-4 pb-8 absolute top-0  w-full text-center text-4xl text-primary pointer-events-none;
+  @apply bg-gradient-to-b to-100% from-background to-transparent py-4 pb-8 absolute top-0 w-full text-center text-4xl text-primary pointer-events-none;
   text-shadow: 1px 1px 2px white;
 }
 
 #tutorial {
-  @apply absolute bottom-28 px-10  w-full text-center text-2xl text-white animate-pulse pointer-events-none;
+  @apply absolute bottom-28 px-10 w-full text-center text-2xl text-white animate-pulse pointer-events-none;
   text-shadow: 1px 1px 2px black;
 }
 
