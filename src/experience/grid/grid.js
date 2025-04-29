@@ -280,7 +280,7 @@ export default class Grid {
       })
 
       this.soundPlayer.play('success')
-      UI.nextButton.show()
+      UI.nextButton.wiggle().show()
       this.experience.setExplorationMode()
 
       this.tutorial.third()

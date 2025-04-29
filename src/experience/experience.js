@@ -127,12 +127,13 @@ export default class Experience {
     this.toggleLoop()
     this.toggleAmbience()
 
+    this.camera.autoRotate = false
     UI.startButton.setLabel('Resume')
     this.menu.open()
   }
 
   setGameMode(block) {
-    UI.backButton.show()
+    UI.backButton.wiggle().show()
 
     this.camera.setGameControls(block)
     this.environment.directionalLight.castShadow = false

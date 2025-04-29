@@ -154,17 +154,22 @@
       </button>
 
       <!-- header -->
+      <button id="menu" class="hex absolute top-2 left-4 z-10 hidden">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <h1 id="level" class="hidden">Level 1</h1>
 
       <!-- tutorial -->
       <p id="tutorial" class="hidden">Touch any river tile to start</p>
 
       <!-- footer -->
-      <button id="menu" class="hex hidden absolute bottom-4 left-4">
-        <i class="fa-solid fa-bars"></i>
+      <div class="absolute bottom-4 text-center w-full pointer-events-none">
+        <button id="next" class="hex primary text-2xl pointer-events-auto hidden">Next</button>
+      </div>
+
+      <button id="back" class="hex hidden absolute bottom-4 left-4">
+        <i class="fa-regular fa-compass fa-xl"></i>
       </button>
-      <button id="back" class="hex hidden">Explore</button>
-      <button id="next" class="hex primary text-2xl hidden">Next</button>
 
       <button id="fullscreen" class="hex absolute bottom-14 right-22 hidden">
         <i class="fa-solid fa-expand"></i>

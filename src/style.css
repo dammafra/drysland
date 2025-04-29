@@ -43,6 +43,34 @@
   cursor: url('/cursors/move.png'), move;
 }
 
+@theme {
+  --animate-wiggle: wiggle 2s infinite ease-in-out;
+
+  @keyframes wiggle {
+    0% {
+      transform: rotate(0deg);
+    }
+    5% {
+      transform: rotate(10deg);
+    }
+    10% {
+      transform: rotate(-10deg);
+    }
+    15% {
+      transform: rotate(10deg);
+    }
+    20% {
+      transform: rotate(-10deg);
+    }
+    25% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
 /* styles */
 * {
   @apply select-none touch-manipulation !my-cursor-auto;
@@ -69,7 +97,7 @@ body {
 }
 
 main {
-  @apply h-full text-center;
+  @apply h-full;
 }
 
 .webgl {
@@ -169,11 +197,6 @@ button.hex label {
 
 button.hex.primary {
   @apply bg-primary text-white hover:bg-sky-400;
-}
-
-#back,
-#next {
-  @apply absolute bottom-4 size-18;
 }
 
 #level {
