@@ -22,13 +22,10 @@ export default class Auth {
     this.provider = new GoogleAuthProvider()
   }
 
-  async signIn() {
-    await signInWithPopup(this.auth, this.provider)
-    return State.instance.syncOn()
-  }
+  signIn = () => signInWithPopup(this.auth, this.provider)
 
   async signOut() {
-    await State.instance.syncOff()
+    await State.instance.desync()
     return signOut(this.auth)
   }
 

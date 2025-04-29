@@ -18,7 +18,7 @@ export default class State {
 
   load = () => (Auth.instance.user ? this.loadRemote() : this.loadLocal())
 
-  async syncOn() {
+  async sync() {
     const localState = this.loadLocal()
     const remoteState = await this.loadRemote()
 
@@ -65,7 +65,7 @@ export default class State {
     }
   }
 
-  async syncOff() {
+  async desync() {
     const remoteState = await this.loadRemote()
     this.saveLocal(remoteState)
   }
