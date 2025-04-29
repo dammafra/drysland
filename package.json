@@ -18,6 +18,7 @@
   "dependencies": {
     "@pmndrs/pointer-events": "^6.6.14",
     "@tailwindcss/vite": "^4.0.9",
+    "@tweakpane/plugin-essentials": "^0.2.1",
     "@vercel/analytics": "^1.5.0",
     "camera-controls": "^2.10.0",
     "firebase": "^11.6.1",

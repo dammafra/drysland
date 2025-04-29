@@ -1,21 +1,25 @@
-import Stats from 'three/examples/jsm/libs/stats.module.js'
+import * as TweakpaneEssentialsPlugin from '@tweakpane/plugin-essentials'
 import { Pane } from 'tweakpane'
 
 export default class GUI {
   constructor() {
     this.root = new Pane({ title: 'DEBUG' })
+    this.root.registerPlugin(TweakpaneEssentialsPlugin)
 
     this.root.element.parentElement.style.width = '350px'
     this.root.element.parentElement.style.zIndex = 999
 
-    // Stats
-    this.stats = new Stats()
-    document.body.appendChild(this.stats.dom)
-
-    addEventListener('beforeunload', this.saveState)
     this.root
       .addButton({ title: 'reset' })
       .on('click', () => this.root.importState(JSON.parse(this.defaults)))
+
+    this.stats = this.root.addBlade({
+      view: 'fpsgraph',
+      label: 'FPS',
+      rows: 2,
+    })
+
+    addEventListener('beforeunload', this.saveState)
   }
 
   storeDefaults() {

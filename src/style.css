@@ -73,18 +73,22 @@
 
 /* styles */
 * {
-  @apply select-none touch-manipulation !my-cursor-auto;
+  @apply select-none touch-manipulation;
+}
+
+main * {
+  @apply !my-cursor-auto;
+
+  a,
+  button,
+  a *,
+  button * {
+    @apply !my-cursor-pointer;
+  }
 }
 
 a {
   @apply inline-block underline;
-}
-
-a,
-button,
-a *,
-button * {
-  @apply !my-cursor-pointer;
 }
 
 html,
