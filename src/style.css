@@ -39,7 +39,7 @@ body {
 }
 
 main {
-  @apply text-center;
+  @apply h-full text-center;
 }
 
 .webgl {
@@ -71,6 +71,11 @@ main {
   @apply flex flex-col justify-center items-center;
 }
 
+.menu .bg-hex {
+  @apply hex bg-white/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0 flex justify-center items-center;
+  @apply after:hex after:bg-primary/80 after:size-46 after:content-[''];
+}
+
 .menu .title {
   @apply font-hex text-7xl text-white scale-0 uppercase;
   text-shadow: 5px 5px 2px var(--color-primary);
@@ -80,18 +85,46 @@ main {
   @apply text-3xl scale-0;
 }
 
-.menu .credits {
-  @apply font-hex text-white text-base pt-10 text-center opacity-0;
+.menu footer {
+  @apply font-hex text-white opacity-0;
   text-shadow: 0.5px 0.5px 0.5px black;
 }
 
-.menu .credits a {
+.menu footer a {
   @apply underline hover:text-sky-200;
+}
+
+/* credits */
+.credits {
+  @apply font-hex text-slate-600 text-base text-center;
+}
+
+.credits a {
+  @apply underline hover:text-primary;
+}
+
+/* modal */
+.modal-container {
+  @apply relative h-full w-full flex items-center justify-center;
+}
+
+.modal-container #modal {
+  @apply hex bg-white size-96 min-w-96 z-10 flex items-center justify-center px-12;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: scale(1);
 }
 
 /* UI */
 button.hex {
   @apply bg-white shadow-2xl p-3 hover:bg-sky-200 cursor-pointer font-hex text-primary;
+}
+
+button.hex:has(label) {
+  @apply size-24 flex flex-col justify-center items-center gap-1;
+}
+
+button.hex label {
+  @apply text-xl leading-4;
 }
 
 #level {

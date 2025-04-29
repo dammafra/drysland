@@ -3,6 +3,7 @@ import Auth from '@fire/auth'
 import State from '@fire/state'
 import Grid from '@grid/grid'
 import Menu from '@ui/menu'
+import Modal from '@ui/modal'
 import { UI } from '@ui/ui'
 import debounce from '@utils/debounce'
 import { AxesHelper, GridHelper, Scene } from 'three'
@@ -60,7 +61,6 @@ export default class Experience {
   ready = () => {
     this.level = 0
     this.setDebug()
-
     this.loading.stop()
 
     this.menu = new Menu()
@@ -74,6 +74,7 @@ export default class Experience {
 
     UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()) //prettier-ignore
     UI.startButton.onClick(this.start.bind(this))
+    UI.creditsButton.onClick(() => Modal.instance.open('.credits'))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
   }

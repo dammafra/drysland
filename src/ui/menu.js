@@ -18,9 +18,9 @@ export default class Menu {
 
     this.element = document.querySelector('.menu')
     this.title = this.element.querySelector('.title')
-    this.bgHex = this.title.previousElementSibling
+    this.bgHex = this.element.querySelector('.bg-hex')
     this.buttons = this.element.querySelectorAll('button')
-    this.credits = this.element.querySelector('.credits')
+    this.footer = this.element.querySelector('footer')
 
     this.open()
   }
@@ -28,9 +28,9 @@ export default class Menu {
   init() {
     this.element.classList.remove('hidden')
     gsap.set(this.element, { scale: 1 })
-    gsap.set(this.bgHex, { scale: 0 })
+    gsap.set(this.bgHex, { scale: 0, rotate: 0 })
     gsap.set(this.title, { scale: 0 })
-    gsap.set(this.credits, { opacity: 0 })
+    gsap.set(this.footer, { opacity: 0 })
     gsap.set(this.buttons, { scale: 0 })
   }
 
@@ -63,7 +63,7 @@ export default class Menu {
         },
         '<+0.2',
       )
-      .to(this.credits, {
+      .to(this.footer, {
         opacity: 1,
         duration: 1,
         ease: 'back.out',
@@ -88,7 +88,7 @@ export default class Menu {
         ease: 'back.in',
       })
       .to(
-        this.credits,
+        this.footer,
         {
           opacity: 0,
           duration: 0.2,

@@ -26,97 +26,106 @@
 
       <div class="menu">
         <div class="relative text-center">
-          <div
-            class="hex bg-white/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0 flex justify-center items-center"
-          >
-            <div class="hex bg-primary/80 size-46 mx-auto"></div>
-          </div>
+          <div class="bg-hex"></div>
           <div class="title">Drysland</div>
           <div class="w-full flex flex-row justify-center">
-            <button id="start" class="hex size-24 flex flex-col justify-center items-center gap-1">
+            <button id="start" class="hex">
               <i class="fa-solid fa-play"></i>
-              <div class="label text-xl leading-4">Start</div>
+              <label>Start</label>
             </button>
-            <button id="auth" class="hex size-24 flex flex-col justify-center items-center gap-1">
+            <button id="auth" class="hex">
               <i class="fa-brands fa-google"></i>
-              <div class="label text-xl leading-4">Login</div>
+              <label>Login</label>
+            </button>
+            <button id="credits" class="hex absolute -bottom-20">
+              <i class="fa-solid fa-circle-info"></i>
+              <label>Credits</label>
             </button>
           </div>
         </div>
 
-        <div class="credits">
-          <div class="text-xl">
-            Made with ❤️ by
-            <a href="https://github.com/dammafra/drysland" target="_blank"> @dammafra </a>
-          </div>
+        <footer class="text-xl absolute bottom-4">
+          Made with <i class="fa-solid fa-heart"></i> by
+          <a href="https://github.com/dammafra/drysland" target="_blank"> @dammafra </a>
+        </footer>
+      </div>
 
-          <div class="py-6">Thanks to</div>
-
-          <div class="flex flex-col gap-2">
-            <div>
-              Hexagon Kit by
-              <a href="https://kenney.nl/assets/hexagon-kit" target="_blank"> Kenney.nl </a>
-            </div>
-
-            <div class="leading-4">
-              Sound Effects by
-              <a
-                href="https://pixabay.com/users/floraphonic-38928062/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=197891"
-                target="_blank"
-              >
-                floraphonic </a
-              >,
-              <a
-                href="https://pixabay.com/users/rasoolasaad-47313572/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269266"
-                target="_blank"
-              >
-                Rasool Asaad</a
-              >, <br />
-              <a
-                href="https://pixabay.com/users/missywhimsyart-4358466/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=266187"
-                target="_blank"
-              >
-                Lynda Smith </a
-              >,
-              <a
-                href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487"
-                target="_blank"
-              >
-                Sergei Chetvertnykh
-              </a>
-              via
-              <a
-                href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music"
-                target="_blank"
-              >
-                Pixabay
-              </a>
-            </div>
-
-            <div>
-              <a href="https://skfb.ly/orun9" target="_blank"> Low-Poly Seagull </a>
-              by
-              <a href="https://sketchfab.com/simonaskLDE" target="_blank">simonaskLDE</a>
-              [<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank"> CC </a>] via
-              <a href="https://sketchfab.com/" target="_blank"> Sketchfab </a>
-            </div>
-
-            <div class="leading-4">
-              <a href="https://poly.pizza/m/cIzO4MBPqI" target="_blank"> Sail Ship </a>
-              by
-              <a href="https://poly.pizza/u/Quaternius" target="_blank"> Quaternius </a>
-              and <br />
-              <a href="https://poly.pizza/m/1d76pfN4Dne" target="_blank"> Sailboat </a>
-              by
-              <a href="https://poly.pizza/u/Poly%20by%20Google" target="_blank"> Poly by Google </a>
-              [<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC</a>] via
-              <a href="https://poly.pizza" target="_blank"> Poly Pizza </a>
-            </div>
-          </div>
-        </div>
+      <div class="modal-container">
+        <div id="modal" class="hidden"></div>
+        <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <canvas class="webgl"></canvas>
+
+      <div class="credits hidden">
+        <div class="pb-6 text-xl">Thanks to</div>
+        <div class="flex flex-col gap-4">
+          <div>
+            Hexagon Kit by
+            <a href="https://kenney.nl/assets/hexagon-kit" target="_blank"> Kenney.nl </a>
+          </div>
+
+          <div class="leading-4">
+            Sound Effects by
+            <a
+              href="https://pixabay.com/users/floraphonic-38928062/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=197891"
+              target="_blank"
+            >
+              floraphonic </a
+            >,
+            <a
+              href="https://pixabay.com/users/rasoolasaad-47313572/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269266"
+              target="_blank"
+            >
+              Rasool Asaad</a
+            >, <br />
+            <a
+              href="https://pixabay.com/users/missywhimsyart-4358466/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=266187"
+              target="_blank"
+            >
+              Lynda Smith </a
+            >,
+            <a
+              href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487"
+              target="_blank"
+            >
+              Sergei Chetvertnykh
+            </a>
+            <br />
+            via
+            <a
+              href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music"
+              target="_blank"
+            >
+              Pixabay
+            </a>
+          </div>
+
+          <div class="leading-4">
+            <a href="https://skfb.ly/orun9" target="_blank"> Low-Poly Seagull </a>
+            by
+            <a href="https://sketchfab.com/simonaskLDE" target="_blank">simonaskLDE</a>
+            [<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank"> CC </a>]
+            <br />via
+            <a href="https://sketchfab.com/" target="_blank"> Sketchfab </a>
+          </div>
+
+          <div class="leading-4">
+            <a href="https://poly.pizza/m/cIzO4MBPqI" target="_blank"> Sail Ship </a>
+            by
+            <a href="https://poly.pizza/u/Quaternius" target="_blank"> Quaternius </a>
+            and <br />
+            <a href="https://poly.pizza/m/1d76pfN4Dne" target="_blank"> Sailboat </a>
+            by
+            <a href="https://poly.pizza/u/Poly%20by%20Google" target="_blank"> Poly by Google </a>
+            [<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC</a>]
+            <br />via
+            <a href="https://poly.pizza" target="_blank"> Poly Pizza </a>
+          </div>
+        </div>
+      </div>
 
       <!-- header -->
       <button id="menu" class="hex absolute top-2 left-4 z-10 hidden">
