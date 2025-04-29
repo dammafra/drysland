@@ -3,6 +3,7 @@ import CameraControls from 'camera-controls'
 import {
   Box3,
   Frustum,
+  MathUtils,
   Matrix4,
   PerspectiveCamera,
   Quaternion,
@@ -52,13 +53,30 @@ export default class Camera {
     this.controls.minDistance = 5
     this.controls.maxDistance = 25
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
-    this.controls.restThreshold = 0.001
+    this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
+    this.controls.draggingSmoothTime = 0.25
 
     const box = new Box3()
     box.min.set(-10, 0, -10)
     box.max.set(10, 10, 10)
     this.controls.setBoundary(box)
+
+    this.controls.addEventListener('controlstart', () => {
+      this.controls.removeEventListener('rest', onRest)
+      this.userDragging = true
+      this.disableAutoRotate = true
+    })
+
+    this.controls.addEventListener('controlend', () =>
+      this.controls.active ? this.controls.addEventListener('rest', onRest) : onRest(),
+    )
+
+    const onRest = () => {
+      this.controls.removeEventListener('rest', onRest)
+      this.userDragging = false
+      this.disableAutoRotate = false
+    }
   }
 
   resize() {
@@ -68,17 +86,25 @@ export default class Camera {
 
   update() {
     this.controls.update(this.time.delta)
+
+    if (this.autoRotate && !this.disableAutoRotate) {
+      this.controls.azimuthAngle += 20 * this.time.delta * 0.3 * MathUtils.DEG2RAD
+    }
   }
 
   distanceTo(position) {
     return this.instance.position.distanceTo(position)
   }
 
-  intro() {
-    return this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
+  async intro() {
+    this.autoRotate = false
+    await this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
+    this.autoRotate = true
   }
 
   setExplorationControls() {
+    this.autoRotate = true
+
     this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
 
@@ -86,6 +112,8 @@ export default class Camera {
   }
 
   setGameControls(block) {
+    this.autoRotate = false
+
     this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
 
