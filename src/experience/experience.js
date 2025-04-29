@@ -80,12 +80,12 @@ export default class Experience {
 
     UI.soundsToggle.onToggle(this.toggleSounds.bind(this)).show()
     UI.loopToggle.onToggle(this.toggleLoop.bind(this)).show()
-    UI.wavesToggle.onToggle(this.toggleWaves.bind(this)).show()
+    UI.wavesToggle.onToggle(this.toggleAmbience.bind(this)).show()
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.fullscreenToggle.show()
 
     this.toggleLoop()
-    this.toggleWaves()
+    this.toggleAmbience()
 
     this.nextLevel()
   }
@@ -117,7 +117,7 @@ export default class Experience {
     UI.nextButton.hide()
 
     this.toggleLoop()
-    this.toggleWaves()
+    this.toggleAmbience()
 
     UI.startButton.setLabel('Resume')
     this.menu.open()
@@ -146,7 +146,15 @@ export default class Experience {
       : this.soundPlayer.playBackground('loop', 0.5)
   }
 
-  toggleWaves() {
+  toggleAmbience() {
+    this.soundPlayer.backgrounds.has('seagulls')
+      ? this.soundPlayer.stopBackground('seagulls')
+      : this.soundPlayer.playBackground('seagulls', 0)
+
+    this.soundPlayer.backgrounds.has('sailing')
+      ? this.soundPlayer.stopBackground('sailing')
+      : this.soundPlayer.playBackground('sailing', 0)
+
     return this.soundPlayer.backgrounds.has('waves')
       ? this.soundPlayer.stopBackground('waves')
       : this.soundPlayer.playBackground('waves', 0.1)

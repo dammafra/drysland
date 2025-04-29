@@ -1,144 +1,132 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Drysland</title>
-    <link rel="stylesheet" href="./style.css" />
 
-    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
-    <link rel="shortcut icon" href="favicon/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
-    <link rel="manifest" href="favicon/site.webmanifest" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Drysland</title>
+  <link rel="stylesheet" href="./style.css" />
 
-    <script src="https://kit.fontawesome.com/7fdff1040a.js" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <main>
-      <div class="loading">
-        <div class="title">Loading</div>
-        <div class="spinner"></div>
-      </div>
+  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+  <link rel="shortcut icon" href="favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="favicon/site.webmanifest" />
 
-      <div class="menu">
-        <div class="relative text-center">
-          <div class="bg-hex"></div>
-          <div class="title">Drysland</div>
-          <div class="w-full flex flex-row justify-center">
-            <button id="start" class="hex">
-              <i class="fa-solid fa-play"></i>
-              <label>Start</label>
-            </button>
-            <button id="auth" class="hex">
-              <i class="fa-brands fa-google"></i>
-              <label>Login</label>
-            </button>
-            <button id="credits" class="hex absolute -bottom-20">
-              <i class="fa-solid fa-circle-info"></i>
-              <label>Credits</label>
-            </button>
-          </div>
-        </div>
+  <script src="https://kit.fontawesome.com/7fdff1040a.js" crossorigin="anonymous"></script>
+</head>
 
-        <footer class="text-xl absolute bottom-4">
-          Made with <i class="fa-solid fa-heart"></i> by
-          <a href="https://github.com/dammafra/drysland" target="_blank"> @dammafra </a>
-        </footer>
-      </div>
+<body>
+  <main>
+    <div class="loading">
+      <div class="title">Loading</div>
+      <div class="spinner"></div>
+    </div>
 
-      <div class="modal-container">
-        <div id="modal" class="flex hidden"></div>
-        <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <canvas class="webgl"></canvas>
-
-      <div class="credits hidden">
-        <div class="pb-6 text-xl">Thanks to</div>
-        <div class="flex flex-col gap-4">
-          <div>
-            Hexagon Kit by
-            <a href="https://kenney.nl/assets/hexagon-kit" target="_blank"> Kenney.nl </a>
-          </div>
-
-          <div class="leading-4">
-            Sound Effects by
-            <a
-              href="https://pixabay.com/users/floraphonic-38928062/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=197891"
-              target="_blank"
-            >
-              floraphonic </a
-            >,
-            <a
-              href="https://pixabay.com/users/rasoolasaad-47313572/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269266"
-              target="_blank"
-            >
-              Rasool Asaad</a
-            >, <br />
-            <a
-              href="https://pixabay.com/users/missywhimsyart-4358466/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=266187"
-              target="_blank"
-            >
-              Lynda Smith </a
-            >,
-            <a
-              href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487"
-              target="_blank"
-            >
-              Sergei Chetvertnykh
-            </a>
-            <br />
-            via
-            <a
-              href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music"
-              target="_blank"
-            >
-              Pixabay
-            </a>
-          </div>
-
-          <div class="leading-4">
-            <a href="https://skfb.ly/orun9" target="_blank"> Low-Poly Seagull </a>
-            by
-            <a href="https://sketchfab.com/simonaskLDE" target="_blank">simonaskLDE</a>
-            [<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank"> CC </a>]
-            <br />via
-            <a href="https://sketchfab.com/" target="_blank"> Sketchfab </a>
-          </div>
-
-          <div class="leading-4">
-            <a href="https://poly.pizza/m/cIzO4MBPqI" target="_blank"> Sail Ship </a>
-            by
-            <a href="https://poly.pizza/u/Quaternius" target="_blank"> Quaternius </a>
-            and <br />
-            <a href="https://poly.pizza/m/1d76pfN4Dne" target="_blank"> Sailboat </a>
-            by
-            <a href="https://poly.pizza/u/Poly%20by%20Google" target="_blank"> Poly by Google </a>
-            [<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC</a>]
-            <br />via
-            <a href="https://poly.pizza" target="_blank"> Poly Pizza </a>
-          </div>
+    <div class="menu">
+      <div class="relative text-center">
+        <div class="bg-hex"></div>
+        <div class="title">Drysland</div>
+        <div class="w-full flex flex-row justify-center">
+          <button id="start" class="hex">
+            <i class="fa-solid fa-play"></i>
+            <label>Start</label>
+          </button>
+          <button id="auth" class="hex">
+            <i class="fa-brands fa-google"></i>
+            <label>Login</label>
+          </button>
+          <button id="credits" class="hex absolute -bottom-20">
+            <i class="fa-solid fa-circle-info"></i>
+            <label>Credits</label>
+          </button>
         </div>
       </div>
 
-      <div class="state-conflict hidden">
-        <div class="flex flex-col gap-2">
-          <p class="text-sm">
-            Looks like your local and remote saves don’t match, choose the one you want to keep:
-          </p>
-          <div class="slots flex justify-center gap-2"></div>
+      <footer class="text-xl absolute bottom-4">
+        Made with <i class="fa-solid fa-heart"></i> by
+        <a href="https://github.com/dammafra/drysland" target="_blank"> @dammafra </a>
+      </footer>
+    </div>
+
+    <div class="modal-container">
+      <div id="modal" class="flex hidden"></div>
+      <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <canvas class="webgl"></canvas>
+
+    <div class="credits hidden">
+      <div class="pb-6 text-xl">Thanks to</div>
+      <div class="flex flex-col gap-4">
+        <div>
+          Hexagon Kit by
+          <a href="https://kenney.nl/assets/hexagon-kit" target="_blank"> Kenney.nl </a>
+        </div>
+
+        <div class="leading-4">
+          Sound Effects by
+          <a href="https://pixabay.com/users/floraphonic-38928062/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=197891"
+            target="_blank">
+            floraphonic </a>,
+          <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=102122"
+            target="_blank">freesound_community</a>
+          <a href="https://pixabay.com/users/rasoolasaad-47313572/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=269266"
+            target="_blank">
+            Rasool Asaad</a>, <br />
+          <a href="https://pixabay.com/users/missywhimsyart-4358466/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=266187"
+            target="_blank">
+            Lynda Smith </a>,
+          <a href="https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487"
+            target="_blank">
+            Sergei Chetvertnykh
+          </a>
+          <br />
+          via
+          <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music"
+            target="_blank">
+            Pixabay
+          </a>
+        </div>
+
+        <div class="leading-4">
+          <a href="https://skfb.ly/orun9" target="_blank"> Low-Poly Seagull </a>
+          by
+          <a href="https://sketchfab.com/simonaskLDE" target="_blank">simonaskLDE</a>
+          [<a href="http://creativecommons.org/licenses/by/4.0/" target="_blank"> CC </a>]
+          <br />via
+          <a href="https://sketchfab.com/" target="_blank"> Sketchfab </a>
+        </div>
+
+        <div class="leading-4">
+          <a href="https://poly.pizza/m/cIzO4MBPqI" target="_blank"> Sail Ship </a>
+          by
+          <a href="https://poly.pizza/u/Quaternius" target="_blank"> Quaternius </a>
+          and <br />
+          <a href="https://poly.pizza/m/1d76pfN4Dne" target="_blank"> Sailboat </a>
+          by
+          <a href="https://poly.pizza/u/Poly%20by%20Google" target="_blank"> Poly by Google </a>
+          [<a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC</a>]
+          <br />via
+          <a href="https://poly.pizza" target="_blank"> Poly Pizza </a>
         </div>
       </div>
+    </div>
 
-      <button id="save-slot" class="hex hidden">
-        <p class="level text-xl">level</p>
-        <p class="date leading-4">date</p>
+    <div class="state-conflict hidden">
+      <div class="flex flex-col gap-2">
+        <p class="text-sm">
+          Looks like your local and remote saves don’t match, choose the one you want to keep:
+        </p>
+        <div class="slots flex justify-center gap-2"></div>
+      </div>
+    </div>
+
+    <button id="save-slot" class="hex hidden">
+      <p class="level text-xl">level</p>
+      <p class="date leading-4">date</p>
       </div>
 
       <!-- header -->
@@ -169,8 +157,9 @@
       <button id="waves" class="hex absolute bottom-4 right-4 hidden">
         <i class="fa-solid fa-water"></i>
       </button>
-    </main>
+  </main>
 
-    <script type="module" src="./script.js"></script>
-  </body>
+  <script type="module" src="./script.js"></script>
+</body>
+
 </html>

@@ -1,3 +1,4 @@
+import Experience from '@experience'
 import Random from '@utils/random'
 import Seagull from './seagull'
 import Ship from './ship'
@@ -6,6 +7,10 @@ import Wind from './wind'
 // TODO improve
 export default class Landscape {
   constructor(grid) {
+    this.experience = Experience.instance
+    this.camera = this.experience.camera
+    this.soundPlayer = this.experience.soundPlayer
+
     this.grid = grid
 
     this.grid.deadEnds.forEach((b, i) => {
@@ -80,6 +85,22 @@ export default class Landscape {
     this.wind?.update()
     this.ship?.update()
     this.seagulls?.forEach(s => s.update())
+
+    if (this.ship) {
+      const distance = this.camera.normalizedDistanceTo(this.ship.mesh.position)
+      const volume = Math.pow(1 - distance, 10)
+      const clampedVolume = Math.max(0, Math.min(volume, 0.3))
+      this.soundPlayer.updateBackgoundVolume('sailing', clampedVolume)
+    }
+
+    if (this.seagulls) {
+      const distance = Math.min(
+        ...this.seagulls.map(s => s.mesh.position).map(p => this.camera.normalizedDistanceTo(p)),
+      )
+      const volume = Math.pow(1 - distance, 5)
+      const clampedVolume = Math.max(0, Math.min(volume, 1))
+      this.soundPlayer.updateBackgoundVolume('seagulls', clampedVolume)
+    }
   }
 
   dispose() {

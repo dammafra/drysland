@@ -68,13 +68,18 @@ export class SoundPlayer {
     source.connect(gainNode).connect(this.audioContext.destination)
     source.start()
 
-    this.backgrounds.set(sound, source)
+    this.backgrounds.set(sound, { source, gainNode })
     return true
   }
 
   async stopBackground(sound) {
-    this.backgrounds.get(sound)?.stop()
+    this.backgrounds.get(sound)?.source.stop()
     this.backgrounds.delete(sound)
     return false
+  }
+
+  async updateBackgoundVolume(sound, volume) {
+    if (!this.backgrounds.has(sound)) return
+    this.backgrounds.get(sound).gainNode.gain.value = volume
   }
 }

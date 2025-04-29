@@ -31,6 +31,16 @@ const resourcesConfig = [
     path: 'sounds/multi-pop.mp3',
   },
   {
+    name: 'sailing',
+    type: 'sound',
+    path: 'sounds/sailing.mp3',
+  },
+  {
+    name: 'seagulls',
+    type: 'sound',
+    path: 'sounds/seagulls.mp3',
+  },
+  {
     name: 'success',
     type: 'sound',
     path: 'sounds/success.mp3',

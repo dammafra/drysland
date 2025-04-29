@@ -96,6 +96,14 @@ export default class Camera {
     return this.instance.position.distanceTo(position)
   }
 
+  normalizedDistanceTo(position) {
+    const distance = this.distanceTo(position)
+    return (
+      (distance - this.controls.minDistance) /
+      (this.controls.maxDistance - this.controls.minDistance)
+    )
+  }
+
   async intro() {
     this.autoRotate = false
     await this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
