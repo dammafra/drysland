@@ -25,6 +25,7 @@ export default class Button extends Element {
         })
 
       callback()
+      this.element.blur()
     }
 
     return this

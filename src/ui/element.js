@@ -6,6 +6,7 @@ export default class Element {
 
     gsap.set(this.element, { scale: 0 })
     this.element.classList.remove('hidden')
+    this.element.setAttribute('tabindex', '-1')
   }
 
   show() {
