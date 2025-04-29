@@ -173,7 +173,7 @@ button.hex.primary {
 
 #back,
 #next {
-  @apply absolute bottom-4 -translate-x-1/2 size-18;
+  @apply absolute bottom-4 size-18;
 }
 
 #level {
