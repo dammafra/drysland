@@ -6,21 +6,21 @@ export default class Tutorial {
     this.grid = grid
     this.show = this.grid.level === 1
 
-    if (!this.show) UI.hintText.hide()
+    if (!this.show) UI.tutorialText.hide()
     this.first()
   }
 
   first() {
     if (!this.show) return
 
-    UI.hintText.set(`${Touch.support ? 'Touch' : 'Click'} any river tile to start`).show()
+    UI.tutorialText.set(`${Touch.support ? 'Touch' : 'Click'} any river tile to start`).show()
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = true))
   }
 
   second() {
     if (!this.show) return
 
-    UI.hintText
+    UI.tutorialText
       .set('Rotate the tiles to restore the course of the river and un-Dry the Island')
       .show()
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = false))
@@ -29,7 +29,7 @@ export default class Tutorial {
   third() {
     if (!this.show) return
 
-    UI.hintText.set('Great job! Now sail to the next Drysland!').show()
+    UI.tutorialText.set('Great job! Now sail to the next Drysland!').show()
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = false))
   }
 }

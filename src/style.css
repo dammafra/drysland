@@ -99,7 +99,7 @@ button.hex {
   text-shadow: 1px 1px 2px white;
 }
 
-#hint {
+#tutorial {
   @apply absolute bottom-28 px-10 font-hex w-full text-center text-2xl text-white animate-pulse pointer-events-none;
   text-shadow: 1px 1px 2px black;
 }

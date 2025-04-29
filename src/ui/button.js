@@ -1,9 +1,10 @@
 import gsap from 'gsap'
 import Element from './element'
+import Text from './text'
 
 export default class Button extends Element {
-  constructor(id) {
-    super(id)
+  constructor(selector) {
+    super(selector)
   }
 
   onClick(callback) {
@@ -26,6 +27,15 @@ export default class Button extends Element {
       callback()
     }
 
+    return this
+  }
+
+  setLabel(content) {
+    if (!this.label) {
+      this.label = new Text(`#${this.element.id} .label`)
+    }
+
+    this.label.set(content).show()
     return this
   }
 }

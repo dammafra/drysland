@@ -93,6 +93,7 @@ export default class Grid {
 
     this.landscape?.init()
     this.experience.save()
+    UI.menuButton.show()
   }
 
   setBlock(q, r) {

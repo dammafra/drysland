@@ -68,8 +68,7 @@ export default class Experience {
     this.environment = new Environment()
 
     Auth.instance.subscribe(user => {
-      UI.authToggle.set(!user)
-      UI.authText.set(user ? 'Logout' : 'Login').show()
+      UI.authToggle.setLabel(user ? 'Logout' : 'Login').toggle(!user)
       user && State.instance.sync()
     })
 
@@ -85,6 +84,7 @@ export default class Experience {
     UI.soundsToggle.onToggle(this.toggleSounds.bind(this)).show()
     UI.loopToggle.onToggle(this.toggleLoop.bind(this)).show()
     UI.wavesToggle.onToggle(this.toggleWaves.bind(this)).show()
+    UI.menuButton.onClick(this.openMenu.bind(this))
     UI.fullscreenToggle.show()
 
     this.toggleLoop()
@@ -102,6 +102,28 @@ export default class Experience {
     this.grid = new Grid(this.level, blocks)
 
     UI.levelText.set(`Level ${this.level}`).show()
+  }
+
+  openMenu() {
+    this.grid?.dispose()
+    this.level--
+    this.loaded = false
+
+    UI.soundsToggle.hide()
+    UI.loopToggle.hide()
+    UI.wavesToggle.hide()
+    UI.menuButton.hide()
+    UI.fullscreenToggle.hide()
+    UI.levelText.hide()
+    UI.tutorialText.hide()
+    UI.backButton.hide()
+    UI.nextButton.hide()
+
+    this.toggleLoop()
+    this.toggleWaves()
+
+    UI.startButton.setLabel('Resume')
+    this.menu.open()
   }
 
   setGameMode(block) {

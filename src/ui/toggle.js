@@ -8,7 +8,7 @@ export default class Toggle extends Button {
   onToggle(callback) {
     const newCallback = async () => {
       const res = await callback()
-      this.set(res)
+      this.toggle(res)
     }
 
     super.onClick(newCallback)
@@ -16,7 +16,7 @@ export default class Toggle extends Button {
     return this
   }
 
-  set(value) {
+  toggle(value) {
     value
       ? this.element.classList.remove('!text-red-700')
       : this.element.classList.add('!text-red-700')

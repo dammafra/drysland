@@ -1,8 +1,8 @@
 import gsap from 'gsap'
 
 export default class Element {
-  constructor(id) {
-    this.element = document.getElementById(id)
+  constructor(selector) {
+    this.element = document.querySelector(selector)
 
     gsap.set(this.element, { scale: 0 })
     this.element.classList.remove('hidden')

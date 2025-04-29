@@ -42,7 +42,7 @@ export default class WaterBlock {
 
   init() {
     this.setMesh()
-    this.transitionIn()
+    return this.transitionIn()
   }
 
   async setMesh() {
@@ -156,8 +156,10 @@ export default class WaterBlock {
         delay,
         onUpdate: () => {
           this.meshMatrix.compose(position, quaternion, scale)
-          WaterBlock.toDisposeMesh.setMatrixAt(this.meshIndex, this.meshMatrix)
-          WaterBlock.toDisposeMesh.instanceMatrix.needsUpdate = true
+          if (WaterBlock.toDisposeMesh) {
+            WaterBlock.toDisposeMesh?.setMatrixAt(this.meshIndex, this.meshMatrix)
+            WaterBlock.toDisposeMesh.instanceMatrix.needsUpdate = true
+          }
         },
       })
       .to(scale, {

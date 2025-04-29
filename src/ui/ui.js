@@ -3,17 +3,18 @@ import Text from './text'
 import Toggle from './toggle'
 
 export class UI {
-  static startButton = new Button('start')
-  static authToggle = new Toggle('auth')
-  static nextButton = new Button('next')
-  static backButton = new Button('back')
+  static startButton = new Button('#start')
+  static authToggle = new Toggle('#auth')
 
-  static soundsToggle = new Toggle('sounds')
-  static loopToggle = new Toggle('loop')
-  static wavesToggle = new Toggle('waves')
-  static fullscreenToggle = new Toggle('fullscreen')
+  static backButton = new Button('#back')
+  static nextButton = new Button('#next')
 
-  static authText = new Text('auth-label')
-  static levelText = new Text('level')
-  static hintText = new Text('hint')
+  static menuButton = new Button('#menu')
+  static soundsToggle = new Toggle('#sounds')
+  static loopToggle = new Toggle('#loop')
+  static wavesToggle = new Toggle('#waves')
+  static fullscreenToggle = new Toggle('#fullscreen')
+
+  static levelText = new Text('#level')
+  static tutorialText = new Text('#tutorial')
 }

@@ -25,7 +25,18 @@ export default class Menu {
     this.open()
   }
 
+  init() {
+    this.element.classList.remove('hidden')
+    gsap.set(this.element, { scale: 1 })
+    gsap.set(this.bgHex, { scale: 0 })
+    gsap.set(this.title, { scale: 0 })
+    gsap.set(this.credits, { opacity: 0 })
+    gsap.set(this.buttons, { scale: 0 })
+  }
+
   open() {
+    this.init()
+
     this.idle = gsap.to(this.bgHex, {
       rotate: '+=60',
       duration: 0.5,
@@ -104,9 +115,8 @@ export default class Menu {
     this.dispose()
   }
 
-  dispose = () => {
+  dispose() {
     this.idle.kill()
-    this.element.remove()
-    this.element = null
+    this.element.classList.add('hidden')
   }
 }

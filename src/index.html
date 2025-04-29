@@ -27,14 +27,19 @@
       <div class="menu">
         <div class="relative text-center">
           <div
-            class="hex bg-primary/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0"
-          ></div>
+            class="hex bg-white/50 size-50 absolute -top-16 left-1/2 -translate-x-1/2 -z-10 scale-0 flex justify-center items-center"
+          >
+            <div class="hex bg-primary/80 size-46 mx-auto"></div>
+          </div>
           <div class="title">Drysland</div>
           <div class="w-full flex flex-row justify-center">
-            <button id="start" class="hex size-24">Start</button>
+            <button id="start" class="hex size-24 flex flex-col justify-center items-center gap-1">
+              <i class="fa-solid fa-play"></i>
+              <div class="label text-xl leading-4">Start</div>
+            </button>
             <button id="auth" class="hex size-24 flex flex-col justify-center items-center gap-1">
-              <div id="auth-label" class="text-xl leading-4">Login</div>
               <i class="fa-brands fa-google"></i>
+              <div class="label text-xl leading-4">Login</div>
             </button>
           </div>
         </div>
@@ -113,10 +118,19 @@
 
       <canvas class="webgl"></canvas>
 
+      <!-- header -->
+      <button id="menu" class="hex absolute top-2 left-4 z-10 hidden">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <h1 id="level" class="hidden">Level 1</h1>
-      <p id="hint" class="hidden">Touch any river tile to start</p>
 
-      <button id="back" class="hex text-2xl hidden absolute bottom-4 left-4">Back</button>
+      <!-- tutorial -->
+      <p id="tutorial" class="hidden">Touch any river tile to start</p>
+
+      <!-- footer -->
+      <button id="back" class="hex hidden absolute bottom-4 left-4">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
       <button id="next" class="hex text-2xl hidden absolute bottom-4 -translate-x-1/2">Next</button>
 
       <button id="fullscreen" class="hex absolute bottom-14 right-22 hidden">
