@@ -88,7 +88,7 @@ export default class Camera {
     this.controls.update(this.time.delta)
 
     if (this.autoRotate && !this.disableAutoRotate) {
-      this.controls.azimuthAngle += 20 * this.time.delta * 0.3 * MathUtils.DEG2RAD
+      this.controls.azimuthAngle += 10 * this.time.delta * 0.3 * MathUtils.DEG2RAD
     }
   }
 
