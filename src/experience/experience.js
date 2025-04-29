@@ -54,6 +54,11 @@ export default class Experience {
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
+
+    document.addEventListener('keypress', e => {
+      if (!this.grid || e.code !== 'Space') return
+      this.grid.riverBlocks.find(b => b.material.uniforms.uHovered.value)?.onClick()
+    })
   }
 
   resize = () => {
