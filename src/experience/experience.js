@@ -67,11 +67,7 @@ export default class Experience {
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
 
-    Auth.instance.subscribe(user => {
-      UI.authToggle.setLabel(user ? 'Logout' : 'Login').toggle(!user)
-      user && State.instance.sync()
-    })
-
+    Auth.instance.subscribe(user => UI.authToggle.setLabel(user ? 'Logout' : 'Login').toggle(!user))
     UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()) //prettier-ignore
     UI.startButton.onClick(this.start.bind(this))
     UI.creditsButton.onClick(() => Modal.instance.open('.credits'))
@@ -172,9 +168,11 @@ export default class Experience {
   save() {
     if (!this.level) return
 
+    const timestamp = Date.now()
     const blocks = this.grid?.serialize()
     const level = this.level
-    State.instance.save({ level, blocks })
+
+    State.instance.save({ timestamp, level, blocks })
   }
 
   async load() {

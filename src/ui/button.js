@@ -32,7 +32,7 @@ export default class Button extends Element {
 
   setLabel(content) {
     if (!this.label) {
-      this.label = new Text(`#${this.element.id} label`)
+      this.label = new Text(this.element.querySelector('label'))
     }
 
     this.label.set(content).show()

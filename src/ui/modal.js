@@ -4,6 +4,7 @@ import Element from './element'
 
 export default class Modal extends Element {
   static instance = new Modal()
+  #closeable = true
 
   constructor() {
     if (Modal.instance) return Modal.instance
@@ -21,14 +22,22 @@ export default class Modal extends Element {
     this.content.classList.remove('hidden')
     this.element.append(this.content)
 
+    this.beforeOpenCallback && this.beforeOpenCallback(this.content)
+
     gsap.set(this.element, { rotate: 60 })
     gsap.timeline().to(this.element, {
       scale: 1,
       rotate: 0,
       duration: 0.25,
       ease: 'back.inOut',
-      onComplete: () => this.closeButton.show(),
+      onComplete: () => {
+        this.#closeable && this.closeButton.show()
+        delete this.beforeOpenCallback
+        this.#closeable = true
+      },
     })
+
+    return this
   }
 
   close() {
@@ -40,5 +49,17 @@ export default class Modal extends Element {
       onStart: () => this.closeButton.hide(),
       onComplete: () => this.content.remove(),
     })
+
+    return this
+  }
+
+  disableClose() {
+    this.#closeable = false
+    return this
+  }
+
+  beforeOpen(callback) {
+    this.beforeOpenCallback = callback
+    return this
   }
 }

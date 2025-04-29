@@ -1,3 +1,5 @@
+import Modal from '@ui/modal'
+import SaveSlot from '@ui/save-slot'
 import debounce from '@utils/debounce'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 import FirebasApp from './app'
@@ -11,29 +13,61 @@ export default class State {
     this.db = getFirestore(FirebasApp.instance)
   }
 
+  #save = state => (Auth.instance.user ? this.saveRemote(state) : this.saveLocal(state))
   save = debounce(this.#save.bind(this), 1000)
 
-  #save(state) {
-    this.saveLocal(state)
+  load = () => (Auth.instance.user ? this.loadRemote() : this.loadLocal())
 
-    if (Auth.instance.user) {
-      this.saveRemote(state)
-    }
-  }
-
-  load() {
-    return this.loadLocal()
-  }
-
-  async sync() {
+  async syncOn() {
     const localState = this.loadLocal()
     const remoteState = await this.loadRemote()
 
-    if (remoteState && (!localState || remoteState.level > localState.level)) {
-      this.saveLocal(remoteState)
-    } else if (localState && (!remoteState || localState.level > remoteState.level)) {
-      this.saveRemote(localState)
+    if (!localState && !remoteState) return // nothing to do
+    if (!localState && remoteState) return // will use remote
+
+    if (localState && !remoteState) {
+      this.saveRemote(localState) // upload local, will use remote
+      this.deleteLocal() // avoid conflict on next reload
+      return
     }
+
+    if (localState && remoteState) {
+      if (
+        localState.level === remoteState.level &&
+        localState.timestamp === remoteState.timestamp
+      ) {
+        this.deleteLocal() // are the same state, will use remote
+        return
+      }
+
+      // handle conflict
+      Modal.instance
+        .beforeOpen(content => {
+          const slot1 = new SaveSlot(localState)
+            .onClick(() => {
+              this.saveRemote(localState) // upload local, will use remote
+              this.deleteLocal() // avoid conflict on next reload
+              Modal.instance.close()
+            })
+            .show()
+
+          const slot2 = new SaveSlot(remoteState)
+            .onClick(() => {
+              this.deleteLocal() // will use remote, avoid conflict on next reload
+              Modal.instance.close()
+            })
+            .show()
+
+          content.querySelector('.slots').append(slot1.element, slot2.element)
+        })
+        .disableClose()
+        .open('.state-conflict')
+    }
+  }
+
+  async syncOff() {
+    const remoteState = await this.loadRemote()
+    this.saveLocal(remoteState)
   }
 
   saveLocal(state) {
@@ -52,5 +86,9 @@ export default class State {
 
   async loadRemote() {
     return getDoc(doc(this.db, 'states', Auth.instance.user.uid)).then(res => res.data())
+  }
+
+  deleteLocal() {
+    localStorage.removeItem('state')
   }
 }

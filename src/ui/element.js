@@ -2,7 +2,7 @@ import gsap from 'gsap'
 
 export default class Element {
   constructor(selector) {
-    this.element = document.querySelector(selector)
+    this.element = typeof selector === 'string' ? document.querySelector(selector) : selector
 
     gsap.set(this.element, { scale: 0 })
     this.element.classList.remove('hidden')

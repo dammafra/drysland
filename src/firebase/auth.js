@@ -8,6 +8,7 @@ import {
   signOut,
 } from 'firebase/auth'
 import FirebasApp from './app'
+import State from './state'
 
 export default class Auth {
   static instance = new Auth()
@@ -21,9 +22,15 @@ export default class Auth {
     this.provider = new GoogleAuthProvider()
   }
 
-  signIn = () => signInWithPopup(this.auth, this.provider)
+  async signIn() {
+    await signInWithPopup(this.auth, this.provider)
+    return State.instance.syncOn()
+  }
 
-  signOut = () => signOut(this.auth)
+  async signOut() {
+    await State.instance.syncOff()
+    return signOut(this.auth)
+  }
 
   subscribe(callback) {
     onAuthStateChanged(this.auth, user => {

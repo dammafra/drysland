@@ -51,7 +51,7 @@
       </div>
 
       <div class="modal-container">
-        <div id="modal" class="hidden"></div>
+        <div id="modal" class="flex hidden"></div>
         <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
           <i class="fa-solid fa-xmark"></i>
         </button>
@@ -125,6 +125,20 @@
             <a href="https://poly.pizza" target="_blank"> Poly Pizza </a>
           </div>
         </div>
+      </div>
+
+      <div class="state-conflict hidden">
+        <div class="flex flex-col gap-2">
+          <p class="text-sm">
+            Looks like your local and remote saves don’t match, choose the one you want to keep:
+          </p>
+          <div class="slots flex justify-center gap-2"></div>
+        </div>
+      </div>
+
+      <button id="save-slot" class="hex hidden">
+        <p class="level text-xl">level</p>
+        <p class="date leading-4">date</p>
       </div>
 
       <!-- header -->
