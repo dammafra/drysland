@@ -126,10 +126,9 @@ export default class Camera {
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
 
     this.controls.rotatePolarTo(0, true)
-    if (
-      this.controls.distance > 10 ||
-      block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))
-    ) {
+
+    if (this.controls.distance > 10) this.controls.dollyTo(10, true)
+    if (block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))) {
       this.controls.fitToBox(block.mesh, true)
       this.controls.dollyTo(10, true)
     }
