@@ -2,7 +2,9 @@ import Experience from '@experience'
 import blockBeginVertexChunk from '@shaders/block/chunks/begin-vertex.glsl'
 import blockCommonChunk from '@shaders/block/chunks/common.glsl'
 import blockOpaqueChunk from '@shaders/block/chunks/opaque.glsl'
+import roughnessmapChunk from '@shaders/block/chunks/roughnessmap.glsl'
 import blockWorldposVertexChunk from '@shaders/block/chunks/worldpos_vertex.glsl'
+// import metalnessmapChunk from '@shaders/block/chunks/metalnessmap.glsl'
 import { Uniform } from 'three'
 
 export default class BlockMaterial {
@@ -52,6 +54,16 @@ export default class BlockMaterial {
       '#include <opaque_fragment>',
       blockOpaqueChunk,
     )
+
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <roughnessmap_fragment>',
+      roughnessmapChunk,
+    )
+
+    // shader.fragmentShader = shader.fragmentShader.replace(
+    //   '#include <metalnessmap_fragment>',
+    //   metalnessmapChunk,
+    // )
   }
 
   update() {

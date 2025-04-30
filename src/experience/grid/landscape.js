@@ -48,7 +48,7 @@ export default class Landscape {
   init() {
     this.wind = new Wind()
     this.ship = new Ship(this.grid.radius)
-    this.seagulls = Array.from({ length: Random.integer({ min: 1, max: 3 }) }, () => new Seagull())
+    this.seagulls = Array.from({ length: Random.integer({ min: 3, max: 6 }) }, () => new Seagull())
   }
 
   updateLinks() {

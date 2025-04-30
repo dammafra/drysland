@@ -38,7 +38,7 @@ export default class Seagull {
         child.receiveShadow = true
       }
     })
-    this.mesh.scale.setScalar(0.025)
+    this.mesh.scale.setScalar(0.01)
     this.scene.add(this.mesh)
   }
 

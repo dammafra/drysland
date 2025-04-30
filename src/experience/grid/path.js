@@ -24,7 +24,7 @@ export default class Path {
       currentAngle += direction * angleStep * Random.float({ min: 0.8, max: 1.2 })
 
       const r = Random.float({
-        min: this.radius ? this.radius + 6 : 1,
+        min: this.radius ? this.radius + 7 : 1,
         max: this.radius ? this.radius + 10 : 20,
       })
       const x = Math.cos(currentAngle) * r
