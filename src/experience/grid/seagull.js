@@ -34,6 +34,8 @@ export default class Seagull {
       if (child.isMesh) {
         child.material.transparent = true
         child.material.opacity = 0
+        child.castShadow = true
+        child.receiveShadow = true
       }
     })
     this.mesh.scale.setScalar(0.025)

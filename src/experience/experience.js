@@ -250,6 +250,7 @@ export default class Experience {
       this.gridHelper.visible = event.value
       this.scene.backgroundIntensity = event.value ? 0 : 1
       this.environment.shadowHelper.visible = event.value
+      this.camera.controls.maxDistance = event.value ? 50 : 25
     })
   }
 }
