@@ -46,8 +46,8 @@ export default class Landscape {
   }
 
   init() {
-    this.wind = new Wind()
     this.ship = new Ship(this.grid.radius)
+    this.winds = Array.from({ length: Random.integer({ min: 1, max: 3 }) }, () => new Wind())
     this.seagulls = Array.from({ length: Random.integer({ min: 3, max: 6 }) }, () => new Seagull())
   }
 
@@ -82,8 +82,8 @@ export default class Landscape {
   }
 
   update() {
-    this.wind?.update()
     this.ship?.update()
+    this.winds?.forEach(w => w.update())
     this.seagulls?.forEach(s => s.update())
 
     if (this.ship) {
@@ -104,11 +104,11 @@ export default class Landscape {
   }
 
   dispose() {
-    this.wind?.dispose()
-    delete this.wind
-
     this.ship?.dispose()
     delete this.ship
+
+    this.winds?.forEach(w => w.dispose())
+    delete this.winds
 
     this.seagulls?.forEach(s => s.dispose())
     delete this.seagulls

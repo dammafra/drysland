@@ -1,11 +1,12 @@
 import Experience from '@experience'
 import { dispose } from '@utils/dispose'
-import Random from '@utils/random'
 import gsap from 'gsap'
 import { CanvasTexture, DoubleSide, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise'
 
 export default class Wind {
+  static texture
+
   static simplex = new SimplexNoise()
 
   constructor() {
@@ -14,15 +15,17 @@ export default class Wind {
     this.time = this.experience.time
 
     this.setTexture()
-    this.setLines()
+    this.setLine()
     this.init()
   }
 
   init() {
-    this.lines.forEach(line => gsap.to(line.material, { opacity: 1, duration: 2 }))
+    gsap.to(this.line.material, { opacity: 1, duration: 2 })
   }
 
   setTexture() {
+    if (Wind.texture) return
+
     // Gradient texture for the lines
     const canvas = document.createElement('canvas')
     canvas.width = 64
@@ -36,48 +39,31 @@ export default class Wind {
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, 64, 8)
 
-    this.texture = new CanvasTexture(canvas)
+    Wind.texture = new CanvasTexture(canvas)
   }
 
-  setLines() {
-    this.lines = []
+  setLine() {
+    this.line = new Mesh(
+      new PlaneGeometry(1, 1, 20, 1),
+      new MeshBasicMaterial({
+        map: Wind.texture,
+        side: DoubleSide,
+        transparent: true,
+        depthWrite: false,
+        opacity: 0,
+      }),
+    )
 
-    const count = Random.integer({ min: 1, max: 3 })
+    this.line.pos = this.line.geometry.getAttribute('position')
+    this.line.rnda = Math.random()
+    this.line.rndb = Math.random()
+    this.line.rndc = Math.random()
+    this.line.rndd = Math.random()
 
-    for (let i = 0; i < count; i++) {
-      const line = new Mesh(
-        new PlaneGeometry(1, 1, 20, 1),
-        new MeshBasicMaterial({
-          map: this.texture,
-          side: DoubleSide,
-          transparent: true,
-          depthWrite: false,
-          opacity: 0,
-        }),
-      )
-      line.pos = line.geometry.getAttribute('position')
-      line.rnda = Math.random()
-      line.rndb = Math.random()
-      line.rndc = Math.random()
-      line.rndd = Math.random()
-      this.lines.push(line)
-      this.scene.add(line)
-    }
+    this.scene.add(this.line)
   }
 
-  flowLine = line => {
-    for (let i = 0; i < 42; i++) {
-      const t = this.time.elapsed * 0.5 + (i % 21) / 60
-      const x = 4 * Math.sin(5 * line.rnda * t + 6 * line.rndb)
-      const y = 4 * Math.cos(5 * line.rndc * t + 6 * line.rndd)
-      const z =
-        this.elevation(x, y) + 0.5 + 0.04 * (i > 20 ? 1 : -1) * Math.cos(((i % 21) - 10) / 8)
-      line.pos.setXYZ(i, x, z, -y)
-    }
-    line.pos.needsUpdate = true
-  }
-
-  elevation = (x, y) => {
+  getElevation(x, y) {
     if (x * x > 24.9 || y * y > 24.9) return -1
     const major = 0.6 * Wind.simplex.noise(0.1 * x, 0.1 * y)
     const minor = 0.2 * Wind.simplex.noise(0.3 * x, 0.3 * y)
@@ -85,14 +71,22 @@ export default class Wind {
   }
 
   update() {
-    this.lines.forEach(this.flowLine)
+    const speed = 0.25
+
+    for (let i = 0; i < 42; i++) {
+      const t = this.time.elapsed * speed + (i % 21) / 60
+      const x = 4 * Math.sin(5 * this.line.rnda * t + 6 * this.line.rndb)
+      const y = 4 * Math.cos(5 * this.line.rndc * t + 6 * this.line.rndd)
+      const z = this.getElevation(x, y) + 0.5 + 0.04 * (i > 20 ? 1 : -1) * Math.cos(((i % 21) - 10) / 8) // prettier-ignore
+      this.line.pos.setXYZ(i, x, z, -y)
+    }
+
+    this.line.pos.needsUpdate = true
   }
 
   dispose() {
-    this.lines.forEach(line => {
-      dispose(line)
-      this.scene.remove(line)
-    })
-    this.lines = []
+    dispose(this.line)
+    this.scene.remove(this.line)
+    delete this.line
   }
 }
