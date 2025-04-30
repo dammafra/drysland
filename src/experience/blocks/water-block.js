@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
 import gsap from 'gsap'
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three'
@@ -88,8 +89,7 @@ export default class WaterBlock {
     const scale = new Vector3()
     this.meshMatrix.decompose(position, quaternion, scale)
 
-    const center = new Vector3(0, 0, 0)
-    const delay = position.distanceTo(center) * 0.05
+    const delay = position.distanceTo(Grid.center) * 0.05
 
     return gsap
       .timeline({
@@ -118,15 +118,17 @@ export default class WaterBlock {
   }
 
   static getElevation(position, elapsed) {
-    const frequency = 0.025
+    const frequency = 0.03
     const speed = 0.05
-    const elevation = 0.15
+    const scale = position.distanceTo(Grid.center) * 0.025
 
     const x = position.x * frequency
     const z = position.z * frequency
     const t = elapsed * speed
 
-    return WaterBlock.simplex.noise(x + t, z + t * 0.5) * elevation
+    const elevation = WaterBlock.simplex.noise(x + t, z + t * 0.5) * scale
+    const clamped = Math.min(elevation, 0)
+    return clamped
   }
 
   idle() {
@@ -148,8 +150,7 @@ export default class WaterBlock {
     const scale = new Vector3()
     this.meshMatrix.decompose(position, quaternion, scale)
 
-    const center = new Vector3(0, 0, 0)
-    const delay = position.distanceTo(center) * 0.05
+    const delay = position.distanceTo(Grid.center) * 0.05
 
     return gsap
       .timeline({

@@ -23,8 +23,10 @@ export default class Ocean {
     const sands = this.grid.blocks.filter(b => blocksConfig.sand.includes(b.name))
 
     sands.forEach(b => {
-      const firstWater = b.neighbors.findIndex(n => n.name.includes('water'))
-      const lastWater = b.neighbors.findLastIndex(n => n.name.includes('water'))
+      const firstWater = b.neighbors?.findIndex(n => n.name.includes('water'))
+      const lastWater = b.neighbors?.findLastIndex(n => n.name.includes('water'))
+
+      if (!firstWater || !lastWater) return
 
       if (firstWater === lastWater) {
         b.name = Random.oneOf(blocksConfig.docks)
@@ -36,8 +38,8 @@ export default class Ocean {
     })
 
     sands.forEach(b => {
-      const waterNeighbors = b.neighbors.filter(n => n.name.includes('water'))
-      if (waterNeighbors.length === 4) b.name = 'water'
+      const waterNeighbors = b.neighbors?.filter(n => n.name.includes('water'))
+      if (waterNeighbors && waterNeighbors.length === 4) b.name = 'water'
     })
   }
 

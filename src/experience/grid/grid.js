@@ -3,6 +3,7 @@ import gridConfig from '@config/grid'
 import Experience from '@experience'
 import { UI } from '@ui/ui'
 import Random from '@utils/random'
+import { Vector3 } from 'three'
 import Landscape from './landscape'
 import Ocean from './ocean'
 import Tutorial from './tutorial'
@@ -11,6 +12,8 @@ const opposite = edge => (edge + 3) % 6
 const key = (q, r) => `${q},${r}`
 
 export default class Grid {
+  static center = new Vector3(0, 0, 0)
+
   #riverBlocks = null
   #deadEnds = null
   #perimeter = { totalCount: 0, blocks: [] }

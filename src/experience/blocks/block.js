@@ -1,9 +1,10 @@
 import blocksConfig from '@config/blocks'
 import Experience from '@experience'
+import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
 import Random from '@utils/random'
 import gsap from 'gsap'
-import { AnimationMixer, SRGBColorSpace, Vector3 } from 'three'
+import { AnimationMixer, SRGBColorSpace } from 'three'
 import BlockMaterial from './block-material'
 
 export default class Block {
@@ -148,8 +149,7 @@ export default class Block {
   }
 
   transitionIn() {
-    const center = new Vector3(0, 0, 0)
-    const delay = this.mesh.position.distanceTo(center) * 0.05
+    const delay = this.mesh.position.distanceTo(Grid.center) * 0.05
 
     return gsap
       .timeline({ delay })
@@ -171,8 +171,7 @@ export default class Block {
   }
 
   transitionOut() {
-    const center = new Vector3(0, 0, 0)
-    const delay = this.mesh.position.distanceTo(center) * 0.05
+    const delay = this.mesh.position.distanceTo(Grid.center) * 0.05
 
     return gsap
       .timeline({ delay })

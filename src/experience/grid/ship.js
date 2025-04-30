@@ -36,6 +36,8 @@ export default class Ship {
       if (child.isMesh) {
         child.material.transparent = true
         child.material.opacity = 0
+        child.castShadow = true
+        child.receiveShadow = true
       }
     })
     this.mesh.scale.setScalar(this.scale)
