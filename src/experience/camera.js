@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import Grid from '@grid/grid'
 import CameraControls from 'camera-controls'
 import {
   Box3,
@@ -33,6 +34,7 @@ export default class Camera {
   constructor() {
     // Setup
     this.experience = Experience.instance
+    this.debug = this.experience.debug
     this.time = this.experience.time
     this.sizes = this.experience.sizes
     this.scene = this.experience.scene
@@ -40,6 +42,8 @@ export default class Camera {
 
     this.setInstance()
     this.setControls()
+
+    this.setDebug()
   }
 
   setInstance() {
@@ -55,7 +59,6 @@ export default class Camera {
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
-    this.controls.draggingSmoothTime = 0.25
 
     const box = new Box3()
     box.min.set(-10, 0, -10)
@@ -85,6 +88,8 @@ export default class Camera {
   }
 
   update() {
+    if (!this.controls.enabled) return
+
     this.controls.update(this.time.delta)
 
     if (this.autoRotate && !this.disableAutoRotate) {
@@ -143,5 +148,15 @@ export default class Camera {
       ),
     )
     return frustum.containsPoint(position)
+  }
+
+  setDebug() {
+    if (!this.debug) return
+
+    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 4, expanded: false })
+    folder.addBinding(this.controls, 'enabled', { label: 'controls' })
+    folder
+      .addBinding(this.instance, 'position')
+      .on('change', () => this.instance.lookAt(Grid.center))
   }
 }

@@ -21,7 +21,7 @@ export default class Fullscreen {
     Fullscreen.toggle = document.querySelector(toggleSelector)
 
     if (Fullscreen.isStandalone) {
-      document.body.classList.add('fullscreen')
+      document.body.classList.add('fullscreen', 'standalone')
       Fullscreen.toggle.remove()
       return
     }

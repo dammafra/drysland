@@ -207,30 +207,11 @@ export default class Experience {
 
     window.experience = Experience.instance
 
-    const levelController = this.debug.root
-      .addBinding(this, 'level', { min: 1, max: 100, step: 1 })
-      .on(
-        'change',
-        debounce(() => {
-          levelController.disabled = true
-          setTimeout(() => (levelController.disabled = false), 2000)
-
-          localStorage.removeItem('state')
-          this.level--
-          this.nextLevel()
-        }, 500),
-      )
-
-    const shuffleController = this.debug.root.addButton({ title: 'shuffle' }).on('click', () => {
-      shuffleController.disabled = true
-      setTimeout(() => (shuffleController.disabled = false), 2000)
-
-      localStorage.removeItem('state')
-      this.grid?.dispose()
-      this.grid = new Grid(this.level)
+    const folder = this.debug.root.addFolder({
+      title: '🌐 experience',
+      index: 3,
+      expanded: false,
     })
-
-    const folder = this.debug.root.addFolder({ title: '🌐 experience', expanded: false })
 
     const helpersSize = gridConfig.maxRadius * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)
@@ -251,6 +232,27 @@ export default class Experience {
       this.scene.backgroundIntensity = event.value ? 0 : 1
       this.environment.shadowHelper.visible = event.value
       this.camera.controls.maxDistance = event.value ? 50 : 25
+    })
+
+    const levelController = folder.addBinding(this, 'level', { min: 1, max: 100, step: 1 }).on(
+      'change',
+      debounce(() => {
+        levelController.disabled = true
+        setTimeout(() => (levelController.disabled = false), 2000)
+
+        localStorage.removeItem('state')
+        this.level--
+        this.nextLevel()
+      }, 500),
+    )
+
+    const shuffleController = folder.addButton({ title: 'shuffle' }).on('click', () => {
+      shuffleController.disabled = true
+      setTimeout(() => (shuffleController.disabled = false), 2000)
+
+      localStorage.removeItem('state')
+      this.grid?.dispose()
+      this.grid = new Grid(this.level)
     })
   }
 }

@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <footer class="text-xl absolute bottom-4">
+        <footer>
           Made with <i class="fa-solid fa-heart"></i> by
           <a href="https://github.com/dammafra/drysland" target="_blank"> @dammafra </a>
         </footer>
@@ -154,7 +154,7 @@
       </button>
 
       <!-- header -->
-      <button id="menu" class="hex absolute top-2 left-4 z-10 hidden">
+      <button id="menu" class="hex absolute top-4 left-4 z-10 hidden">
         <i class="fa-solid fa-bars"></i>
       </button>
       <h1 id="level" class="hidden">Level 1</h1>
@@ -171,19 +171,21 @@
         <i class="fa-regular fa-compass text-2xl"></i>
       </button>
 
-      <button id="fullscreen" class="hex absolute bottom-14 right-22 hidden">
-        <i class="fa-solid fa-expand"></i>
-        <i class="fa-solid fa-compress"></i>
-      </button>
-      <button id="sounds" class="hex absolute bottom-14 right-10 hidden">
-        <i class="fa-solid fa-volume-low"></i>
-      </button>
-      <button id="loop" class="hex absolute bottom-4 right-16 hidden">
-        <i class="fa-solid fa-music"></i>
-      </button>
-      <button id="waves" class="hex absolute bottom-4 right-4 hidden">
-        <i class="fa-solid fa-water"></i>
-      </button>
+      <div id="controls" class="absolute bottom-4 right-4">
+        <button id="fullscreen" class="hex absolute bottom-10 right-18 hidden">
+          <i class="fa-solid fa-expand"></i>
+          <i class="fa-solid fa-compress"></i>
+        </button>
+        <button id="sounds" class="hex absolute bottom-10 right-6 hidden">
+          <i class="fa-solid fa-volume-low"></i>
+        </button>
+        <button id="loop" class="hex absolute bottom-0 right-12 hidden">
+          <i class="fa-solid fa-music"></i>
+        </button>
+        <button id="waves" class="hex absolute bottom-0 right-0 hidden">
+          <i class="fa-solid fa-water"></i>
+        </button>
+      </div>
     </main>
 
     <script type="module" src="./script.js"></script>

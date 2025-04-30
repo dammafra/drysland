@@ -9,9 +9,8 @@ export default class GUI {
     this.root.element.parentElement.style.width = '350px'
     this.root.element.parentElement.style.zIndex = 999
 
-    this.root
-      .addButton({ title: 'reset' })
-      .on('click', () => this.root.importState(JSON.parse(this.defaults)))
+    this.root.addButton({ title: 'load' }).on('click', this.loadState)
+    this.root.addButton({ title: 'reset' }).on('click', this.resetState)
 
     this.stats = this.root.addBlade({
       view: 'fpsgraph',
@@ -38,5 +37,9 @@ export default class GUI {
       this.root.importState(JSON.parse(state))
       localStorage.removeItem('debug')
     }
+  }
+
+  resetState = () => {
+    this.root.importState(JSON.parse(this.defaults))
   }
 }

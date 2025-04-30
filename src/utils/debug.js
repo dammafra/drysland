@@ -25,7 +25,6 @@ export default class Debug {
     const { default: GUI } = await import('./gui.js')
     const gui = new GUI()
     gui.storeDefaults()
-    gui.loadState()
 
     return gui
   }

@@ -160,7 +160,7 @@ main {
 }
 
 .menu footer {
-  @apply text-white opacity-0;
+  @apply text-white opacity-0 text-xl absolute bottom-4;
   text-shadow: 0.5px 0.5px 0.5px black;
 }
 
@@ -204,7 +204,7 @@ button.hex.primary {
 }
 
 #level {
-  @apply bg-gradient-to-b to-100% from-background to-transparent py-4 pb-8 absolute top-0 w-full text-center text-4xl text-primary pointer-events-none;
+  @apply bg-gradient-to-b to-100% from-background to-transparent py-5 pb-8 absolute top-0 w-full text-center text-4xl text-primary pointer-events-none;
   text-shadow: 1px 1px 2px white;
 }
 
@@ -213,6 +213,7 @@ button.hex.primary {
   text-shadow: 1px 1px 2px black;
 }
 
+/* fullscreen */
 body.fullscreen .fa-expand,
 body:not(.fullscreen) .fa-compress {
   @apply hidden;
@@ -221,4 +222,15 @@ body:not(.fullscreen) .fa-compress {
 body.fullscreen .fa-compress,
 body:not(.fullscreen) .fa-expand {
   @apply inline-block;
+}
+
+body.standalone .menu footer,
+body.standalone #back,
+body.standalone #controls,
+body.standalone div:has(#next) {
+  @apply bottom-8;
+}
+
+body.standalone #tutorial {
+  @apply bottom-32;
 }

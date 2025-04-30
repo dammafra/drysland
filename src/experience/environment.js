@@ -1,4 +1,5 @@
 import gridConfig from '@config/grid'
+import Experience from '@experience'
 import {
   CameraHelper,
   DirectionalLight,
@@ -11,7 +12,6 @@ import {
   Vector3,
 } from 'three'
 import { Lensflare, LensflareElement } from 'three/examples/jsm/Addons.js'
-import Experience from './experience'
 
 export default class Environment {
   constructor() {
@@ -94,7 +94,7 @@ export default class Environment {
     this.shadowHelper.visible = false
     this.scene.add(this.shadowHelper)
 
-    const folder = this.debug.root.addFolder({ title: '💡 environment', expanded: false })
+    const folder = this.debug.root.addFolder({ title: '💡 environment', index: 5, expanded: false })
 
     folder
       .addBinding(this.sunSpherical, 'phi', {
