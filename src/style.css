@@ -195,6 +195,10 @@ button.hex {
   @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary;
 }
 
+button.hex.disabled {
+  @apply grayscale;
+}
+
 button.hex:has(label) {
   @apply size-24 flex flex-col justify-center items-center gap-1;
 }

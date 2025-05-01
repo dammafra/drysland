@@ -75,11 +75,15 @@ export default class Experience {
     this.environment = new Environment()
 
     Auth.instance.subscribe(user => {
-      UI.authToggle.setLabel(user ? 'Logout' : 'Login').toggle(!user)
+      UI.authToggle
+        .setLabel(user ? 'Logout' : 'Login')
+        .toggle(!user)
+        .enable()
+      UI.startButton.enable()
       user && State.instance.sync()
     })
-    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()) //prettier-ignore
-    UI.startButton.onClick(this.start.bind(this))
+    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()).disable() //prettier-ignore
+    UI.startButton.onClick(this.start.bind(this)).disable()
     UI.creditsButton.onClick(() => Modal.instance.open('.credits'))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))

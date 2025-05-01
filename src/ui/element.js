@@ -30,11 +30,13 @@ export default class Element {
   }
 
   disable() {
+    this.element.classList.add('disabled')
     this.element.style.pointerEvents = 'none'
     return this
   }
 
   enable() {
+    this.element.classList.remove('disabled')
     this.element.style.pointerEvents = 'auto'
     return this
   }
