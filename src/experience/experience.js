@@ -1,5 +1,5 @@
 import setConfigDebug from '@config/debug'
-import gridConfig from '@config/grid'
+import gridConfig, { generateLevel } from '@config/grid'
 import Auth from '@fire/auth'
 import State from '@fire/state'
 import Grid from '@grid/grid'
@@ -109,7 +109,8 @@ export default class Experience {
     this.level = level
     UI.levelText.set(`Level ${this.level}`).show()
 
-    this.levelParams = gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
+    this.levelParams = generateLevel(this.level - 1)
+    debug.log(`level ${this.level}: `, this.levelParams)
     this.grid?.dispose()
     this.grid = new Grid({ level, blocks, ...this.levelParams })
   }
@@ -215,10 +216,6 @@ export default class Experience {
         this.camera.controls.maxDistance = event.value ? 50 : 25
       })
 
-    debug.groupCollapsed('gridConfig.levels')
-    debug.log(gridConfig.levels)
-    debug.groupEnd()
-
     const folder = this.debug.root.addFolder({
       title: '⬢ grid',
       index: 4,
@@ -238,7 +235,6 @@ export default class Experience {
 
     const onGenerateChange = () => {
       disableGridPanes()
-      updateSelectLevelPane()
 
       delete this.level
       this.levelParams = generateParams
@@ -249,15 +245,17 @@ export default class Experience {
     }
 
     const onSelectLevelChange = e => {
+      if (isNaN(e.value)) return
+
       disableGridPanes()
 
-      this.level = e.value
+      this.level = e.value - 1
       this.nextLevel()
     }
 
-    const updateSelectLevelPane = (level = '-') => {
+    const updateSelectLevelPane = level => {
       selectLevelPane.off('change', onSelectLevelChange)
-      selectLevelPane.controller.value.setRawValue(level)
+      selectLevelPane.controller.value.setRawValue(level || 'debug')
       selectLevelPane.on('change', onSelectLevelChange)
     }
 
@@ -273,12 +271,10 @@ export default class Experience {
     const generatePane = folder.addButton({ title: 'generate' }).on('click', onGenerateChange)
     const selectLevelPane = folder
       .addBlade({
-        view: 'list',
+        view: 'text',
         label: 'select level',
-        options: [{ text: '-', value: '-' }].concat(
-          gridConfig.levels.map((_, i) => ({ text: `${i + 1}`, value: i })),
-        ),
-        value: '-',
+        parse: v => +v,
+        value: 0,
       })
       .on('change', onSelectLevelChange)
 

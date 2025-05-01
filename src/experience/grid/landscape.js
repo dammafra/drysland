@@ -12,9 +12,24 @@ export default class Landscape {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
-
     this.grid = grid
 
+    this.addDeadEndsPerimeters()
+    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.landscape))
+    this.grid.addPerimeter(() => Random.oneOf(blocksConfig.grass))
+  }
+
+  /**
+   * Alternate dead ends landscape generation:
+   * - even indices (i) represent river starts (originating from mountains)
+   * - odd indices represent river ends (leading into cities)
+   *
+   * Each dead-end gets a river tile, then connects to a primary mountain or city block accordingly,
+   * and their neighbors get secondary blocks matching the context (mountain surroundings near starts, city surroundings near ends).
+   *
+   * TODO: configure dimension and weights; add tweaks
+   * */
+  addDeadEndsPerimeters() {
     this.grid.deadEnds.forEach((b, i) => {
       b.name = Random.alternate(i, blocksConfig.rivers['0'])
 
@@ -33,9 +48,6 @@ export default class Landscape {
         ),
       )
     })
-
-    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.landscape))
-    this.grid.addPerimeter(() => Random.oneOf(blocksConfig.grass))
   }
 
   init() {

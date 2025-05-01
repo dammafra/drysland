@@ -1,43 +1,16 @@
 import { Uniform } from 'three'
 
-function generateLevels() {
-  const levels = []
-
-  for (
-    let radius = gridConfig.minRadius;
-    radius <= gridConfig.maxRadius;
-    radius += gridConfig.radiusStep
-  ) {
-    for (
-      let coverage = gridConfig.minCoverage;
-      coverage <= gridConfig.maxCoverage;
-      coverage += gridConfig.coverageStep
-    ) {
-      for (
-        let extraLinks = gridConfig.minExtraLinks;
-        extraLinks <= gridConfig.maxExtraLinks;
-        extraLinks += gridConfig.maxExtraLinksStep
-      ) {
-        levels.push({ radius, coverage, extraLinks })
-      }
-    }
-  }
-
-  return levels
-}
-
 const gridConfig = {
   minRadius: 2,
   maxRadius: 8,
-  radiusStep: 1,
 
   minCoverage: 0.6,
-  maxCoverage: 0.8,
-  coverageStep: 0.1,
+  maxCoverage: 0.9,
 
   minExtraLinks: 0,
   maxExtraLinks: 0.2,
-  maxExtraLinksStep: 0.05,
+
+  difficultyScale: 100, // by level 100 you reach the maximum difficulty
 
   minDeadEnds: 2,
   directions: [
@@ -77,7 +50,25 @@ const gridConfig = {
   },
 }
 
-const levels = generateLevels()
-gridConfig.levels = levels
+export const generateLevel = n => {
+  const lerp = (min, max, t) => min + (max - min) * t
+  const t = n / gridConfig.difficultyScale
+
+  const radius = Math.round(
+    Math.min(gridConfig.maxRadius, lerp(gridConfig.minRadius, gridConfig.maxRadius, t)),
+  )
+
+  const coverage = Math.min(
+    gridConfig.maxCoverage,
+    lerp(gridConfig.minCoverage, gridConfig.maxCoverage, t),
+  )
+
+  const extraLinks = Math.min(
+    gridConfig.maxExtraLinks,
+    lerp(gridConfig.minExtraLinks, gridConfig.maxExtraLinks, t),
+  )
+
+  return { radius, coverage, extraLinks }
+}
 
 export default gridConfig

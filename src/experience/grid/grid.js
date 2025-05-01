@@ -359,7 +359,7 @@ export default class Grid {
     this.experience.generateParams.coverage = this.coverage
     this.experience.generateParams.extraLinks = this.extraLinks
     this.experience.generateParams.minDeadEnds = this.minDeadEnds
-    this.experience.updateSelectLevelPane(this.level - 1)
+    this.experience.updateSelectLevelPane(this.level)
     this.experience.debug.root.refresh()
   }
 }
