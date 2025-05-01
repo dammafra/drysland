@@ -9,7 +9,7 @@
 
 const rivers = {
   // one edge
-  0: ['riverStart', 'riverEnd'],
+  0: ['riverEnd', 'riverStart'],
 
   // two edges
   '01': ['riverCornerSharp'],

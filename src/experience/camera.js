@@ -118,7 +118,7 @@ export default class Camera {
 
     this.controls.maxPolarAngle = Math.PI / 2 - 0.1
     this.controls.maxAzimuthAngle = Infinity
-    this.controls.setLookAt(3, 5, radius + 10, 0, 0, 0, true)
+    this.controls.setLookAt(3, 6, radius + 10, 0, 0, 0, true)
   }
 
   setGameControls(block) {

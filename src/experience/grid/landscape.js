@@ -15,7 +15,7 @@ export default class Landscape {
     this.grid = grid
 
     this.addDeadEndsPerimeters()
-    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.landscape))
+    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.landscape), 2)
     this.grid.addPerimeter(() => Random.oneOf(blocksConfig.grass))
   }
 
