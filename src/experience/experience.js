@@ -227,6 +227,7 @@ export default class Experience {
       coverage: 0.5,
       extraLinks: 0,
       minDeadEnds: 2,
+      linksOnly: false,
     }
 
     folder
@@ -243,8 +244,9 @@ export default class Experience {
       .on('change', e => (gridConfig.selectionStrategy = e.value))
     folder.addBinding(generateParams, 'radius', { min: 1, max: 10, step: 1 })
     folder.addBinding(generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
-    folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 0.5, step: 0.05 })
+    folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 1, step: 0.05 })
     folder.addBinding(generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
+    folder.addBinding(generateParams, 'linksOnly')
 
     const onGenerateChange = () => {
       disableGridPanes()

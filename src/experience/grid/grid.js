@@ -50,7 +50,7 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  constructor({ level, blocks, radius, coverage, extraLinks, minDeadEnds }) {
+  constructor({ level, blocks, radius, coverage, extraLinks, minDeadEnds, linksOnly }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
@@ -62,6 +62,7 @@ export default class Grid {
     this.coverage = coverage
     this.extraLinks = extraLinks
     this.minDeadEnds = minDeadEnds
+    this.linksOnly = linksOnly
 
     if (blocks) {
       blocks.forEach(b => this.blocksMap.set(b.key, new Block({ grid: this, ...b })))
@@ -89,8 +90,10 @@ export default class Grid {
   }
 
   async init() {
-    this.landscape = new Landscape(this)
-    this.ocean = new Ocean(this)
+    if (!this.linksOnly) {
+      this.landscape = new Landscape(this)
+      this.ocean = new Ocean(this)
+    }
 
     this.soundPlayer.play('multiPop')
     await Promise.all(this.blocks.map(b => b.init()))
@@ -341,6 +344,7 @@ export default class Grid {
     this.experience.generateParams.coverage = this.coverage
     this.experience.generateParams.extraLinks = this.extraLinks
     this.experience.generateParams.minDeadEnds = this.minDeadEnds
+    this.experience.generateParams.linksOnly = this.linksOnly
     this.experience.updateSelectLevelPane(this.level)
     this.experience.debug.root.refresh()
   }
