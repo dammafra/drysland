@@ -58,11 +58,10 @@ export default class Grid {
     this.blocksMap = new Map()
 
     this.level = level
-    const params = gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
-    this.radius = radius || params.radius
-    this.coverage = coverage || params.coverage
-    this.extraLinks = extraLinks || params.extraLinks
-    this.minDeadEnds = minDeadEnds || gridConfig.minDeadEnds
+    this.radius = radius
+    this.coverage = coverage
+    this.extraLinks = extraLinks
+    this.minDeadEnds = minDeadEnds
 
     if (blocks) {
       blocks.forEach(b => this.blocksMap.set(b.key, new Block({ grid: this, ...b })))

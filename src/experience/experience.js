@@ -113,8 +113,9 @@ export default class Experience {
     this.level = level
     UI.levelText.set(`Level ${this.level}`).show()
 
+    this.levelParams = gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
     this.grid?.dispose()
-    this.grid = new Grid({ level, blocks })
+    this.grid = new Grid({ level, blocks, ...this.levelParams })
   }
 
   levelStart() {
@@ -160,7 +161,7 @@ export default class Experience {
 
   setExplorationMode() {
     UI.backButton.hide()
-    this.camera.setExplorationControls()
+    this.camera.setExplorationControls(this.levelParams.radius)
     this.grid?.setShadows(true)
   }
 
@@ -268,6 +269,7 @@ export default class Experience {
       setTimeout(() => (generateController.disabled = false), 2000)
 
       delete this.level
+      this.levelParams = this.generateParams
       UI.levelText.set(`DEBUG`).show()
 
       this.grid?.dispose()
