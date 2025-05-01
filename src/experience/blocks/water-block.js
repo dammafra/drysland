@@ -1,3 +1,4 @@
+import { setWater } from '@config/blocks'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
 import Grid from '@grid/grid'
@@ -35,9 +36,9 @@ export default class WaterBlock {
     this.scene = this.experience.scene
 
     this.grid = grid
-    this.name = 'water'
     this.q = q
     this.r = r
+    setWater(this)
 
     this.links = []
   }

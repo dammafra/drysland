@@ -96,7 +96,7 @@ export default class Block {
 
     this.normalizeLinks()
 
-    const riverBlocks = blocksConfig.linksMap[this.linksKey]
+    const riverBlocks = blocksConfig.rivers[this.linksKey]
     if (!riverBlocks) return
 
     this.name = Random.oneOf(riverBlocks)

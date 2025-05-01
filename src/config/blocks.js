@@ -1,22 +1,3 @@
-const water = { water: 1, waterRocks: 0.05 }
-const sand = ['sand', 'sandRocks']
-const docks = ['buildingDock', 'buildingPort']
-const grass = ['grass', 'grassForest']
-const city = { buildingHouse: 1, buildingVillage: 0.5, buildingMarket: 0.2 }
-const mountain = { stoneHill: 1, buildingCabin: 0.5, buildingMine: 0.2 }
-const landscape = {
-  grass: 1,
-  grassForest: 0.8,
-  grassHill: 0.3,
-  buildingMill: 0.4,
-  buildingSheep: 0.3,
-  buildingCastle: 0.2,
-  buildingWall: 0.2,
-  buildingWizardTower: 0.2,
-  buildingArchery: 0.2,
-  buildingSmelter: 0.2,
-}
-
 /**
  * Hexagon Edges:
  *
@@ -26,7 +7,7 @@ const landscape = {
  *
  */
 
-const linksMap = {
+const rivers = {
   // one edge
   0: ['riverStart', 'riverEnd'],
 
@@ -53,19 +34,44 @@ const linksMap = {
   '012345': ['riverCrossing'],
 }
 
-const links = Object.keys(linksMap)
+const links = Object.keys(rivers)
+
+const city = {
+  primary: 'buildingVillage',
+  secondary: { buildingHouse: 1, buildingVillage: 0.5, buildingMarket: 0.2 },
+}
+const mountain = {
+  primary: 'stoneMountain',
+  secondary: { stoneHill: 1, buildingCabin: 0.5, buildingMine: 0.2 },
+}
+const landscape = {
+  grass: 1,
+  grassForest: 0.8,
+  grassHill: 0.3,
+  buildingMill: 0.4,
+  buildingSheep: 0.3,
+  buildingCastle: 0.2,
+  buildingWall: 0.2,
+  buildingWizardTower: 0.2,
+  buildingArchery: 0.2,
+  buildingSmelter: 0.2,
+}
+const grass = ['grass', 'grassForest']
+const sand = ['sand', 'sandRocks']
+const docks = ['buildingDock', 'buildingPort']
+const water = { water: 1, waterRocks: 0.05 }
 
 const blocksConfig = {
-  water,
-  sand,
-  docks,
-  grass,
+  rivers,
+  links,
+
   city,
   mountain,
   landscape,
-
-  links,
-  linksMap,
+  grass,
+  sand,
+  docks,
+  water,
 }
 
 export const isRiverStart = block => block.name === 'riverStart'

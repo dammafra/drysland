@@ -50,7 +50,7 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  constructor({ level, blocks, radius, coverage, extraLinks }) {
+  constructor({ level, blocks, radius, coverage, extraLinks, minDeadEnds }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
@@ -62,6 +62,7 @@ export default class Grid {
     this.radius = radius || params.radius
     this.coverage = coverage || params.coverage
     this.extraLinks = extraLinks || params.extraLinks
+    this.minDeadEnds = minDeadEnds || gridConfig.minDeadEnds
 
     if (blocks) {
       blocks.forEach(b => this.blocksMap.set(b.key, new Block({ grid: this, ...b })))
@@ -192,7 +193,7 @@ export default class Grid {
   }
 
   addExtraLinks() {
-    const preserved = new Set(this.deadEnds.slice(0, gridConfig.minDeadEnds).map(b => b.key))
+    const preserved = new Set(this.deadEnds.slice(0, this.minDeadEnds).map(b => b.key))
 
     for (const block of this.blocks) {
       if (preserved.has(block.key)) continue
@@ -287,7 +288,7 @@ export default class Grid {
       })
 
       this.soundPlayer.play('success')
-      UI.nextButton.wiggle().show()
+      if (this.level) UI.nextButton.wiggle().show()
       this.experience.setExplorationMode()
 
       this.tutorial?.third()
@@ -361,10 +362,10 @@ export default class Grid {
   setDebug() {
     if (!this.experience.debug) return
 
-    this.experience.generateParams.level = this.level
     this.experience.generateParams.radius = this.radius
     this.experience.generateParams.coverage = this.coverage
     this.experience.generateParams.extraLinks = this.extraLinks
+    this.experience.generateParams.minDeadEnds = this.minDeadEnds
     this.experience.debug.root.refresh()
   }
 }

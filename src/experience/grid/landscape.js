@@ -16,16 +16,19 @@ export default class Landscape {
     this.grid = grid
 
     this.grid.deadEnds.forEach((b, i) => {
-      b.name = Random.alternate(i, blocksConfig.linksMap['0'])
+      b.name = Random.alternate(i, blocksConfig.rivers['0'])
 
-      this.grid.addNeighbors(b, Random.alternate(i, ['buildingVillage', 'stoneMountain']))
+      this.grid.addNeighbors(
+        b,
+        Random.alternate(i, [blocksConfig.city.primary, blocksConfig.mountain.primary]),
+      )
 
       b.neighbors.forEach(n =>
         this.grid.addNeighbors(
           n,
           Random.alternate(i, [
-            () => Random.weightedOneOf(blocksConfig.city),
-            () => Random.weightedOneOf(blocksConfig.mountain),
+            () => Random.weightedOneOf(blocksConfig.city.secondary),
+            () => Random.weightedOneOf(blocksConfig.mountain.secondary),
           ]),
         ),
       )

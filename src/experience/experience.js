@@ -240,10 +240,12 @@ export default class Experience {
       radius: 1,
       coverage: 0.5,
       extraLinks: 0,
+      minDeadEnds: 2,
     }
     folder.addBinding(this.generateParams, 'radius', { min: 1, max: 10, step: 1 })
     folder.addBinding(this.generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
-    folder.addBinding(this.generateParams, 'extraLinks', { min: 0, max: 1, step: 0.05 })
+    folder.addBinding(this.generateParams, 'extraLinks', { min: 0, max: 0.5, step: 0.05 })
+    folder.addBinding(this.generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
 
     const generateController = folder.addButton({ title: 'generate' }).on('click', () => {
       generateController.disabled = true
