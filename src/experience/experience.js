@@ -192,27 +192,32 @@ export default class Experience {
     window.experience = Experience.instance
 
     const helpersSize = gridConfig.maxRadius * 2 + 4
-    this.axesHelper = new AxesHelper(helpersSize)
-    this.axesHelper.visible = false
-    this.axesHelper.position.x = -helpersSize * 0.5
-    this.axesHelper.position.y = 1.01
-    this.axesHelper.position.z = -helpersSize * 0.5
+    const axesHelper = new AxesHelper(helpersSize)
+    axesHelper.visible = false
+    axesHelper.position.x = -helpersSize * 0.5
+    axesHelper.position.y = 1.01
+    axesHelper.position.z = -helpersSize * 0.5
 
-    this.gridHelper = new GridHelper(helpersSize, helpersSize * 2, 'gray', 'gray')
-    this.gridHelper.visible = false
-    this.gridHelper.position.y = 1
+    const gridHelper = new GridHelper(helpersSize, helpersSize * 2, 'gray', 'gray')
+    gridHelper.visible = false
+    gridHelper.position.y = 1
 
-    this.scene.add(this.axesHelper, this.gridHelper)
+    this.scene.add(axesHelper, gridHelper)
 
     this.debug.root
-      .addBinding(this.axesHelper, 'visible', { label: 'helpers', index: 3 })
+      .addBinding(axesHelper, 'visible', { label: 'helpers', index: 3 })
       .on('change', event => {
-        this.axesHelper.visible = event.value
-        this.gridHelper.visible = event.value
+        axesHelper.visible = event.value
+        gridHelper.visible = event.value
+
         this.scene.backgroundIntensity = event.value ? 0 : 1
         this.environment.shadowHelper.visible = event.value
         this.camera.controls.maxDistance = event.value ? 50 : 25
       })
+
+    debug.groupCollapsed('gridConfig.levels')
+    debug.log(gridConfig.levels)
+    debug.groupEnd()
 
     const folder = this.debug.root.addFolder({
       title: '⬢ grid',
@@ -220,28 +225,65 @@ export default class Experience {
       expanded: false,
     })
 
-    this.generateParams = {
+    const generateParams = {
       radius: 1,
       coverage: 0.5,
       extraLinks: 0,
       minDeadEnds: 2,
     }
-    folder.addBinding(this.generateParams, 'radius', { min: 1, max: 10, step: 1 })
-    folder.addBinding(this.generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
-    folder.addBinding(this.generateParams, 'extraLinks', { min: 0, max: 0.5, step: 0.05 })
-    folder.addBinding(this.generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
+    folder.addBinding(generateParams, 'radius', { min: 1, max: 10, step: 1 })
+    folder.addBinding(generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
+    folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 0.5, step: 0.05 })
+    folder.addBinding(generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
 
-    const generateController = folder.addButton({ title: 'generate' }).on('click', () => {
-      generateController.disabled = true
-      setTimeout(() => (generateController.disabled = false), 2000)
+    const onGenerateChange = () => {
+      disableGridPanes()
+      updateSelectLevelPane()
 
       delete this.level
-      this.levelParams = this.generateParams
+      this.levelParams = generateParams
       UI.levelText.set(`DEBUG`).show()
 
       this.grid?.dispose()
-      this.grid = new Grid(this.generateParams)
-    })
+      this.grid = new Grid(generateParams)
+    }
+
+    const onSelectLevelChange = e => {
+      disableGridPanes()
+
+      this.level = e.value
+      this.nextLevel()
+    }
+
+    const updateSelectLevelPane = (level = '-') => {
+      selectLevelPane.off('change', onSelectLevelChange)
+      selectLevelPane.controller.value.setRawValue(level)
+      selectLevelPane.on('change', onSelectLevelChange)
+    }
+
+    const disableGridPanes = () => {
+      selectLevelPane.disabled = true
+      generatePane.disabled = true
+      setTimeout(() => {
+        selectLevelPane.disabled = false
+        generatePane.disabled = false
+      }, 2000)
+    }
+
+    const generatePane = folder.addButton({ title: 'generate' }).on('click', onGenerateChange)
+    const selectLevelPane = folder
+      .addBlade({
+        view: 'list',
+        label: 'select level',
+        options: [{ text: '-', value: '-' }].concat(
+          gridConfig.levels.map((_, i) => ({ text: `${i + 1}`, value: i })),
+        ),
+        value: '-',
+      })
+      .on('change', onSelectLevelChange)
+
+    this.generateParams = generateParams
+    this.updateSelectLevelPane = updateSelectLevelPane
 
     setConfigDebug(this.debug)
   }
