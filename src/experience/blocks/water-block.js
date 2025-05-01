@@ -1,3 +1,4 @@
+import gridConfig from '@config/grid'
 import Experience from '@experience'
 import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
@@ -118,12 +119,13 @@ export default class WaterBlock {
   }
 
   static getElevation(position, elapsed) {
-    const frequency = 0.03
-    const speed = 0.05
-    const scale = position.distanceTo(Grid.center) * 0.025
+    const frequencyX = gridConfig.ocean.waves.frequencyX
+    const frequencyY = gridConfig.ocean.waves.frequencyY
+    const speed = gridConfig.ocean.waves.speed
+    const scale = position.distanceTo(Grid.center) * gridConfig.ocean.waves.scale * 0.1
 
-    const x = position.x * frequency
-    const z = position.z * frequency
+    const x = position.x * frequencyX
+    const z = position.z * frequencyY
     const t = elapsed * speed
 
     const elevation = WaterBlock.simplex.noise(x + t, z + t * 0.5) * scale

@@ -8,6 +8,8 @@ export default class GUI {
 
     this.root.element.parentElement.style.width = '350px'
     this.root.element.parentElement.style.zIndex = 999
+    this.root.element.lastChild.style.maxHeight = 'calc(100vh - 40px)'
+    this.root.element.lastChild.style.overflow = 'scroll'
 
     this.root.addButton({ title: 'load' }).on('click', this.loadState)
     this.root.addButton({ title: 'reset' }).on('click', this.resetState)

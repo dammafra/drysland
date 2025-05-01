@@ -1,4 +1,4 @@
-import blocksConfig from '@config/blocks'
+import blocksConfig, { isDock, isRiverStart, isSand, isWater } from '@config/blocks'
 import Experience from '@experience'
 import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
@@ -36,8 +36,8 @@ export default class Block {
 
   // TODO improve
   set linked(value) {
-    this.#linked = blocksConfig.water.includes(this.name) || this.name === 'riverStart' || value
-    this.material.uniforms.uLinked.value = blocksConfig.docks.includes(this.name) || this.#linked
+    this.#linked = isWater(this) || isRiverStart(this) || value
+    this.material.uniforms.uLinked.value = isDock(this) || this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
@@ -162,7 +162,7 @@ export default class Block {
       .to(
         this.mesh.position,
         {
-          y: blocksConfig.sand.includes(this.name) ? -0.1 : 0,
+          y: isSand(this) ? -0.1 : 0,
           duration: 0.5,
           ease: 'back.inOut',
         },
@@ -230,7 +230,7 @@ export default class Block {
     this.experience.setGameMode(this)
 
     this.experience.save()
-    this.grid.tutorial.second()
+    this.grid.tutorial?.second()
     this.grid.updateLinks()
     this.grid.checkSolution()
   }

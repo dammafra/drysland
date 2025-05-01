@@ -5,7 +5,6 @@ import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import Modal from '@ui/modal'
 import { UI } from '@ui/ui'
-import debounce from '@utils/debounce'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -103,12 +102,13 @@ export default class Experience {
 
   async nextLevel() {
     const state = await this.load()
-    this.level = state ? state.level : this.level + 1
+    const level = state ? state.level : this.level + 1
     const blocks = state?.blocks
 
     this.grid?.dispose()
-    this.grid = new Grid(this.level, blocks)
+    this.grid = new Grid({ level, blocks })
 
+    this.level = level
     UI.levelText.set(`Level ${this.level}`).show()
   }
 
@@ -139,13 +139,13 @@ export default class Experience {
     UI.backButton.wiggle().show()
 
     this.camera.setGameControls(block)
-    this.environment.directionalLight.castShadow = false
+    this.grid?.setShadows(false)
   }
 
   setExplorationMode() {
     UI.backButton.hide()
     this.camera.setExplorationControls()
-    this.environment.directionalLight.castShadow = true
+    this.grid?.setShadows(true)
   }
 
   toggleSounds() {
@@ -207,12 +207,6 @@ export default class Experience {
 
     window.experience = Experience.instance
 
-    const folder = this.debug.root.addFolder({
-      title: '🌐 experience',
-      index: 3,
-      expanded: false,
-    })
-
     const helpersSize = gridConfig.maxRadius * 2 + 4
     this.axesHelper = new AxesHelper(helpersSize)
     this.axesHelper.visible = false
@@ -226,33 +220,42 @@ export default class Experience {
 
     this.scene.add(this.axesHelper, this.gridHelper)
 
-    folder.addBinding(this.axesHelper, 'visible', { label: 'helpers' }).on('change', event => {
-      this.axesHelper.visible = event.value
-      this.gridHelper.visible = event.value
-      this.scene.backgroundIntensity = event.value ? 0 : 1
-      this.environment.shadowHelper.visible = event.value
-      this.camera.controls.maxDistance = event.value ? 50 : 25
+    this.debug.root
+      .addBinding(this.axesHelper, 'visible', { label: 'helpers', index: 3 })
+      .on('change', event => {
+        this.axesHelper.visible = event.value
+        this.gridHelper.visible = event.value
+        this.scene.backgroundIntensity = event.value ? 0 : 1
+        this.environment.shadowHelper.visible = event.value
+        this.camera.controls.maxDistance = event.value ? 50 : 25
+      })
+
+    const folder = this.debug.root.addFolder({
+      title: '⬢ grid',
+      index: 4,
+      expanded: false,
     })
 
-    const levelController = folder.addBinding(this, 'level', { min: 1, max: 100, step: 1 }).on(
-      'change',
-      debounce(() => {
-        levelController.disabled = true
-        setTimeout(() => (levelController.disabled = false), 2000)
+    this.generateParams = {
+      radius: 1,
+      coverage: 0.5,
+      extraLinks: 0,
+    }
+    folder.addBinding(this.generateParams, 'radius', { min: 1, max: 10, step: 1 })
+    folder.addBinding(this.generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
+    folder.addBinding(this.generateParams, 'extraLinks', { min: 0, max: 1, step: 0.05 })
 
-        localStorage.removeItem('state')
-        this.level--
-        this.nextLevel()
-      }, 500),
-    )
+    const generateController = folder.addButton({ title: 'generate' }).on('click', () => {
+      generateController.disabled = true
+      setTimeout(() => (generateController.disabled = false), 2000)
 
-    const shuffleController = folder.addButton({ title: 'shuffle' }).on('click', () => {
-      shuffleController.disabled = true
-      setTimeout(() => (shuffleController.disabled = false), 2000)
+      delete this.level
+      UI.levelText.set(`DEBUG`).show()
 
-      localStorage.removeItem('state')
       this.grid?.dispose()
-      this.grid = new Grid(this.level)
+      this.grid = new Grid(this.generateParams)
     })
+
+    gridConfig.setDebug(this.debug)
   }
 }

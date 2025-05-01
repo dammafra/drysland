@@ -6,6 +6,7 @@ uniform bool uHovered;
 uniform bool uLinked;
 uniform bool uTutorial;
 uniform bool uInvalid;
+uniform float uWaterRoughness;
 
 varying vec3 vWorldPosition;
 

@@ -1,3 +1,4 @@
+import gridConfig from '@config/grid'
 import Experience from '@experience'
 import blockBeginVertexChunk from '@shaders/block/chunks/begin-vertex.glsl'
 import blockCommonChunk from '@shaders/block/chunks/common.glsl'
@@ -20,6 +21,7 @@ export default class BlockMaterial {
       uLinked: new Uniform(false),
       uTutorial: new Uniform(false),
       uInvalid: new Uniform(false),
+      uWaterRoughness: gridConfig.ocean.roughness,
     }
   }
 
@@ -34,6 +36,7 @@ export default class BlockMaterial {
     shader.uniforms.uLinked = this.uniforms.uLinked
     shader.uniforms.uTutorial = this.uniforms.uTutorial
     shader.uniforms.uInvalid = this.uniforms.uInvalid
+    shader.uniforms.uWaterRoughness = this.uniforms.uWaterRoughness
 
     // common
     shader.vertexShader = shader.vertexShader.replace('#include <common>', blockCommonChunk)

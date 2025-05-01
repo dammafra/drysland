@@ -1,3 +1,5 @@
+import blocksConfig, { isRiverStart } from '@config/blocks'
+import gridConfig from '@config/grid'
 import Experience from '@experience'
 import Random from '@utils/random'
 import Seagull from './seagull'
@@ -14,35 +16,23 @@ export default class Landscape {
     this.grid = grid
 
     this.grid.deadEnds.forEach((b, i) => {
-      b.name = i % 2 ? 'riverEnd' : 'riverStart'
+      b.name = Random.alternate(i, blocksConfig.linksMap['0'])
 
-      this.grid.addNeighbors(b, i % 2 ? 'buildingVillage' : 'stoneMountain')
+      this.grid.addNeighbors(b, Random.alternate(i, ['buildingVillage', 'stoneMountain']))
 
       b.neighbors.forEach(n =>
         this.grid.addNeighbors(
           n,
-          i % 2
-            ? Random.weightedOneOf({ buildingHouse: 1, buildingVillage: 0.5, buildingMarket: 0.2 })
-            : () => Random.weightedOneOf({ stoneHill: 1, buildingCabin: 0.5, buildingMine: 0.2 }),
+          Random.alternate(i, [
+            () => Random.weightedOneOf(blocksConfig.city),
+            () => Random.weightedOneOf(blocksConfig.mountain),
+          ]),
         ),
       )
     })
 
-    this.grid.addPerimeter(() =>
-      Random.weightedOneOf({
-        grass: 1,
-        grassForest: 0.8,
-        grassHill: 0.3,
-        buildingMill: 0.4,
-        buildingSheep: 0.3,
-        buildingCastle: 0.2,
-        buildingWall: 0.2,
-        buildingWizardTower: 0.2,
-        buildingArchery: 0.2,
-        buildingSmelter: 0.2,
-      }),
-    )
-    this.grid.addPerimeter(() => Random.oneOf('grass', 'grassForest'))
+    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.landscape))
+    this.grid.addPerimeter(() => Random.oneOf(blocksConfig.grass))
   }
 
   init() {
@@ -62,7 +52,7 @@ export default class Landscape {
 
   getClosestRiver(block) {
     if (!this.riverBlocks) {
-      this.riverBlocks = this.grid.blocks.filter(b => b.name !== 'riverStart' && b.links.length)
+      this.riverBlocks = this.grid.blocks.filter(b => !isRiverStart(b) && b.links.length)
     }
 
     if (!block) return null
@@ -89,7 +79,7 @@ export default class Landscape {
     if (this.ship) {
       const distance = this.camera.normalizedDistanceTo(this.ship.mesh.position)
       const volume = Math.pow(1 - distance, 10)
-      const clampedVolume = Math.max(0, Math.min(volume, 0.3))
+      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.ship.maxVolume))
       this.soundPlayer.updateBackgoundVolume('sailing', clampedVolume)
     }
 
@@ -98,7 +88,7 @@ export default class Landscape {
         ...this.seagulls.map(s => s.mesh.position).map(p => this.camera.normalizedDistanceTo(p)),
       )
       const volume = Math.pow(1 - distance, 5)
-      const clampedVolume = Math.max(0, Math.min(volume, 1))
+      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.seagull.maxVolume))
       this.soundPlayer.updateBackgoundVolume('seagulls', clampedVolume)
     }
   }

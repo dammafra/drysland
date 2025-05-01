@@ -94,7 +94,7 @@ export default class Environment {
     this.shadowHelper.visible = false
     this.scene.add(this.shadowHelper)
 
-    const folder = this.debug.root.addFolder({ title: '💡 environment', index: 5, expanded: false })
+    const folder = this.debug.root.addFolder({ title: '💡 environment', index: 6, expanded: false })
 
     folder
       .addBinding(this.sunSpherical, 'phi', {

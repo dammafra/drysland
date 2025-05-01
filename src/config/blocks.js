@@ -1,25 +1,21 @@
-const rivers = [
-  'riverBridge',
-  'riverCorner',
-  'riverCornerSharp',
-  'riverCrossing',
-  'riverEnd',
-  'riverIntersectionA',
-  'riverIntersectionB',
-  'riverIntersectionC',
-  'riverIntersectionD',
-  'riverIntersectionE',
-  'riverIntersectionF',
-  'riverIntersectionG',
-  'riverIntersectionH',
-  'riverStart',
-  'riverStraight',
-  'riverWatermill',
-]
-
-const water = ['water', 'waterRocks']
+const water = { water: 1, waterRocks: 0.05 }
 const sand = ['sand', 'sandRocks']
 const docks = ['buildingDock', 'buildingPort']
+const grass = ['grass', 'grassForest']
+const city = { buildingHouse: 1, buildingVillage: 0.5, buildingMarket: 0.2 }
+const mountain = { stoneHill: 1, buildingCabin: 0.5, buildingMine: 0.2 }
+const landscape = {
+  grass: 1,
+  grassForest: 0.8,
+  grassHill: 0.3,
+  buildingMill: 0.4,
+  buildingSheep: 0.3,
+  buildingCastle: 0.2,
+  buildingWall: 0.2,
+  buildingWizardTower: 0.2,
+  buildingArchery: 0.2,
+  buildingSmelter: 0.2,
+}
 
 /**
  * Hexagon Edges:
@@ -60,13 +56,23 @@ const linksMap = {
 const links = Object.keys(linksMap)
 
 const blocksConfig = {
-  rivers,
   water,
   sand,
   docks,
+  grass,
+  city,
+  mountain,
+  landscape,
 
   links,
   linksMap,
 }
+
+export const isRiverStart = block => block.name === 'riverStart'
+export const isSand = block => block.name.includes('sand')
+export const isDock = block => docks.includes(block.name)
+export const isWater = block => block.name.includes('water')
+
+export const setWater = block => (block.name = 'water')
 
 export default blocksConfig

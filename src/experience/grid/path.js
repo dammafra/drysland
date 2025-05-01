@@ -3,11 +3,10 @@ import Random from '@utils/random'
 import { CatmullRomCurve3, Vector3 } from 'three'
 
 export default class Path {
-  constructor(radius, speed) {
+  constructor(radius) {
     this.experience = Experience.instance
     this.time = this.experience.time
     this.radius = radius
-    this.speed = speed
 
     this.setPath()
   }
@@ -40,8 +39,8 @@ export default class Path {
     this.pathProgress = 0
   }
 
-  update() {
-    this.pathProgress = (this.pathProgress + this.time.delta * this.speed) % 1
+  update(speed = 0.5) {
+    this.pathProgress = (this.pathProgress + this.time.delta * speed) % 1
 
     const position = this.curve.getPointAt(this.pathProgress)
 

@@ -37,6 +37,10 @@ export default class Random {
     return fallback[0]
   }
 
+  static alternate(i, options) {
+    return i % 2 ? options.at(0) : options.at(1)
+  }
+
   static color() {
     return `#${Math.floor(Math.random() * 16777215)
       .toString(16)

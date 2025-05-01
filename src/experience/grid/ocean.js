@@ -1,5 +1,5 @@
 import WaterBlock from '@blocks/water-block'
-import blocksConfig from '@config/blocks'
+import blocksConfig, { isSand, isWater, setWater } from '@config/blocks'
 import gridConfig from '@config/grid'
 import Random from '@utils/random'
 
@@ -7,24 +7,20 @@ import Random from '@utils/random'
 export default class Ocean {
   constructor(grid) {
     this.grid = grid
-    this.size = 20
 
-    this.grid.addPerimeter(() => Random.oneOf('sand', 'sandRocks'))
-    this.grid.addPerimeter(() => Random.weightedOneOf({ water: 1, waterRocks: 0.05 }))
+    this.grid.addPerimeter(() => Random.oneOf(blocksConfig.sand))
+    this.grid.addPerimeter(() => Random.weightedOneOf(blocksConfig.water))
 
     this.placeDocks()
-
-    for (let i = 0; i < this.size; i++) {
-      this.addWaterPerimeter()
-    }
+    this.addWaterPerimeter()
   }
 
   placeDocks() {
-    const sands = this.grid.blocks.filter(b => blocksConfig.sand.includes(b.name))
+    const sands = this.grid.blocks.filter(isSand)
 
     sands.forEach(b => {
-      const firstWater = b.neighbors?.findIndex(n => n.name.includes('water'))
-      const lastWater = b.neighbors?.findLastIndex(n => n.name.includes('water'))
+      const firstWater = b.neighbors?.findIndex(isWater)
+      const lastWater = b.neighbors?.findLastIndex(isWater)
 
       if (!firstWater || !lastWater) return
 
@@ -32,29 +28,31 @@ export default class Ocean {
         b.name = Random.oneOf(blocksConfig.docks)
         b.rotation = -((Math.PI / 3) * firstWater)
         b.neighbors.forEach(n => {
-          if (n.name.includes('sand') || n.name.includes('sand')) n.name = 'water'
+          if (isSand(n) || isWater(n)) setWater(n)
         })
       }
     })
 
     sands.forEach(b => {
-      const waterNeighbors = b.neighbors?.filter(n => n.name.includes('water'))
-      if (waterNeighbors && waterNeighbors.length === 4) b.name = 'water'
+      const waterNeighbors = b.neighbors?.filter(isWater)
+      if (waterNeighbors && waterNeighbors.length === 4) setWater(b)
     })
   }
 
   addWaterPerimeter() {
-    this.grid.perimeter.forEach(block => {
-      block.neighbors = gridConfig.directions.map(dir => {
-        const q = block.q + dir.q
-        const r = block.r + dir.r
-        const existingBlock = this.grid.getBlock(q, r)
-        if (existingBlock) return existingBlock
+    for (let i = 0; i < gridConfig.ocean.size; i++) {
+      this.grid.perimeter.forEach(block => {
+        block.neighbors = gridConfig.directions.map(dir => {
+          const q = block.q + dir.q
+          const r = block.r + dir.r
+          const existingBlock = this.grid.getBlock(q, r)
+          if (existingBlock) return existingBlock
 
-        const waterBlock = new WaterBlock({ grid: this.grid, q, r })
-        this.grid.blocksMap.set(waterBlock.key, waterBlock)
-        return waterBlock
+          const waterBlock = new WaterBlock({ grid: this.grid, q, r })
+          this.grid.blocksMap.set(waterBlock.key, waterBlock)
+          return waterBlock
+        })
       })
-    })
+    }
   }
 }

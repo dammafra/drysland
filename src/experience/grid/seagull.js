@@ -1,3 +1,4 @@
+import gridConfig from '@config/grid'
 import Experience from '@experience'
 import { dispose } from '@utils/dispose'
 import Random from '@utils/random'
@@ -12,7 +13,7 @@ export default class Seagull {
     this.resources = this.experience.resources
     this.time = this.experience.time
     this.scene = this.experience.scene
-    this.path = new Path(0, 0.008)
+    this.path = new Path()
     this.offset = Random.float({ max: 2 })
 
     this.setMesh()
@@ -52,7 +53,8 @@ export default class Seagull {
   }
 
   update() {
-    const { position, angle } = this.path.update()
+    const speed = gridConfig.landscape.seagull.speed * 0.1
+    const { position, angle } = this.path.update(speed)
 
     this.mesh.position.copy(position)
     this.mesh.position.y = 0.25 * Math.sin(this.time.elapsed * this.offset) + 3

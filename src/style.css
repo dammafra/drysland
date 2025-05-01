@@ -43,6 +43,10 @@
   cursor: url('/cursors/move.png'), move;
 }
 
+@utility p-mobile {
+  @apply max-sm:pb-20 transition-[padding];
+}
+
 @theme {
   --animate-wiggle: wiggle 2s infinite ease-in-out;
 
@@ -78,13 +82,13 @@
 
 main * {
   @apply !my-cursor-auto;
+}
 
-  a,
-  button,
-  a *,
-  button * {
-    @apply !my-cursor-pointer;
-  }
+main a,
+main button,
+main a *,
+main button * {
+  @apply !my-cursor-pointer;
 }
 
 a {
@@ -127,7 +131,7 @@ main {
 /* loading */
 .loading {
   @apply fixed top-0 w-full h-full z-10;
-  @apply flex flex-col gap-8 justify-center items-center;
+  @apply flex flex-col gap-8 justify-center items-center p-mobile;
 }
 
 .loading .spinner {
@@ -142,7 +146,7 @@ main {
 /* menu */
 .menu {
   @apply fixed top-0 w-full h-full z-10;
-  @apply flex flex-col justify-center items-center;
+  @apply flex flex-col justify-center items-center p-mobile;
 }
 
 .menu .bg-hex {
@@ -179,7 +183,7 @@ main {
 
 /* modal */
 .modal-container {
-  @apply relative h-full w-full flex items-center justify-center;
+  @apply relative h-full w-full flex items-center justify-center p-mobile;
 }
 
 .modal-container #modal {
@@ -213,7 +217,7 @@ button.hex.primary {
   text-shadow: 1px 1px 2px black;
 }
 
-/* fullscreen */
+/* fullscreen - standalone */
 body.fullscreen .fa-expand,
 body:not(.fullscreen) .fa-compress {
   @apply hidden;

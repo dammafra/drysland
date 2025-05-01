@@ -15,7 +15,7 @@ export default class Modal extends Element {
   }
 
   open(selector) {
-    const content = document.querySelector(selector)
+    const content = typeof selector === 'string' ? document.querySelector(selector) : selector
     if (!content) return
 
     this.content = content.cloneNode(true)

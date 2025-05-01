@@ -59,6 +59,7 @@ export default class Camera {
     this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
+    this.autorotationSpeed = 3
 
     const box = new Box3()
     box.min.set(-10, 0, -10)
@@ -93,7 +94,7 @@ export default class Camera {
     this.controls.update(this.time.delta)
 
     if (this.autoRotate && !this.disableAutoRotate) {
-      this.controls.azimuthAngle += 10 * this.time.delta * 0.3 * MathUtils.DEG2RAD
+      this.controls.azimuthAngle += this.autorotationSpeed * this.time.delta * MathUtils.DEG2RAD
     }
   }
 
@@ -153,8 +154,14 @@ export default class Camera {
   setDebug() {
     if (!this.debug) return
 
-    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 4, expanded: false })
+    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 5, expanded: false })
     folder.addBinding(this.controls, 'enabled', { label: 'controls' })
+    folder.addBinding(this, 'autorotationSpeed', {
+      label: 'auto rotation speed',
+      min: 0,
+      max: 20,
+      step: 0.1,
+    })
     folder
       .addBinding(this.instance, 'position')
       .on('change', () => this.instance.lookAt(Grid.center))

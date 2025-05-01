@@ -1,4 +1,5 @@
 import Block from '@blocks/block'
+import { isRiverStart } from '@config/blocks'
 import gridConfig from '@config/grid'
 import Experience from '@experience'
 import { UI } from '@ui/ui'
@@ -49,7 +50,7 @@ export default class Grid {
     return this.#perimeter.blocks
   }
 
-  constructor(level, blocks) {
+  constructor({ level, blocks, radius, coverage, extraLinks }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
@@ -57,11 +58,10 @@ export default class Grid {
     this.blocksMap = new Map()
 
     this.level = level
-    const { radius, coverage, extraLinks } =
-      gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
-    this.radius = radius
-    this.coverage = coverage
-    this.extraLinks = extraLinks
+    const params = gridConfig.levels.at(this.level - 1) || gridConfig.levels.at(-1)
+    this.radius = radius || params.radius
+    this.coverage = coverage || params.coverage
+    this.extraLinks = extraLinks || params.extraLinks
 
     if (blocks) {
       blocks.forEach(b => this.blocksMap.set(b.key, new Block({ grid: this, ...b })))
@@ -75,14 +75,18 @@ export default class Grid {
       this.blocks.forEach(b => !b.name && this.blocksMap.delete(b.key))
     }
 
+    this.init()
+
     UI.nextButton.hide()
     this.experience.setExplorationMode()
-
-    this.init()
-    this.tutorial = new Tutorial(this)
+    if (this.level === 1) {
+      this.tutorial = new Tutorial(this)
+    }
 
     this.updateLinks()
     this.checkSolution()
+
+    this.setDebug()
   }
 
   async init() {
@@ -260,7 +264,7 @@ export default class Grid {
       .filter(b => {
         b.linked = false
         b.invalid = false
-        return b.name === 'riverStart'
+        return isRiverStart(b)
       })
       .forEach(startBlock => {
         updateNeighborLinks(startBlock)
@@ -286,10 +290,10 @@ export default class Grid {
       UI.nextButton.wiggle().show()
       this.experience.setExplorationMode()
 
-      this.tutorial.third()
+      this.tutorial?.third()
     } else {
       this.riverBlocks.forEach(b => {
-        if (b.name === 'riverStart') return
+        if (isRiverStart(b)) return
 
         const invalid = b.links.some(edge => {
           const neighbor = b.neighbors?.at(edge)
@@ -307,9 +311,14 @@ export default class Grid {
     this.landscape?.update()
   }
 
+  setShadows(value) {
+    this.riverBlocks.forEach(b => (b.mesh.receiveShadow = value))
+  }
+
   dispose() {
     this.blocks.forEach(block => block.dispose())
     this.landscape?.dispose()
+    this.tutorial?.dispose()
 
     delete this.landscape
     delete this.ocean
@@ -347,5 +356,15 @@ export default class Grid {
     }
 
     return res
+  }
+
+  setDebug() {
+    if (!this.experience.debug) return
+
+    this.experience.generateParams.level = this.level
+    this.experience.generateParams.radius = this.radius
+    this.experience.generateParams.coverage = this.coverage
+    this.experience.generateParams.extraLinks = this.extraLinks
+    this.experience.debug.root.refresh()
   }
 }
