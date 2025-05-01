@@ -78,8 +78,7 @@ export default class Grid {
 
     this.init()
 
-    UI.nextButton.hide()
-    this.experience.setExplorationMode()
+    this.experience.levelStart()
     if (this.level === 1) {
       this.tutorial = new Tutorial(this)
     }
@@ -94,9 +93,7 @@ export default class Grid {
     this.landscape = new Landscape(this)
     this.ocean = new Ocean(this)
 
-    this.camera.intro()
     this.soundPlayer.play('multiPop')
-
     await Promise.all(this.blocks.map(b => b.init()))
 
     this.landscape?.init()
@@ -287,11 +284,8 @@ export default class Grid {
         this.pointer.remove(b)
       })
 
-      this.soundPlayer.play('success')
-      if (this.level) UI.nextButton.wiggle().show()
-      this.experience.setExplorationMode()
-
       this.tutorial?.third()
+      this.experience.levelComplete()
     } else {
       this.riverBlocks.forEach(b => {
         if (isRiverStart(b)) return

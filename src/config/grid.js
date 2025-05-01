@@ -9,14 +9,14 @@ function generateLevels() {
     radius += gridConfig.radiusStep
   ) {
     for (
-      let extraLinks = gridConfig.minExtraLinks;
-      extraLinks <= gridConfig.maxExtraLinks;
-      extraLinks += gridConfig.maxExtraLinksStep
+      let coverage = gridConfig.minCoverage;
+      coverage <= gridConfig.maxCoverage;
+      coverage += gridConfig.coverageStep
     ) {
       for (
-        let coverage = gridConfig.minCoverage;
-        coverage <= gridConfig.maxCoverage;
-        coverage += gridConfig.coverageStep
+        let extraLinks = gridConfig.minExtraLinks;
+        extraLinks <= gridConfig.maxExtraLinks;
+        extraLinks += gridConfig.maxExtraLinksStep
       ) {
         levels.push({ radius, coverage, extraLinks })
       }
@@ -36,7 +36,7 @@ const gridConfig = {
   coverageStep: 0.1,
 
   minExtraLinks: 0,
-  maxExtraLinks: 0.1,
+  maxExtraLinks: 0.2,
   maxExtraLinksStep: 0.05,
 
   minDeadEnds: 2,

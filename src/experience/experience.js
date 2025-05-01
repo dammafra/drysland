@@ -110,11 +110,22 @@ export default class Experience {
     const level = state ? state.level : this.level + 1
     const blocks = state?.blocks
 
-    this.grid?.dispose()
-    this.grid = new Grid({ level, blocks })
-
     this.level = level
     UI.levelText.set(`Level ${this.level}`).show()
+
+    this.grid?.dispose()
+    this.grid = new Grid({ level, blocks })
+  }
+
+  levelStart() {
+    UI.nextButton.hide()
+    this.setExplorationMode()
+  }
+
+  levelComplete() {
+    this.soundPlayer.play('success')
+    if (this.level) UI.nextButton.wiggle().show()
+    this.setExplorationMode()
   }
 
   openMenu() {
