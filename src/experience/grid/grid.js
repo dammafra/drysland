@@ -1,6 +1,6 @@
 import Block from '@blocks/block'
 import { isRiverStart } from '@config/blocks'
-import gridConfig from '@config/grid'
+import gridConfig, { applySelectionStrategy } from '@config/grid'
 import Experience from '@experience'
 import { UI } from '@ui/ui'
 import Random from '@utils/random'
@@ -130,24 +130,6 @@ export default class Grid {
     const frontier = []
     const targetVisits = Math.floor(this.blocksMap.size * this.coverage)
 
-    // Selection strategy:
-    // 1. DFS style: pick last           --> frontier.at(-1)
-    // 2. BFS style: pick first          --> frontier.at(0)
-    // 3. Prim style: pick random        --> Random.oneOf(frontier)
-    // - Balanced: use middle or weighted
-    // - Mixed
-    const select = (frontier, strategy) => {
-      // prettier-ignore
-      switch (strategy) {
-        case 1: return frontier.at(-1)
-        case 2: return frontier.at(0)
-        case 3: return Random.oneOf(frontier)
-        default:
-          debug.warn('The selected strategy doe not exixt, fallback to DFS')
-          return frontier.at(-1)
-      }
-    }
-
     const start = Random.oneOf(this.blocks)
     visited.add(start.key)
     frontier.push(start)
@@ -159,7 +141,7 @@ export default class Grid {
     while (frontier.length && visited.size < targetVisits) {
       const logs = []
 
-      const current = select(frontier, 1)
+      const current = applySelectionStrategy(frontier, gridConfig.selectionStrategy)
       logs.push('current: ' + current)
 
       const neighbors = current.neighbors

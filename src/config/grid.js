@@ -1,6 +1,9 @@
+import Random from '@utils/random'
 import { Uniform } from 'three'
 
 const gridConfig = {
+  selectionStrategy: 1, // DFS, see `applySelectionStrategy` below
+
   minRadius: 2,
   maxRadius: 8,
 
@@ -13,6 +16,7 @@ const gridConfig = {
   difficultyScale: 100, // by level 100 you reach the maximum difficulty
 
   minDeadEnds: 2,
+
   directions: [
     { q: -1, r: 0 }, //edge 0: E
     { q: 0, r: -1 }, //edge 1: NE
@@ -69,6 +73,28 @@ export const generateLevel = n => {
   )
 
   return { radius, coverage, extraLinks }
+}
+
+/**
+ * Selection strategy:
+ * 1. DFS style: pick last      --> frontier.at(-1)
+ * 2. BFS style: pick first     --> frontier.at(0)
+ * 3. Prim style: pick random   --> Random.oneOf(frontier)
+ *
+ * TODO:
+ * - Balanced: use middle or weighted
+ * - Mixed
+ */
+export const applySelectionStrategy = (frontier, strategy) => {
+  // prettier-ignore
+  switch (strategy) {
+        case 1: return frontier.at(-1)
+        case 2: return frontier.at(0)
+        case 3: return Random.oneOf(frontier)
+        default:
+          debug.warn('The selected strategy doe not exixt, fallback to DFS')
+          return applySelectionStrategy(frontier, 1)
+      }
 }
 
 export default gridConfig

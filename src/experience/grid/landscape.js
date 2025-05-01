@@ -28,7 +28,7 @@ export default class Landscape {
    * and their neighbors get secondary blocks matching the context (mountain surroundings near starts, city surroundings near ends).
    *
    * TODO: configure dimension and weights; add tweaks
-   * */
+   */
   addDeadEndsPerimeters() {
     this.grid.deadEnds.forEach((b, i) => {
       b.name = Random.alternate(i, blocksConfig.rivers['0'])

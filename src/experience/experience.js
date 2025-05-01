@@ -228,6 +228,19 @@ export default class Experience {
       extraLinks: 0,
       minDeadEnds: 2,
     }
+
+    folder
+      .addBlade({
+        view: 'list',
+        label: 'strategy',
+        options: [
+          { text: 'DFS', value: 1 },
+          { text: 'BFS', value: 2 },
+          { text: "Prim's", value: 3 },
+        ],
+        value: 1,
+      })
+      .on('change', e => (gridConfig.selectionStrategy = e.value))
     folder.addBinding(generateParams, 'radius', { min: 1, max: 10, step: 1 })
     folder.addBinding(generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
     folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 0.5, step: 0.05 })
