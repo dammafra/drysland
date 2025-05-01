@@ -97,11 +97,7 @@ a {
 
 html,
 body {
-  @apply overflow-hidden overscroll-none touch-none font-hex;
-}
-
-body {
-  @apply w-screen h-[100svh] bg-background;
+  @apply font-hex;
 }
 
 main {
