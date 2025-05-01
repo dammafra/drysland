@@ -58,6 +58,7 @@ export default class Camera {
     this.controls.maxDistance = 25
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
+    this.autoRotate = true
     this.autorotationSpeed = 3
 
     const box = new Box3()
@@ -95,6 +96,8 @@ export default class Camera {
     if (this.autoRotate && !this.disableAutoRotate) {
       this.controls.azimuthAngle += this.autorotationSpeed * this.time.delta * MathUtils.DEG2RAD
     }
+
+    this.cameraPositionPane?.refresh()
   }
 
   distanceTo(position) {
@@ -155,15 +158,22 @@ export default class Camera {
     if (!this.debug) return
 
     const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 5, expanded: false })
-    folder.addBinding(this.controls, 'enabled', { label: 'controls' })
+
+    folder
+      .addBinding(this.controls, 'enabled', { label: 'controls' })
+      .on('change', e => (this.cameraPositionPane.disabled = e.value))
+
+    folder.addBinding(this, 'autoRotate', { label: 'auto rotation' })
+
     folder.addBinding(this, 'autorotationSpeed', {
       label: 'auto rotation speed',
       min: 0,
       max: 20,
       step: 0.1,
     })
-    folder
-      .addBinding(this.instance, 'position')
+
+    this.cameraPositionPane = folder
+      .addBinding(this.instance, 'position', { disabled: true })
       .on('change', () => this.instance.lookAt(Grid.center))
   }
 }
