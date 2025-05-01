@@ -29,8 +29,8 @@ export default class Element {
     return this
   }
 
-  disable() {
-    this.element.classList.add('disabled')
+  disable(applyClass) {
+    applyClass && this.element.classList.add('disabled')
     this.element.style.pointerEvents = 'none'
     return this
   }

@@ -12,6 +12,7 @@ import Environment from './environment'
 import Pointer from './pointer'
 import Renderer from './renderer'
 import Resources from './resources'
+import Settings from './settings'
 import Sizes from './sizes'
 import { SoundPlayer } from './sound-player'
 import Time from './time'
@@ -83,9 +84,10 @@ export default class Experience {
       UI.startButton.enable()
       user && State.instance.sync()
     })
-    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()).disable() //prettier-ignore
-    UI.startButton.onClick(this.start.bind(this)).disable()
+    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()).disable(true) //prettier-ignore
+    UI.startButton.onClick(this.start.bind(this)).disable(true)
     UI.creditsButton.onClick(() => Modal.instance.open('.credits'))
+    UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
   }
@@ -93,14 +95,8 @@ export default class Experience {
   start() {
     this.menu.close()
 
-    UI.soundsToggle.onToggle(this.toggleSounds.bind(this)).show()
-    UI.loopToggle.onToggle(this.toggleLoop.bind(this)).show()
-    UI.wavesToggle.onToggle(this.toggleAmbience.bind(this)).show()
-    UI.menuButton.onClick(this.openMenu.bind(this))
+    this.settings = new Settings()
     UI.fullscreenToggle.show()
-
-    this.toggleLoop()
-    this.toggleAmbience()
 
     this.nextLevel()
   }
@@ -134,18 +130,13 @@ export default class Experience {
     this.level--
     this.loaded = false
 
-    UI.soundsToggle.hide()
-    UI.loopToggle.hide()
-    UI.wavesToggle.hide()
+    this.settings.hide()
     UI.menuButton.hide()
     UI.fullscreenToggle.hide()
     UI.levelText.hide()
     UI.tutorialText.hide()
     UI.backButton.hide()
     UI.nextButton.hide()
-
-    this.toggleLoop()
-    this.toggleAmbience()
 
     this.camera.autoRotate = false
     UI.startButton.setLabel('Resume')
@@ -163,30 +154,6 @@ export default class Experience {
     UI.backButton.hide()
     this.camera.setExplorationControls(this.levelParams.radius)
     this.grid?.setShadows(true)
-  }
-
-  toggleSounds() {
-    return this.soundPlayer.setMuted(!this.soundPlayer.muted)
-  }
-
-  toggleLoop() {
-    return this.soundPlayer.backgrounds.has('loop')
-      ? this.soundPlayer.stopBackground('loop')
-      : this.soundPlayer.playBackground('loop', 0.5)
-  }
-
-  toggleAmbience() {
-    this.soundPlayer.backgrounds.has('seagulls')
-      ? this.soundPlayer.stopBackground('seagulls')
-      : this.soundPlayer.playBackground('seagulls', 0)
-
-    this.soundPlayer.backgrounds.has('sailing')
-      ? this.soundPlayer.stopBackground('sailing')
-      : this.soundPlayer.playBackground('sailing', 0)
-
-    return this.soundPlayer.backgrounds.has('waves')
-      ? this.soundPlayer.stopBackground('waves')
-      : this.soundPlayer.playBackground('waves', 0.1)
   }
 
   update = () => {

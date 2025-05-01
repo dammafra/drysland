@@ -13,7 +13,7 @@ export class UI {
   static menuButton = new Button('#menu')
   static soundsToggle = new Toggle('#sounds')
   static loopToggle = new Toggle('#loop')
-  static wavesToggle = new Toggle('#waves')
+  static ambienceToggle = new Toggle('#ambience')
   static fullscreenToggle = new Toggle('#fullscreen')
 
   static levelText = new Text('#level')
