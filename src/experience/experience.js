@@ -1,3 +1,4 @@
+import setConfigDebug from '@config/debug'
 import gridConfig from '@config/grid'
 import Auth from '@fire/auth'
 import State from '@fire/state'
@@ -262,6 +263,6 @@ export default class Experience {
       this.grid = new Grid(this.generateParams)
     })
 
-    gridConfig.setDebug(this.debug)
+    setConfigDebug(this.debug)
   }
 }
