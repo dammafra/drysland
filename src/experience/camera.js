@@ -56,7 +56,6 @@ export default class Camera {
     this.controls = new CameraControls(this.instance, this.canvas)
     this.controls.minDistance = 5
     this.controls.maxDistance = 25
-    this.controls.maxPolarAngle = Math.PI / 2 - 0.1
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
     this.autorotationSpeed = 3
@@ -72,9 +71,9 @@ export default class Camera {
       this.disableAutoRotate = true
     })
 
-    this.controls.addEventListener('controlend', () =>
-      this.controls.active ? this.controls.addEventListener('rest', onRest) : onRest(),
-    )
+    this.controls.addEventListener('controlend', () => {
+      this.controls.active ? this.controls.addEventListener('rest', onRest) : onRest()
+    })
 
     const onRest = () => {
       this.controls.removeEventListener('rest', onRest)
@@ -117,6 +116,8 @@ export default class Camera {
     this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
 
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.1
+    this.controls.maxAzimuthAngle = Infinity
     this.controls.setLookAt(3, 5, radius + 10, 0, 0, 0, true)
   }
 
@@ -127,9 +128,12 @@ export default class Camera {
     this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
 
+    this.controls.maxPolarAngle = 0
+    this.controls.maxAzimuthAngle = 0
     this.controls.rotatePolarTo(0, true)
+    this.controls.rotateAzimuthTo(0, true)
 
-    if (this.controls.distance > 10) this.controls.dollyTo(10, true)
+    if (this.controls.distance > 20) this.controls.dollyTo(10, true)
     if (block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))) {
       this.controls.fitToBox(block.mesh, true)
       this.controls.dollyTo(10, true)
