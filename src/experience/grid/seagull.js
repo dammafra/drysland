@@ -13,6 +13,9 @@ export default class Seagull {
     this.resources = this.experience.resources
     this.time = this.experience.time
     this.scene = this.experience.scene
+    this.pointer = this.experience.pointer
+    this.soundplayer = this.experience.soundPlayer
+
     this.path = new Path()
     this.offset = Random.float({ max: 2 })
 
@@ -27,6 +30,8 @@ export default class Seagull {
         gsap.to(child.material, { opacity: 1, duration: 2 })
       }
     })
+
+    this.pointer.add(this)
   }
 
   setMesh() {
@@ -50,6 +55,13 @@ export default class Seagull {
     const action = this.animationMixer.clipAction(animation)
 
     action.play()
+  }
+
+  onClick() {
+    const previousMuted = this.soundplayer.muted
+    this.soundplayer.setMuted(false)
+    this.soundplayer.play('1989')
+    this.soundplayer.setMuted(previousMuted)
   }
 
   update() {

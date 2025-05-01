@@ -16,6 +16,11 @@ const resourcesConfig = [
   },
   // sounds
   {
+    name: '1989',
+    type: 'sound',
+    path: 'sounds/1989.mp3',
+  },
+  {
     name: 'link',
     type: 'sound',
     path: 'sounds/link.mp3',
