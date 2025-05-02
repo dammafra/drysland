@@ -30,17 +30,17 @@ const subsetOfTHREE = {
 
 CameraControls.install({ THREE: subsetOfTHREE })
 
-const TAU = Math.PI * 2
+// const TAU = Math.PI * 2
 
-function normalizeAngle(angle) {
-  const normalized = angle % TAU
-  return normalized > Math.PI ? normalized - TAU : normalized
-}
+// function normalizeAngle(angle) {
+//   const normalized = angle % TAU
+//   return normalized > Math.PI ? normalized - TAU : normalized
+// }
 
-function deltaAngle(targetAngle, sourceAngle) {
-  const angle = targetAngle - sourceAngle
-  return MathUtils.euclideanModulo(angle + Math.PI, TAU) - Math.PI
-}
+// function deltaAngle(targetAngle, sourceAngle) {
+//   const angle = targetAngle - sourceAngle
+//   return MathUtils.euclideanModulo(angle + Math.PI, TAU) - Math.PI
+// }
 
 export default class Camera {
   constructor() {
@@ -132,8 +132,11 @@ export default class Camera {
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
 
     this.controls.maxPolarAngle = Math.PI / 2 - 0.1
+    this.controls.dollyTo(radius + 15, true)
+    this.controls.rotatePolarTo(65 * MathUtils.DEG2RAD, true)
+
     this.controls.maxAzimuthAngle = Infinity
-    this.controls.setLookAt(3, 6, radius + 10, 0, 0, 0, true)
+    this.controls.minAzimuthAngle = -Infinity
   }
 
   setGameControls(block) {
@@ -145,13 +148,17 @@ export default class Camera {
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
 
     this.controls.maxPolarAngle = 0
-    this.controls.maxAzimuthAngle = 0
     this.controls.rotatePolarTo(0, true)
 
-    const normalized = normalizeAngle(this.controls.azimuthAngle)
-    const delta = deltaAngle(0, normalized)
-    this.controls.azimuthAngle = normalized
-    this.controls.rotate(delta, 0, true)
+    // -- lock rotation
+    this.controls.maxAzimuthAngle = this.controls.azimuthAngle
+    this.controls.minAzimuthAngle = this.controls.azimuthAngle
+
+    // -- set rotation to 0
+    // const normalized = normalizeAngle(this.controls.azimuthAngle)
+    // const delta = deltaAngle(0, normalized)
+    // this.controls.azimuthAngle = normalized
+    // this.controls.rotate(delta, 0, true)
 
     if (this.controls.distance > 20) this.controls.dollyTo(10, true)
     if (block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))) {
