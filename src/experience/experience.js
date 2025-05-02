@@ -102,9 +102,8 @@ export default class Experience {
   }
 
   async start() {
-    await this.menu.close()
-
-    this.nextLevel()
+    this.menu.close()
+    await this.nextLevel()
 
     this.soundControls.show()
     UI.fullscreenToggle.show()
