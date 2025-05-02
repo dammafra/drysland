@@ -11,8 +11,8 @@ export default class GUI {
     this.root.element.lastChild.style.maxHeight = 'calc(100vh - 40px)'
     this.root.element.lastChild.style.overflow = 'scroll'
 
-    this.root.addButton({ title: 'load' }).on('click', this.loadState)
-    this.root.addButton({ title: 'reset' }).on('click', this.resetState)
+    this.root.addButton({ title: 'back to previous GUI state' }).on('click', this.loadState)
+    this.root.addButton({ title: 'reset GUI to defaults' }).on('click', this.resetState)
 
     this.stats = this.root.addBlade({
       view: 'fpsgraph',
