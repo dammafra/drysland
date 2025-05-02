@@ -27,6 +27,7 @@ const gridConfig = {
   ],
 
   landscape: {
+    animate: true,
     wind: { min: 1, max: 3, speed: 0.25 },
     ship: {
       maxVolume: 0.3,
@@ -47,9 +48,10 @@ const gridConfig = {
   },
 
   ocean: {
+    transparent: true,
     options: {
       quality: { size: 20, roughness: new Uniform(0.65) },
-      performance: { size: 15, roughness: new Uniform(1.0) },
+      performance: { size: 10, roughness: new Uniform(1.0) },
     },
     waves: {
       frequencyX: 0.03,

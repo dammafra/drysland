@@ -10,10 +10,15 @@ if (isWater(vUv)) {
     vec3 oceanColor = color - 0.2;
     color = mix(oceanColor, color, waveAltitude);
 
+#ifdef OPAQUE
+    // do nothing
+#else
+
     float distanceToCenter = distance(vWorldPosition.xz, vec2(0.0));
     float fadeStartAt = uRadius + 15.0;
     float fadeEndAt = fadeStartAt + 5.0;
     alpha = smoothstep(fadeEndAt, fadeStartAt, distanceToCenter);
+#endif
   } else {
     color = vec3(0.3, 0.15, 0.05);
   }

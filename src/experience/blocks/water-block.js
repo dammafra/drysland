@@ -60,7 +60,7 @@ export default class WaterBlock {
       const modelMesh = this.resources.items[this.name].scene.children.at(0).clone()
       const modelGeometry = modelMesh.geometry.clone()
       const modelMaterial = modelMesh.material.clone()
-      modelMaterial.transparent = true
+      modelMaterial.transparent = gridConfig.ocean.transparent
       modelMaterial.onBeforeCompile = WaterBlock.material.inject
 
       WaterBlock.mesh = new InstancedMesh(modelGeometry, modelMaterial, 5000)

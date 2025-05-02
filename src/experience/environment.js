@@ -24,7 +24,6 @@ export default class Environment {
 
     this.setLight()
     this.setEnvironmentMap()
-    this.setLensflare()
 
     this.setDebug()
   }
@@ -85,6 +84,13 @@ export default class Environment {
     this.lensflare.addElement(new LensflareElement(flareTexture, 120, 0.9))
     this.lensflare.addElement(new LensflareElement(flareTexture, 70, 1))
     this.pointLight.add(this.lensflare)
+  }
+
+  disposeLensFlare() {
+    if (!this.lensflare) return
+    this.pointLight.remove(this.lensflare)
+    this.lensflare.dispose()
+    delete this.lensflare
   }
 
   setDebug() {

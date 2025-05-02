@@ -1,4 +1,5 @@
 import blocksConfig, { isDock, isRiverStart, isSand, isWater } from '@config/blocks'
+import gridConfig from '@config/grid'
 import Experience from '@experience'
 import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
@@ -239,6 +240,7 @@ export default class Block {
     this.material.update()
 
     // TODO improve
+    if (!gridConfig.landscape.animate) return
     if (!this.links.length || this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }

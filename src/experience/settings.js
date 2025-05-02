@@ -10,6 +10,7 @@ export default class Settings {
   constructor() {
     this.experience = Experience.instance
     this.renderer = this.experience.renderer
+    this.environment = this.experience.environment
 
     this.load()
     this.apply()
@@ -33,13 +34,20 @@ export default class Settings {
   }
 
   setGraphics(option) {
-    gridConfig.ocean = { ...gridConfig.ocean, ...gridConfig.ocean.options[option] }
+    gridConfig.ocean = {
+      ...gridConfig.ocean,
+      ...gridConfig.ocean.options[option],
+      transparent: option === 'quality',
+    }
+
+    gridConfig.landscape.animate = option === 'quality'
     gridConfig.landscape.seagulls = {
       ...gridConfig.landscape.seagulls,
       ...gridConfig.landscape.seagulls.options[option],
     }
 
     this.renderer.instance.shadowMap.enabled = option === 'quality'
+    option === 'quality' ? this.environment.setLensflare() : this.environment.disposeLensFlare()
     delete WaterBlock.material
 
     this.settings.graphics = option
