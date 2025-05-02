@@ -72,9 +72,10 @@ export default class Experience {
     this.setDebug()
     this.loading.stop()
 
-    this.menu = new Menu()
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
+    this.menu = new Menu()
+    this.settings = new Settings()
 
     Auth.instance.subscribe(user => {
       UI.authToggle
@@ -92,13 +93,15 @@ export default class Experience {
     UI.backButton.onClick(this.setExplorationMode.bind(this))
   }
 
-  start() {
-    this.menu.close()
-
-    this.settings = new Settings()
-    UI.fullscreenToggle.show()
+  async start() {
+    await this.menu.close()
 
     this.nextLevel()
+
+    this.settings.show()
+    UI.fullscreenToggle.show()
+    UI.menuButton.disable().show()
+    UI.levelText.show()
   }
 
   async nextLevel() {
@@ -107,7 +110,7 @@ export default class Experience {
     const blocks = state?.blocks
 
     this.level = level
-    UI.levelText.set(`Level ${this.level}`).show()
+    UI.levelText.set(`Level ${this.level}`)
 
     this.levelParams = generateLevel(this.level - 1)
     debug.log(`level ${this.level}: `, this.levelParams)
@@ -122,7 +125,7 @@ export default class Experience {
 
   levelComplete() {
     this.soundPlayer.play('success')
-    if (this.level) UI.nextButton.wiggle().show()
+    if (this.level) UI.nextButton.show({ wiggle: true })
     this.setExplorationMode()
   }
 
@@ -145,7 +148,7 @@ export default class Experience {
   }
 
   setGameMode(block) {
-    UI.backButton.wiggle().show()
+    UI.backButton.show({ wiggle: true })
 
     this.camera.setGameControls(block)
     this.grid?.setShadows(false)
@@ -248,7 +251,7 @@ export default class Experience {
     folder.addBinding(generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
     folder.addBinding(generateParams, 'linksOnly')
 
-    const onGenerateChange = () => {
+    const onGenerateClick = () => {
       disableGridPanes()
 
       delete this.level
@@ -283,7 +286,7 @@ export default class Experience {
       }, 2000)
     }
 
-    const generatePane = folder.addButton({ title: 'generate' }).on('click', onGenerateChange)
+    const generatePane = folder.addButton({ title: 'generate' }).on('click', onGenerateClick)
     const selectLevelPane = folder
       .addBlade({
         view: 'text',

@@ -92,7 +92,7 @@ export default class Menu {
         this.footer,
         {
           opacity: 0,
-          duration: 0.2,
+          duration: 0.25,
           ease: 'back.in',
         },
         '<+0.1',
@@ -107,11 +107,15 @@ export default class Menu {
         },
         '<+0.1',
       )
-      .to(this.element, {
-        scale: 0,
-        duration: 0.25,
-        ease: 'back.in',
-      })
+      .to(
+        this.element,
+        {
+          scale: 0,
+          duration: 0.25,
+          ease: 'back.in',
+        },
+        '<+0.1',
+      )
 
     this.dispose()
   }

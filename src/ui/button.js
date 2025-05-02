@@ -7,16 +7,6 @@ export default class Button extends Element {
     super(selector)
   }
 
-  wiggle() {
-    this.element.classList.add('animate-wiggle')
-    return this
-  }
-
-  hide() {
-    this.element.classList.remove('animate-wiggle')
-    return super.hide()
-  }
-
   onClick(callback) {
     this.element.onclick = async () => {
       this.disable()

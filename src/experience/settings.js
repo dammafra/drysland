@@ -9,28 +9,22 @@ export default class Settings {
     UI.soundsToggle.onToggle(this.toggleSounds.bind(this))
     UI.loopToggle.onToggle(this.toggleLoop.bind(this))
     UI.ambienceToggle.onToggle(this.toggleAmbience.bind(this))
+  }
 
+  // ui
+  show() {
     const settings = this.loadSettings()
     this.sounds = settings.sounds
     this.loop = settings.loop
     this.ambience = settings.ambience
 
-    UI.soundsToggle.toggle(this.sounds)
-    UI.loopToggle.toggle(this.loop)
-    UI.ambienceToggle.toggle(this.ambience)
-
     this.soundPlayer.setMuted(!this.sounds)
     if (this.loop) this.playLoop()
     if (this.ambience) this.playAmbience()
 
-    this.show()
-  }
-
-  // ui
-  show() {
-    UI.soundsToggle.show()
-    UI.loopToggle.show()
-    UI.ambienceToggle.show()
+    UI.soundsToggle.toggle(this.sounds).show()
+    UI.loopToggle.toggle(this.loop).show()
+    UI.ambienceToggle.toggle(this.ambience).show()
   }
 
   hide() {

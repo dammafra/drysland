@@ -9,21 +9,27 @@ export default class Element {
     this.element.setAttribute('tabindex', '-1')
   }
 
-  show() {
-    gsap.to(this.element, {
+  show(options = { wiggle: false }) {
+    this.animation?.kill()
+
+    this.animation = gsap.to(this.element, {
       scale: 1,
       duration: 0.5,
       ease: 'back.out',
+      onComplete: () => options.wiggle && this.element.classList.add('animate-wiggle'),
     })
 
     return this
   }
 
   hide() {
-    gsap.to(this.element, {
+    this.animation?.kill()
+
+    this.animation = gsap.to(this.element, {
       scale: 0,
       duration: 0.5,
       ease: 'back.in',
+      onStart: () => this.element.classList.remove('animate-wiggle'),
     })
 
     return this

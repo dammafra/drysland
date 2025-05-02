@@ -41,8 +41,9 @@ export default class State {
       }
 
       // handle conflict
-      Modal.instance
-        .beforeOpen(content => {
+      Modal.instance.open('.state-conflict', {
+        disableClose: true,
+        onBeforeOpen: content => {
           const slot1 = new SaveSlot(localState)
             .onClick(() => {
               this.saveRemote(localState) // upload local, will use remote
@@ -59,9 +60,8 @@ export default class State {
             .show()
 
           content.querySelector('.slots').append(slot1.element, slot2.element)
-        })
-        .disableClose()
-        .open('.state-conflict')
+        },
+      })
     }
   }
 

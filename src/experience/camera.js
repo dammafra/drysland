@@ -92,12 +92,11 @@ export default class Camera {
     if (!this.controls.enabled) return
 
     this.controls.update(this.time.delta)
+    this.cameraPositionPane?.refresh()
 
     if (this.autoRotate && !this.disableAutoRotate) {
       this.controls.azimuthAngle += this.autorotationSpeed * this.time.delta * MathUtils.DEG2RAD
     }
-
-    this.cameraPositionPane?.refresh()
   }
 
   distanceTo(position) {
@@ -114,6 +113,7 @@ export default class Camera {
 
   setExplorationControls(radius) {
     this.autoRotate = true
+    this.autoRotatePane?.refresh()
     this.canvas.classList.remove('move')
 
     this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
@@ -126,6 +126,7 @@ export default class Camera {
 
   setGameControls(block) {
     this.autoRotate = false
+    this.autoRotatePane?.refresh()
     this.canvas.classList.add('move')
 
     this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
@@ -163,7 +164,7 @@ export default class Camera {
       .addBinding(this.controls, 'enabled', { label: 'controls' })
       .on('change', e => (this.cameraPositionPane.disabled = e.value))
 
-    folder.addBinding(this, 'autoRotate', { label: 'auto rotation' })
+    this.autoRotatePane = folder.addBinding(this, 'autoRotate', { label: 'auto rotation' })
 
     folder.addBinding(this, 'autorotationSpeed', {
       label: 'auto rotation speed',
@@ -174,6 +175,10 @@ export default class Camera {
 
     this.cameraPositionPane = folder
       .addBinding(this.instance, 'position', { disabled: true })
-      .on('change', () => this.instance.lookAt(Grid.center))
+      .on('change', () => {
+        if (!this.controls.enabled) {
+          this.instance.lookAt(Grid.center)
+        }
+      })
   }
 }
