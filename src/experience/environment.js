@@ -29,7 +29,6 @@ export default class Environment {
   }
 
   setLight() {
-    this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
     this.directionalLight = new DirectionalLight('#ffddb1', 4)
 
     this.directionalLight.castShadow = true
@@ -47,11 +46,7 @@ export default class Environment {
     this.directionalLight.shadow.bias = -0.003
     this.directionalLight.shadow.normalBias = 0.01
 
-    this.sunSpherical = new Spherical(1, MathUtils.degToRad(60), MathUtils.degToRad(120))
-    this.sunDirection = new Vector3()
-    this.updateSun()
-
-    this.scene.add(this.pointLight, this.directionalLight)
+    this.scene.add(this.directionalLight)
   }
 
   updateSun = () => {
@@ -69,11 +64,16 @@ export default class Environment {
     this.scene.environment = environmentMap
     this.scene.background = environmentMap
 
-    this.scene.backgroundBlurriness = 0.1
+    this.scene.backgroundBlurriness = 0.08
     this.scene.fog = new FogExp2('#8FBAC2', 0.025)
   }
 
   setLensflare() {
+    this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
+    this.sunSpherical = new Spherical(1, MathUtils.degToRad(60), MathUtils.degToRad(120))
+    this.sunDirection = new Vector3()
+    this.updateSun()
+
     const sunTexture = this.resources.items.lensflare0
     const flareTexture = this.resources.items.lensflare1
 
@@ -84,13 +84,25 @@ export default class Environment {
     this.lensflare.addElement(new LensflareElement(flareTexture, 120, 0.9))
     this.lensflare.addElement(new LensflareElement(flareTexture, 70, 1))
     this.pointLight.add(this.lensflare)
+
+    this.scene.add(this.pointLight)
+    this.setSunDebug()
   }
 
   disposeLensFlare() {
-    if (!this.lensflare) return
+    if (!this.lensflare && !this.pointLight) return
     this.pointLight.remove(this.lensflare)
     this.lensflare.dispose()
     delete this.lensflare
+
+    this.pointLight.dispose()
+    this.scene.remove(this.pointLight)
+    delete this.pointLight
+
+    delete this.sunDirection
+    delete this.sunSpherical
+
+    this.disposeSunDebug()
   }
 
   setDebug() {
@@ -100,41 +112,30 @@ export default class Environment {
     this.shadowHelper.visible = false
     this.scene.add(this.shadowHelper)
 
-    const folder = this.debug.root.addFolder({ title: '💡 environment', index: 6, expanded: false })
+    this.folder = this.debug.root.addFolder({ title: '💡 environment', index: 6, expanded: false })
 
-    folder
-      .addBinding(this.sunSpherical, 'phi', {
-        min: 0,
-        max: Math.PI,
-        label: 'sun polar',
-        format: value => MathUtils.radToDeg(value),
-      })
-      .on('change', this.updateSun)
+    this.folder.addBinding(this.scene, 'backgroundBlurriness', {
+      label: 'background blur',
+      min: 0,
+      max: 1,
+      step: 0.01,
+    })
 
-    folder
-      .addBinding(this.sunSpherical, 'theta', {
-        min: -Math.PI,
-        max: Math.PI,
-        label: 'sun azimuth',
-        format: value => MathUtils.radToDeg(value),
-      })
-      .on('change', this.updateSun)
-
-    folder.addBinding(this.directionalLight.shadow.camera, 'near', {
+    this.folder.addBinding(this.directionalLight.shadow.camera, 'near', {
       label: 'shadow near',
       min: -500,
       max: 500,
       step: 1,
     })
 
-    folder.addBinding(this.directionalLight.shadow.camera, 'far', {
+    this.folder.addBinding(this.directionalLight.shadow.camera, 'far', {
       label: 'shadow far',
       min: -500,
       max: 500,
       step: 1,
     })
 
-    folder
+    this.folder
       .addBinding(this.directionalLight.shadow.camera, 'right', {
         label: 'shadow left/right',
         min: -50,
@@ -143,7 +144,7 @@ export default class Environment {
       })
       .on('change', event => (this.directionalLight.shadow.camera.left = -event.value))
 
-    folder
+    this.folder
       .addBinding(this.directionalLight.shadow.camera, 'top', {
         label: 'shadow top/bottom',
         min: -50,
@@ -152,23 +153,51 @@ export default class Environment {
       })
       .on('change', event => (this.directionalLight.shadow.camera.bottom = -event.value))
 
-    folder.addBinding(this.directionalLight.shadow, 'bias', {
+    this.folder.addBinding(this.directionalLight.shadow, 'bias', {
       label: 'shadow bias',
       min: -1,
       max: 1,
       step: 0.001,
     })
 
-    folder.addBinding(this.directionalLight.shadow, 'normalBias', {
+    this.folder.addBinding(this.directionalLight.shadow, 'normalBias', {
       label: 'shadow normal bias',
       min: -1,
       max: 1,
       step: 0.001,
     })
 
-    folder.on('change', () => {
+    this.folder.on('change', () => {
       this.directionalLight.shadow.camera.updateProjectionMatrix()
       this.shadowHelper.update()
     })
+  }
+
+  setSunDebug() {
+    if (!this.folder) return
+
+    this.folder
+      .addBinding(this.sunSpherical, 'phi', {
+        min: 0,
+        max: Math.PI,
+        label: 'sun polar',
+        format: value => MathUtils.radToDeg(value),
+      })
+      .on('change', this.updateSun)
+
+    this.folder
+      .addBinding(this.sunSpherical, 'theta', {
+        min: -Math.PI,
+        max: Math.PI,
+        label: 'sun azimuth',
+        format: value => MathUtils.radToDeg(value),
+      })
+      .on('change', this.updateSun)
+  }
+
+  disposeSunDebug() {
+    if (!this.folder) return
+    this.folder.children.at(-1).dispose()
+    this.folder.children.at(-1).dispose()
   }
 }

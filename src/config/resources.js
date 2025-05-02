@@ -2,7 +2,7 @@ const resourcesConfig = [
   {
     name: 'envMap',
     type: 'texture',
-    path: 'textures/env-map.png',
+    path: 'textures/env-map.webp',
   },
   {
     name: 'lensflare0',
