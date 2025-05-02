@@ -132,6 +132,7 @@ export default class Camera {
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
 
     this.controls.maxPolarAngle = Math.PI / 2 - 0.1
+    this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
     this.controls.dollyTo(radius + 15, true)
     this.controls.rotatePolarTo(65 * MathUtils.DEG2RAD, true)
 
