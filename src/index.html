@@ -268,14 +268,17 @@
   <body>
     <main>
       <div class="loading">
-        <div class="title">Loading</div>
+        <div class="absolute z-10 flex flex-col items-center">
+          <p class="title">Loading</p>
+          <span id="progress"></span>
+        </div>
         <div class="spinner"></div>
       </div>
 
       <div class="menu">
         <div class="relative text-center">
           <div class="bg-hex"></div>
-          <div class="title">Drysland</div>
+          <h1 class="title">Drysland</h1>
           <div class="w-full flex flex-row justify-center">
             <button id="start" class="hex">
               <i class="fa-solid fa-play"></i>

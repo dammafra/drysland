@@ -4,11 +4,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import SoundLoader from './sound-loader'
 
 export default class Resources extends EventDispatcher {
-  constructor() {
+  constructor(loading) {
     super()
 
     // Options
     this.sources = resourcesConfig
+    this.loading = loading
 
     // Setup
     this.items = {}
@@ -58,6 +59,9 @@ export default class Resources extends EventDispatcher {
   sourceLoaded(source, file) {
     this.items[source.name] = file
     this.loaded++
+
+    const progress = (this.loaded / this.toLoad) * 100
+    this.loading.setProgress(progress)
 
     if (this.loaded === this.toLoad) {
       this.dispatchEvent({ type: 'ready' })

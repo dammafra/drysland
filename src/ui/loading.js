@@ -1,4 +1,5 @@
 import gsap from 'gsap'
+import Text from './text'
 
 export default class Loading {
   /** @type {Loading} */
@@ -19,6 +20,7 @@ export default class Loading {
     this.element = document.querySelector('.loading')
     this.title = this.element.querySelector('.title')
     this.spinner = this.element.querySelector('.spinner')
+    this.progress = new Text('#progress')
 
     this.start()
   }
@@ -32,7 +34,7 @@ export default class Loading {
         ease: 'back.out',
       })
       .to(
-        this.title,
+        [this.title, this.progress.element],
         {
           scale: 1,
           duration: 0.5,
@@ -58,6 +60,10 @@ export default class Loading {
     })
 
     this.dispose()
+  }
+
+  setProgress(progress) {
+    this.progress.set(Math.round(progress))
   }
 
   dispose = () => {

@@ -45,7 +45,7 @@ export default class Experience {
     // Setup
     this.time = new Time()
     this.sizes = new Sizes()
-    this.resources = new Resources()
+    this.resources = new Resources(loading)
     this.scene = new Scene()
     this.camera = new Camera()
     this.renderer = new Renderer()

@@ -135,8 +135,12 @@ main {
 }
 
 .loading .title {
-  @apply text-5xl text-white absolute scale-0 uppercase z-10;
+  @apply text-5xl text-white scale-0 uppercase;
   text-shadow: 5px 5px 2px var(--color-primary);
+}
+
+.loading #progress {
+  @apply absolute -bottom-5 text-white scale-0;
 }
 
 /* menu */

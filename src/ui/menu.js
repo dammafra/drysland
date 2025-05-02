@@ -58,7 +58,6 @@ export default class Menu {
       .to(this.footer, {
         opacity: 1,
         duration: 1,
-        ease: 'back.out',
       })
       .to(
         this.buttons,
@@ -83,20 +82,15 @@ export default class Menu {
   async close() {
     await gsap
       .timeline()
+      .to(this.footer, {
+        opacity: 0,
+        duration: 0.1,
+      })
       .to(this.buttons, {
         scale: 0,
         duration: 0.25,
         ease: 'back.in',
       })
-      .to(
-        this.footer,
-        {
-          opacity: 0,
-          duration: 0.25,
-          ease: 'back.in',
-        },
-        '<+0.1',
-      )
       .to(
         this.bgHex,
         {
