@@ -53,7 +53,7 @@ If differences are detected between the local and cloud save data, a simple conf
 
 <img src="./screens/settings.png" alt="Settings"  >
 
-Drysland offers a simple toggle between Performance and Quality modes. This setting adjusts shadows, water effects, and other visual details to strike a balance between smooth performance and visual fidelity. Your preference is saved and applied automatically each time you return.
+Drysland offers a simple toggle between Quality and Performance modes. This setting adjusts shadows, water effects, and other visual details to strike a balance between visual fidelity and smooth performance. Your preference is saved and applied automatically each time you return.
 
 ### Mobile-Friendly
 
