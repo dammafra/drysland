@@ -11,6 +11,7 @@ export default class Settings {
     this.experience = Experience.instance
     this.renderer = this.experience.renderer
     this.environment = this.experience.environment
+    this.debug = this.experience.debug
 
     this.load()
     this.apply()
@@ -27,6 +28,8 @@ export default class Settings {
         },
       }),
     )
+
+    this.setDebug()
   }
 
   apply() {
@@ -40,7 +43,11 @@ export default class Settings {
       transparent: option === 'quality',
     }
 
-    gridConfig.landscape.animate = option === 'quality'
+    gridConfig.landscape = { ...gridConfig.landscape, ...gridConfig.landscape.options[option] }
+    gridConfig.landscape.wind = {
+      ...gridConfig.landscape.wind,
+      ...gridConfig.landscape.wind.options[option],
+    }
     gridConfig.landscape.seagulls = {
       ...gridConfig.landscape.seagulls,
       ...gridConfig.landscape.seagulls.options[option],
@@ -74,5 +81,14 @@ export default class Settings {
     settings[key] = value
 
     localStorage.setItem(Settings.#key, JSON.stringify(settings))
+  }
+
+  setDebug() {
+    if (!this.debug) return
+
+    this.debug.root.addBinding(this.settings, 'graphics', {
+      label: 'graphics settings',
+      readonly: true,
+    })
   }
 }

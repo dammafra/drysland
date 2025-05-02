@@ -3,6 +3,7 @@ import Experience from '@experience'
 import {
   CameraHelper,
   DirectionalLight,
+  DirectionalLightHelper,
   EquirectangularReflectionMapping,
   FogExp2,
   MathUtils,
@@ -46,14 +47,20 @@ export default class Environment {
     this.directionalLight.shadow.bias = -0.003
     this.directionalLight.shadow.normalBias = 0.01
 
+    this.sunSpherical = new Spherical(1, MathUtils.degToRad(60), MathUtils.degToRad(120))
+    this.sunDirection = new Vector3()
+    this.updateSun()
+
     this.scene.add(this.directionalLight)
   }
 
   updateSun = () => {
     this.sunDirection.setFromSpherical(this.sunSpherical)
+    this.directionalLight.position.copy(this.sunDirection).multiplyScalar(100)
+
+    if (!this.pointLight) return
     this.pointLight.position.copy(this.sunDirection).multiplyScalar(1000)
     this.pointLight.position.y -= 350
-    this.directionalLight.position.copy(this.sunDirection).multiplyScalar(100)
   }
 
   setEnvironmentMap() {
@@ -70,8 +77,6 @@ export default class Environment {
 
   setLensflare() {
     this.pointLight = new PointLight('#ffddb1', 1, 1000, 0)
-    this.sunSpherical = new Spherical(1, MathUtils.degToRad(60), MathUtils.degToRad(120))
-    this.sunDirection = new Vector3()
     this.updateSun()
 
     const sunTexture = this.resources.items.lensflare0
@@ -99,18 +104,19 @@ export default class Environment {
     this.scene.remove(this.pointLight)
     delete this.pointLight
 
-    delete this.sunDirection
-    delete this.sunSpherical
-
     this.disposeSunDebug()
   }
 
   setDebug() {
     if (!this.debug) return
 
+    this.lightHelper = new DirectionalLightHelper(this.directionalLight)
+    this.lightHelper.visible = false
+
     this.shadowHelper = new CameraHelper(this.directionalLight.shadow.camera)
     this.shadowHelper.visible = false
-    this.scene.add(this.shadowHelper)
+
+    this.scene.add(this.lightHelper, this.shadowHelper)
 
     this.folder = this.debug.root.addFolder({ title: '💡 environment', index: 6, expanded: false })
 

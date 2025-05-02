@@ -27,8 +27,17 @@ const gridConfig = {
   ],
 
   landscape: {
-    animate: true,
-    wind: { min: 1, max: 3, speed: 0.25 },
+    options: {
+      quality: { size: 2, animate: true },
+      performance: { size: 1, animate: false },
+    },
+    wind: {
+      options: {
+        quality: { min: 1, max: 3 },
+        performance: { min: 1, max: 1 },
+      },
+      speed: 0.25,
+    },
     ship: {
       maxVolume: 0.3,
       speed: 0.05,
