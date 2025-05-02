@@ -2,7 +2,7 @@ import Button from './button'
 import Text from './text'
 import Toggle from './toggle'
 
-export class UI {
+export default class UI {
   static startButton = new Button('#start')
   static authToggle = new Toggle('#auth')
   static creditsButton = new Button('#credits')

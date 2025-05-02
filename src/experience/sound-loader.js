@@ -1,4 +1,4 @@
-export class SoundLoader {
+export default class SoundLoader {
   constructor() {
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
   }

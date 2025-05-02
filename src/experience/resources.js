@@ -1,7 +1,7 @@
 import resourcesConfig from '@config/resources'
 import { CubeTextureLoader, EventDispatcher, TextureLoader } from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { SoundLoader } from './sound-loader'
+import SoundLoader from './sound-loader'
 
 export default class Resources extends EventDispatcher {
   constructor() {

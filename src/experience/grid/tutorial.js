@@ -1,4 +1,4 @@
-import { UI } from '@ui/ui'
+import UI from '@ui/ui'
 import Touch from '@utils/touch'
 
 export default class Tutorial {

@@ -9,9 +9,9 @@ import { inject } from '@vercel/analytics'
 inject()
 
 DoubleTapPreventer.init()
-Versioning.init('1.1', () => {
+Versioning.init('1.2', () => {
   localStorage.removeItem('debug')
-  localStorage.removeItem('state')
+  localStorage.removeItem('settings')
 })
 Fullscreen.init('#fullscreen')
 

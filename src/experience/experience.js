@@ -5,16 +5,16 @@ import State from '@fire/state'
 import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import Modal from '@ui/modal'
-import { UI } from '@ui/ui'
+import UI from '@ui/ui'
 import { AxesHelper, GridHelper, Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
 import Pointer from './pointer'
 import Renderer from './renderer'
 import Resources from './resources'
-import Settings from './settings'
 import Sizes from './sizes'
-import { SoundPlayer } from './sound-player'
+import SoundControls from './sound-controls'
+import SoundPlayer from './sound-player'
 import Time from './time'
 
 export default class Experience {
@@ -75,7 +75,7 @@ export default class Experience {
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
     this.menu = new Menu()
-    this.settings = new Settings()
+    this.soundControls = new SoundControls()
 
     Auth.instance.subscribe(user => {
       UI.authToggle
@@ -98,7 +98,7 @@ export default class Experience {
 
     this.nextLevel()
 
-    this.settings.show()
+    this.soundControls.show()
     UI.fullscreenToggle.show()
     UI.menuButton.disable().show()
     UI.levelText.show()
@@ -134,7 +134,7 @@ export default class Experience {
     this.level--
     this.loaded = false
 
-    this.settings.hide()
+    this.soundControls.hide()
     UI.menuButton.hide()
     UI.fullscreenToggle.hide()
     UI.levelText.hide()

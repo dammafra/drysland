@@ -1,6 +1,6 @@
 import Experience from '@experience'
 
-export class SoundPlayer {
+export default class SoundPlayer {
   constructor() {
     this.experience = Experience.instance
     this.resources = this.experience.resources

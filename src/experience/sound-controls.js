@@ -1,7 +1,9 @@
 import Experience from '@experience'
-import { UI } from '@ui/ui'
+import UI from '@ui/ui'
 
-export default class Settings {
+export default class SoundControls {
+  static #key = 'sound-controls'
+
   constructor() {
     this.experience = Experience.instance
     this.soundPlayer = this.experience.soundPlayer
@@ -38,23 +40,26 @@ export default class Settings {
 
   // settings
   ensureDefault() {
-    if (!localStorage.getItem('settings')) {
-      localStorage.setItem('settings', JSON.stringify({ sounds: true, loop: true, ambience: true }))
+    if (!localStorage.getItem(SoundControls.#key)) {
+      localStorage.setItem(
+        SoundControls.#key,
+        JSON.stringify({ sounds: true, loop: true, ambience: true }),
+      )
     }
   }
 
   loadSettings() {
     this.ensureDefault()
-    return JSON.parse(localStorage.getItem('settings'))
+    return JSON.parse(localStorage.getItem(SoundControls.#key))
   }
 
   saveSettings(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(localStorage.getItem('settings'))
+    const settings = JSON.parse(localStorage.getItem(SoundControls.#key))
     settings[key] = value
 
-    localStorage.setItem('settings', JSON.stringify(settings))
+    localStorage.setItem(SoundControls.#key, JSON.stringify(settings))
   }
 
   // toggle
