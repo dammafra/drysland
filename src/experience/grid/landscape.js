@@ -52,8 +52,24 @@ export default class Landscape {
 
   init() {
     this.ship = new Ship(this.grid.radius)
-    this.winds = Array.from({ length: Random.integer({ min: 1, max: 3 }) }, () => new Wind())
-    this.seagulls = Array.from({ length: Random.integer({ min: 3, max: 6 }) }, () => new Seagull())
+    this.winds = Array.from(
+      {
+        length: Random.integer({
+          min: gridConfig.landscape.wind.min,
+          max: gridConfig.landscape.wind.max,
+        }),
+      },
+      () => new Wind(),
+    )
+    this.seagulls = Array.from(
+      {
+        length: Random.integer({
+          min: gridConfig.landscape.seagulls.min,
+          max: gridConfig.landscape.seagulls.min,
+        }),
+      },
+      () => new Seagull(),
+    )
   }
 
   updateLinks() {
@@ -103,7 +119,7 @@ export default class Landscape {
         ...this.seagulls.map(s => s.mesh.position).map(p => this.camera.normalizedDistanceTo(p)),
       )
       const volume = Math.pow(1 - distance, 5)
-      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.seagull.maxVolume))
+      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.seagulls.maxVolume))
       this.soundPlayer.updateBackgoundVolume('seagulls', clampedVolume)
     }
   }

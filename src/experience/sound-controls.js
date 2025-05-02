@@ -15,7 +15,7 @@ export default class SoundControls {
 
   // ui
   show() {
-    const settings = this.loadSettings()
+    const settings = this.load()
     this.sounds = settings.sounds
     this.loop = settings.loop
     this.ambience = settings.ambience
@@ -38,7 +38,7 @@ export default class SoundControls {
     this.stopAmbience()
   }
 
-  // settings
+  // persist
   ensureDefault() {
     if (!localStorage.getItem(SoundControls.#key)) {
       localStorage.setItem(
@@ -48,12 +48,12 @@ export default class SoundControls {
     }
   }
 
-  loadSettings() {
+  load() {
     this.ensureDefault()
     return JSON.parse(localStorage.getItem(SoundControls.#key))
   }
 
-  saveSettings(key, value) {
+  save(key, value) {
     this.ensureDefault()
 
     const settings = JSON.parse(localStorage.getItem(SoundControls.#key))
@@ -66,7 +66,7 @@ export default class SoundControls {
   toggleSounds() {
     this.sounds = !this.sounds
     this.soundPlayer.setMuted(!this.sounds)
-    this.saveSettings('sounds', this.sounds)
+    this.save('sounds', this.sounds)
     return this.sounds
   }
 
@@ -82,7 +82,7 @@ export default class SoundControls {
 
   toggleLoop() {
     this.loop ? this.stopLoop() : this.playLoop()
-    this.saveSettings('loop', this.loop)
+    this.save('loop', this.loop)
     return this.loop
   }
 
@@ -102,7 +102,7 @@ export default class SoundControls {
 
   toggleAmbience() {
     this.ambience ? this.stopAmbience() : this.playAmbience()
-    this.saveSettings('ambience', this.ambience)
+    this.save('ambience', this.ambience)
     return this.ambience
   }
 }

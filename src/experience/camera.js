@@ -58,7 +58,7 @@ export default class Camera {
     this.controls.maxDistance = 25
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
-    this.autoRotate = true
+    this.autoRotate = false
     this.autorotationSpeed = 3
 
     const box = new Box3()

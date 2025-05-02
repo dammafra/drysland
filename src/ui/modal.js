@@ -35,6 +35,7 @@ export default class Modal extends Element {
       },
     })
 
+    document.addEventListener('keydown', this.onKeydown)
     return this
   }
 
@@ -48,6 +49,11 @@ export default class Modal extends Element {
       onComplete: () => this.content.remove(),
     })
 
+    document.removeEventListener('keydown', this.onKeydown)
     return this
+  }
+
+  onKeydown = e => {
+    e.code === 'Escape' && this.close()
   }
 }

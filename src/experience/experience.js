@@ -12,6 +12,7 @@ import Environment from './environment'
 import Pointer from './pointer'
 import Renderer from './renderer'
 import Resources from './resources'
+import Settings from './settings'
 import Sizes from './sizes'
 import SoundControls from './sound-controls'
 import SoundPlayer from './sound-player'
@@ -60,6 +61,11 @@ export default class Experience {
       if (!this.grid || e.code !== 'Space') return
       this.grid.riverBlocks.find(b => b.material.uniforms.uHovered.value)?.onClick()
     })
+
+    document.addEventListener('keydown', e => {
+      if (!this.grid || e.code !== 'Escape' || UI.menuButton.disabled) return
+      this.openMenu()
+    })
   }
 
   resize = () => {
@@ -69,13 +75,13 @@ export default class Experience {
 
   ready = () => {
     this.level = 0
-    this.setDebug()
     this.loading.stop()
 
     this.soundPlayer = new SoundPlayer()
     this.environment = new Environment()
     this.menu = new Menu()
     this.soundControls = new SoundControls()
+    this.settings = new Settings()
 
     Auth.instance.subscribe(user => {
       UI.authToggle
@@ -91,6 +97,8 @@ export default class Experience {
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
+
+    this.setDebug()
   }
 
   async start() {
@@ -131,6 +139,8 @@ export default class Experience {
 
   openMenu() {
     this.grid?.dispose()
+    delete this.grid
+
     this.level--
     this.loaded = false
 

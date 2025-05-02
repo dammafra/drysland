@@ -16,7 +16,7 @@
 }
 
 @utility hex {
-  @apply !aspect-square min-w-12 min-h-12;
+  @apply !aspect-square;
   mask-image: url('/hex-mask.svg');
   mask-size: cover;
   -webkit-mask-image: url('/hex-mask.svg');
@@ -156,7 +156,11 @@ main {
 }
 
 .menu button {
-  @apply text-3xl scale-0;
+  @apply scale-0;
+}
+
+.menu button:has(label) {
+  @apply text-3xl;
 }
 
 .menu footer {
@@ -188,7 +192,7 @@ main {
 
 /* UI */
 button.hex {
-  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary;
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary min-w-12 min-h-12;
 }
 
 button.hex.disabled {
@@ -209,6 +213,26 @@ button.hex.primary {
 
 div:has(#level) {
   @apply bg-gradient-to-b to-100% from-background to-transparent py-5 pb-8 absolute top-0 w-full text-center pointer-events-none;
+}
+
+input[type='radio'] {
+  @apply opacity-0 absolute;
+}
+
+label:has(input[type='radio']) {
+  @apply flex gap-2 text-xl !my-cursor-pointer;
+}
+
+input[type='radio'] ~ .radio-mark {
+  @apply hex size-6 bg-primary inline-block relative !my-cursor-pointer;
+}
+
+input[type='radio'] ~ .radio-mark::before {
+  @apply hex size-5 bg-white inline-block absolute content-[''] inset-0.5;
+}
+
+input[type='radio']:checked ~ .radio-mark::after {
+  @apply hex size-4 bg-primary inline-block absolute content-[''] inset-1;
 }
 
 #level {

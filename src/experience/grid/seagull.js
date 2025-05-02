@@ -65,7 +65,7 @@ export default class Seagull {
   }
 
   update() {
-    const speed = gridConfig.landscape.seagull.speed * 0.1
+    const speed = gridConfig.landscape.seagulls.speed * 0.1
     const { position, angle } = this.path.update(speed)
 
     this.mesh.position.copy(position)

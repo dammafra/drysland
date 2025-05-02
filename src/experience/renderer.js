@@ -17,10 +17,7 @@ export default class Renderer {
       canvas: this.canvas,
       antialias: this.sizes.pixelRatio < 2,
     })
-
-    this.instance.shadowMap.enabled = true
     this.instance.shadowMap.type = PCFSoftShadowMap
-
     this.resize()
   }
 

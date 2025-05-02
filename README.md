@@ -49,6 +49,12 @@ Drysland automatically saves your progress locally using the browser’s local s
 For cross-device play, you can optionally log in with a Google account to sync your progress across multiple devices.
 If differences are detected between the local and cloud save data, a simple conflict resolution system will help you choose which version to keep.
 
+### Graphics Settings
+
+<img src="./screens/settings.png" alt="Settings"  >
+
+Drysland offers a simple toggle between Performance and Quality modes. This setting adjusts shadows, water effects, and other visual details to strike a balance between smooth performance and visual fidelity. Your preference is saved and applied automatically each time you return.
+
 ### Mobile-Friendly
 
 Drysland is optimized for mobile devices, providing a smooth and engaging experience on smartphones and tablets. It adapts to smaller screens, ensuring easy interaction and navigation on touch interfaces.

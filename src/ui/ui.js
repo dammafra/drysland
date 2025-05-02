@@ -6,6 +6,7 @@ export default class UI {
   static startButton = new Button('#start')
   static authToggle = new Toggle('#auth')
   static creditsButton = new Button('#credits')
+  static settingsButton = new Button('#settings')
 
   static backButton = new Button('#back')
   static nextButton = new Button('#next')

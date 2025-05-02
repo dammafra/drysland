@@ -289,6 +289,9 @@
               <i class="fa-solid fa-circle-info"></i>
               <label>Credits</label>
             </button>
+            <button id="settings" class="hex absolute -bottom-[44px] right-[49px]">
+              <i class="fa-solid fa-cog text-2xl"></i>
+            </button>
           </div>
         </div>
 
@@ -307,6 +310,7 @@
 
       <canvas class="webgl grab"></canvas>
 
+      <!-- modals -->
       <div class="credits hidden">
         <div class="pb-5 text-xl">Thanks to</div>
         <div class="flex flex-col gap-2">
@@ -399,6 +403,22 @@
         <p class="level text-xl">level</p>
         <p class="date leading-4">date</p>
       </button>
+
+      <div class="settings hidden">
+        <div class="pb-5 text-2xl">Graphics Settings</div>
+        <div class="flex flex-col gap-2">
+          <label>
+            <input type="radio" name="graphics" value="quality" />
+            <span class="radio-mark"></span>
+            Quality
+          </label>
+          <label>
+            <input type="radio" name="graphics" value="performance" />
+            <span class="radio-mark"></span>
+            Performance
+          </label>
+        </div>
+      </div>
 
       <!-- header -->
       <button id="menu" class="hex absolute top-4 left-4 z-10 hidden">

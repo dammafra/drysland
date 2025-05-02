@@ -1,6 +1,10 @@
 import gsap from 'gsap'
 
 export default class Element {
+  get disabled() {
+    return this.element.style.pointerEvents === 'none'
+  }
+
   constructor(selector) {
     this.element = typeof selector === 'string' ? document.querySelector(selector) : selector
 

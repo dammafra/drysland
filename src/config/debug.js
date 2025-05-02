@@ -21,13 +21,13 @@ export default function setConfigDebug(debug) {
     step: 0.01,
   })
 
-  landscapeFolder.addBinding(gridConfig.landscape.seagull, 'speed', {
+  landscapeFolder.addBinding(gridConfig.landscape.seagulls, 'speed', {
     label: 'seagulls speed',
     min: 0,
     max: 1,
     step: 0.01,
   })
-  landscapeFolder.addBinding(gridConfig.landscape.seagull, 'maxVolume', {
+  landscapeFolder.addBinding(gridConfig.landscape.seagulls, 'maxVolume', {
     label: 'seagulls volume',
     min: 0,
     max: 1,

@@ -27,7 +27,7 @@ const gridConfig = {
   ],
 
   landscape: {
-    wind: { speed: 0.25 },
+    wind: { min: 1, max: 3, speed: 0.25 },
     ship: {
       maxVolume: 0.3,
       speed: 0.05,
@@ -36,15 +36,21 @@ const gridConfig = {
         boat: { scale: 0.005, rotationOffset: -Math.PI * 0.5, elevationOffset: 0.1 },
       },
     },
-    seagull: {
+    seagulls: {
+      options: {
+        quality: { min: 3, max: 6 },
+        performance: { min: 1, max: 3 },
+      },
       maxVolume: 1,
       speed: 0.08,
     },
   },
 
   ocean: {
-    size: 20,
-    roughness: new Uniform(0.65),
+    options: {
+      quality: { size: 20, roughness: new Uniform(0.65) },
+      performance: { size: 15, roughness: new Uniform(1.0) },
+    },
     waves: {
       frequencyX: 0.03,
       frequencyY: 0.03,
