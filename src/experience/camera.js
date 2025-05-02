@@ -42,6 +42,12 @@ CameraControls.install({ THREE: subsetOfTHREE })
 //   return MathUtils.euclideanModulo(angle + Math.PI, TAU) - Math.PI
 // }
 
+// -- set rotation to 0
+// const normalized = normalizeAngle(this.controls.azimuthAngle)
+// const delta = deltaAngle(0, normalized)
+// this.controls.azimuthAngle = normalized
+// this.controls.rotate(delta, 0, true)
+
 export default class Camera {
   constructor() {
     // Setup
@@ -68,6 +74,7 @@ export default class Camera {
     this.controls = new CameraControls(this.instance, this.canvas)
     this.controls.minDistance = 5
     this.controls.maxDistance = 25
+    this.controls.maxPolarAngle = Math.PI / 2 - 0.2
     this.controls.restThreshold = 0.00009
     this.controls.smoothTime = 0.25
     this.autoRotate = false
@@ -131,13 +138,8 @@ export default class Camera {
     this.controls.mouseButtons.left = CameraControls.ACTION.ROTATE
     this.controls.touches.one = CameraControls.ACTION.TOUCH_ROTATE
 
-    this.controls.maxPolarAngle = Math.PI / 2 - 0.1
     this.controls.setLookAt(3, 6, 10, 0, 0, 0, true)
     this.controls.dollyTo(radius + 15, true)
-    this.controls.rotatePolarTo(65 * MathUtils.DEG2RAD, true)
-
-    this.controls.maxAzimuthAngle = Infinity
-    this.controls.minAzimuthAngle = -Infinity
   }
 
   setGameControls(block) {
@@ -148,23 +150,19 @@ export default class Camera {
     this.controls.mouseButtons.left = CameraControls.ACTION.TRUCK
     this.controls.touches.one = CameraControls.ACTION.TOUCH_TRUCK
 
-    this.controls.maxPolarAngle = 0
-    this.controls.rotatePolarTo(0, true)
-
-    // -- lock rotation
-    this.controls.maxAzimuthAngle = this.controls.azimuthAngle
-    this.controls.minAzimuthAngle = this.controls.azimuthAngle
-
-    // -- set rotation to 0
-    // const normalized = normalizeAngle(this.controls.azimuthAngle)
-    // const delta = deltaAngle(0, normalized)
-    // this.controls.azimuthAngle = normalized
-    // this.controls.rotate(delta, 0, true)
-
-    if (this.controls.distance > 20) this.controls.dollyTo(10, true)
-    if (block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))) {
-      this.controls.fitToBox(block.mesh, true)
-      this.controls.dollyTo(10, true)
+    if (
+      this.controls.polarAngle > 0.1 ||
+      block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))
+    ) {
+      this.controls.setLookAt(
+        block.mesh.position.x,
+        block.mesh.position.y + 15,
+        block.mesh.position.z,
+        block.mesh.position.x,
+        block.mesh.position.y,
+        block.mesh.position.z,
+        true,
+      )
     }
   }
 
