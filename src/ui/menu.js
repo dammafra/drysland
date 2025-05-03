@@ -1,21 +1,7 @@
 import gsap from 'gsap'
 
 export default class Menu {
-  /** @type {Menu} */
-  static instance
-
-  static init() {
-    return new Menu()
-  }
-
   constructor() {
-    // Singleton
-    if (Menu.instance) {
-      return Menu.instance
-    }
-
-    Menu.instance = this
-
     this.element = document.querySelector('.menu')
     this.title = this.element.querySelector('.title')
     this.bgHex = this.element.querySelector('.bg-hex')

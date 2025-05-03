@@ -1,5 +1,5 @@
-import blocksConfig, { isDock, isRiverStart, isSand, isWater } from '@config/blocks'
-import gridConfig from '@config/grid'
+import BlocksConfig from '@config/blocks'
+import LandscapeConfig from '@config/landscape'
 import Experience from '@experience'
 import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
@@ -14,6 +14,22 @@ export default class Block {
 
   #key = null
   #linked = false
+
+  get isRiverStart() {
+    return this.name === 'riverStart'
+  }
+
+  get isSand() {
+    return this.name.includes('sand')
+  }
+
+  get isDock() {
+    return BlocksConfig.instance.docks.includes(this.name)
+  }
+
+  get isWater() {
+    return this.name.includes('water')
+  }
 
   get key() {
     if (!this.#key) {
@@ -37,8 +53,8 @@ export default class Block {
 
   // TODO improve
   set linked(value) {
-    this.#linked = isWater(this) || isRiverStart(this) || value
-    this.material.uniforms.uLinked.value = isDock(this) || this.#linked
+    this.#linked = this.isWater || this.isRiverStart || value
+    this.material.uniforms.uLinked.value = this.isDock || this.#linked
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
@@ -89,7 +105,7 @@ export default class Block {
     this.target = this.links
 
     if (!this.linksKey) return
-    while (!blocksConfig.links.includes(this.linksKey)) this.rotate(1, false)
+    while (!BlocksConfig.instance.links.includes(this.linksKey)) this.rotate(1, false)
   }
 
   setName() {
@@ -97,10 +113,14 @@ export default class Block {
 
     this.normalizeLinks()
 
-    const riverBlocks = blocksConfig.rivers[this.linksKey]
+    const riverBlocks = BlocksConfig.instance.rivers[this.linksKey]
     if (!riverBlocks) return
 
     this.name = Random.oneOf(riverBlocks)
+  }
+
+  setWater() {
+    this.name = 'water'
   }
 
   setColormaps() {
@@ -163,7 +183,7 @@ export default class Block {
       .to(
         this.mesh.position,
         {
-          y: isSand(this) ? -0.1 : 0,
+          y: this.isSand ? -0.1 : 0,
           duration: 0.5,
           ease: 'back.inOut',
         },
@@ -240,7 +260,7 @@ export default class Block {
     this.material.update()
 
     // TODO improve
-    if (!gridConfig.landscape.animate) return
+    if (!LandscapeConfig.instance.animate) return
     if (!this.links.length || this.#linked) {
       this.animationMixer?.update(this.time.delta * 0.2)
     }

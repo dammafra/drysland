@@ -1,4 +1,4 @@
-import gridConfig from '@config/grid'
+import LandscapeConfig from '@config/landscape'
 import Experience from '@experience'
 import { dispose } from '@utils/dispose'
 import Random from '@utils/random'
@@ -65,7 +65,7 @@ export default class Seagull {
   }
 
   update() {
-    const speed = gridConfig.landscape.seagulls.speed * 0.1
+    const speed = LandscapeConfig.instance.seagulls.speed * 0.1
     const { position, angle } = this.path.update(speed)
 
     this.mesh.position.copy(position)

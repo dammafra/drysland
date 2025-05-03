@@ -1,5 +1,5 @@
-import blocksConfig, { isRiverStart } from '@config/blocks'
-import gridConfig from '@config/grid'
+import BlocksConfig from '@config/blocks'
+import LandscapeConfig from '@config/landscape'
 import Experience from '@experience'
 import Random from '@utils/random'
 import Seagull from './seagull'
@@ -16,10 +16,10 @@ export default class Landscape {
 
     this.addDeadEndsPerimeters()
     this.grid.addPerimeter(
-      () => Random.weightedOneOf(blocksConfig.landscape),
-      gridConfig.landscape.size,
+      () => Random.weightedOneOf(BlocksConfig.instance.landscape),
+      LandscapeConfig.instance.size,
     )
-    this.grid.addPerimeter(() => Random.oneOf(blocksConfig.grass))
+    this.grid.addPerimeter(() => Random.oneOf(BlocksConfig.instance.grass))
   }
 
   /**
@@ -34,19 +34,22 @@ export default class Landscape {
    */
   addDeadEndsPerimeters() {
     this.grid.deadEnds.forEach((b, i) => {
-      b.name = Random.alternate(i, blocksConfig.rivers['0'])
+      b.name = Random.alternate(i, BlocksConfig.instance.rivers['0'])
 
       this.grid.addNeighbors(
         b,
-        Random.alternate(i, [blocksConfig.city.primary, blocksConfig.mountain.primary]),
+        Random.alternate(i, [
+          BlocksConfig.instance.city.primary,
+          BlocksConfig.instance.mountain.primary,
+        ]),
       )
 
       b.neighbors.forEach(n =>
         this.grid.addNeighbors(
           n,
           Random.alternate(i, [
-            () => Random.weightedOneOf(blocksConfig.city.secondary),
-            () => Random.weightedOneOf(blocksConfig.mountain.secondary),
+            () => Random.weightedOneOf(BlocksConfig.instance.city.secondary),
+            () => Random.weightedOneOf(BlocksConfig.instance.mountain.secondary),
           ]),
         ),
       )
@@ -58,8 +61,8 @@ export default class Landscape {
     this.winds = Array.from(
       {
         length: Random.integer({
-          min: gridConfig.landscape.wind.min,
-          max: gridConfig.landscape.wind.max,
+          min: LandscapeConfig.instance.wind.min,
+          max: LandscapeConfig.instance.wind.max,
         }),
       },
       () => new Wind(),
@@ -67,8 +70,8 @@ export default class Landscape {
     this.seagulls = Array.from(
       {
         length: Random.integer({
-          min: gridConfig.landscape.seagulls.min,
-          max: gridConfig.landscape.seagulls.min,
+          min: LandscapeConfig.instance.seagulls.min,
+          max: LandscapeConfig.instance.seagulls.min,
         }),
       },
       () => new Seagull(),
@@ -86,7 +89,7 @@ export default class Landscape {
 
   getClosestRiver(block) {
     if (!this.riverBlocks) {
-      this.riverBlocks = this.grid.blocks.filter(b => !isRiverStart(b) && b.links.length)
+      this.riverBlocks = this.grid.blocks.filter(b => !b.isRiverStart && b.links.length)
     }
 
     if (!block) return null
@@ -113,7 +116,7 @@ export default class Landscape {
     if (this.ship) {
       const distance = this.camera.normalizedDistanceTo(this.ship.mesh.position)
       const volume = Math.pow(1 - distance, 10)
-      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.ship.maxVolume))
+      const clampedVolume = Math.max(0, Math.min(volume, LandscapeConfig.instance.ship.maxVolume))
       this.soundPlayer.updateBackgoundVolume('sailing', clampedVolume)
     }
 
@@ -122,7 +125,10 @@ export default class Landscape {
         ...this.seagulls.map(s => s.mesh.position).map(p => this.camera.normalizedDistanceTo(p)),
       )
       const volume = Math.pow(1 - distance, 5)
-      const clampedVolume = Math.max(0, Math.min(volume, gridConfig.landscape.seagulls.maxVolume))
+      const clampedVolume = Math.max(
+        0,
+        Math.min(volume, LandscapeConfig.instance.seagulls.maxVolume),
+      )
       this.soundPlayer.updateBackgoundVolume('seagulls', clampedVolume)
     }
   }

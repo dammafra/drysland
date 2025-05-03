@@ -1,14 +1,13 @@
-import { setWater } from '@config/blocks'
-import gridConfig from '@config/grid'
-import Experience from '@experience'
+import OceanConfig from '@config/ocean'
 import Grid from '@grid/grid'
 import { dispose } from '@utils/dispose'
 import gsap from 'gsap'
 import { InstancedMesh, Matrix4, Quaternion, Vector3 } from 'three'
 import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
+import Block from './block'
 import BlockMaterial from './block-material'
 
-export default class WaterBlock {
+export default class WaterBlock extends Block {
   static simplex = new SimplexNoise()
   static maxCount = 5000
   static material = null
@@ -19,28 +18,12 @@ export default class WaterBlock {
   static toDisposeMesh = null
   static toDisposeCount = 0
 
-  #key = null
-
-  get key() {
-    if (!this.#key) {
-      this.#key = `${this.q},${this.r}`
-    }
-
-    return this.#key
-  }
+  set linked(_value) {}
+  set invalid(_value) {}
 
   constructor({ grid, q, r }) {
-    this.experience = Experience.instance
-    this.time = this.experience.time
-    this.resources = this.experience.resources
-    this.scene = this.experience.scene
-
-    this.grid = grid
-    this.q = q
-    this.r = r
-    setWater(this)
-
-    this.links = []
+    super({ grid, q, r })
+    this.setWater()
   }
 
   init() {
@@ -60,12 +43,11 @@ export default class WaterBlock {
       const modelMesh = this.resources.items[this.name].scene.children.at(0).clone()
       const modelGeometry = modelMesh.geometry.clone()
       const modelMaterial = modelMesh.material.clone()
-      modelMaterial.transparent = gridConfig.ocean.transparent
+      modelMaterial.map = WaterBlock.colormapDefault
+      modelMaterial.transparent = OceanConfig.instance.transparent
       modelMaterial.onBeforeCompile = WaterBlock.material.inject
 
       WaterBlock.mesh = new InstancedMesh(modelGeometry, modelMaterial, 5000)
-      // WaterBlock.mesh.castShadow = true
-      // WaterBlock.mesh.receiveShadow = true
       this.scene.add(WaterBlock.mesh)
     }
 
@@ -120,10 +102,10 @@ export default class WaterBlock {
   }
 
   static getElevation(position, elapsed) {
-    const frequencyX = gridConfig.ocean.waves.frequencyX
-    const frequencyY = gridConfig.ocean.waves.frequencyY
-    const speed = gridConfig.ocean.waves.speed
-    const scale = position.distanceTo(Grid.center) * gridConfig.ocean.waves.scale * 0.1
+    const frequencyX = OceanConfig.instance.waves.frequencyX
+    const frequencyY = OceanConfig.instance.waves.frequencyY
+    const speed = OceanConfig.instance.waves.speed
+    const scale = position.distanceTo(Grid.center) * OceanConfig.instance.waves.scale * 0.1
 
     const x = position.x * frequencyX
     const z = position.z * frequencyY
@@ -206,9 +188,5 @@ export default class WaterBlock {
       this.scene.remove(WaterBlock.toDisposeMesh)
       WaterBlock.toDisposeMesh = null
     }
-  }
-
-  toString() {
-    return `[${this.key}]`
   }
 }

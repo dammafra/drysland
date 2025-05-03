@@ -1,5 +1,8 @@
-import setConfigDebug from '@config/debug'
-import gridConfig, { generateLevel } from '@config/grid'
+import WaterBlock from '@blocks/water-block'
+import BlocksConfig from '@config/blocks'
+import { default as GridConfig } from '@config/grid'
+import LandscapeConfig from '@config/landscape'
+import OceanConfig from '@config/ocean'
 import Auth from '@fire/auth'
 import State from '@fire/state'
 import Grid from '@grid/grid'
@@ -27,11 +30,7 @@ export default class Experience {
   }
 
   constructor(canvas, loading, debug) {
-    // Singleton
-    if (Experience.instance) {
-      return Experience.instance
-    }
-
+    if (Experience.instance) return Experience.instance
     Experience.instance = this
 
     // Options
@@ -41,6 +40,12 @@ export default class Experience {
 
     this.loading = loading
     this.debug = debug
+    this.settings = new Settings()
+
+    BlocksConfig.init()
+    GridConfig.init()
+    LandscapeConfig.init()
+    OceanConfig.init()
 
     // Setup
     this.time = new Time()
@@ -53,6 +58,7 @@ export default class Experience {
     this.pointer = new Pointer()
 
     // Events
+    this.settings.addEventListener('change', this.applySettings)
     this.sizes.addEventListener('resize', this.resize)
     this.time.addEventListener('tick', this.update)
     this.resources.addEventListener('ready', this.ready)
@@ -66,6 +72,14 @@ export default class Experience {
       if (!this.grid || e.code !== 'Escape' || UI.menuButton.disabled) return
       this.openMenu()
     })
+
+    this.setDebug()
+  }
+
+  applySettings = () => {
+    this.renderer.applySettings()
+    this.environment.applySettings()
+    delete WaterBlock.material
   }
 
   resize = () => {
@@ -81,7 +95,6 @@ export default class Experience {
     this.environment = new Environment()
     this.menu = new Menu()
     this.soundControls = new SoundControls()
-    this.settings = new Settings()
 
     Auth.instance.subscribe(user => {
       UI.authToggle
@@ -97,8 +110,6 @@ export default class Experience {
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))
-
-    this.setDebug()
   }
 
   async start() {
@@ -119,7 +130,7 @@ export default class Experience {
     this.level = level
     UI.levelText.set(`Level ${this.level}`)
 
-    this.levelParams = generateLevel(this.level - 1)
+    this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
     debug.log(`level ${this.level}: `, this.levelParams)
     this.grid?.dispose()
     this.grid = new Grid({ level, blocks, ...this.levelParams })
@@ -204,7 +215,7 @@ export default class Experience {
 
     window.experience = Experience.instance
 
-    const helpersSize = gridConfig.maxRadius * 2 + 4
+    const helpersSize = GridConfig.instance.maxRadius * 2 + 4
     const axesHelper = new AxesHelper(helpersSize)
     axesHelper.visible = false
     axesHelper.position.x = -helpersSize * 0.5
@@ -217,8 +228,14 @@ export default class Experience {
 
     this.scene.add(axesHelper, gridHelper)
 
+    this.debug.root.addBinding(this.settings.settings, 'graphics', {
+      label: 'graphics settings',
+      readonly: true,
+      index: 3,
+    })
+
     this.debug.root
-      .addBinding(axesHelper, 'visible', { label: 'helpers', index: 3 })
+      .addBinding(axesHelper, 'visible', { label: 'helpers', index: 4 })
       .on('change', event => {
         axesHelper.visible = event.value
         gridHelper.visible = event.value
@@ -231,7 +248,7 @@ export default class Experience {
 
     const folder = this.debug.root.addFolder({
       title: '⬢ grid',
-      index: 4,
+      index: 5,
       expanded: false,
     })
 
@@ -254,7 +271,7 @@ export default class Experience {
         ],
         value: 1,
       })
-      .on('change', e => (gridConfig.selectionStrategy = e.value))
+      .on('change', e => (GridConfig.instance.selectionStrategy = e.value))
     folder.addBinding(generateParams, 'radius', { min: 1, max: 10, step: 1 })
     folder.addBinding(generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
     folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 1, step: 0.05 })
@@ -309,6 +326,7 @@ export default class Experience {
     this.generateParams = generateParams
     this.updateSelectLevelPane = updateSelectLevelPane
 
-    setConfigDebug(this.debug)
+    LandscapeConfig.instance.setDebug()
+    OceanConfig.instance.setDebug()
   }
 }

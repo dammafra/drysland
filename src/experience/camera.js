@@ -180,7 +180,7 @@ export default class Camera {
   setDebug() {
     if (!this.debug) return
 
-    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 5, expanded: false })
+    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 6, expanded: false })
 
     folder
       .addBinding(this.controls, 'enabled', { label: 'controls' })

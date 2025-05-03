@@ -5,8 +5,11 @@ export default class Element {
     return this.element.style.pointerEvents === 'none'
   }
 
-  constructor(selector) {
-    this.element = typeof selector === 'string' ? document.querySelector(selector) : selector
+  constructor(selectorOrElement) {
+    this.element =
+      typeof selectorOrElement === 'string'
+        ? document.querySelector(selectorOrElement)
+        : selectorOrElement
 
     gsap.set(this.element, { scale: 0 })
     this.element.classList.remove('hidden')

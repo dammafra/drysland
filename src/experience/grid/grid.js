@@ -1,6 +1,5 @@
 import Block from '@blocks/block'
-import { isRiverStart } from '@config/blocks'
-import gridConfig, { applySelectionStrategy } from '@config/grid'
+import GridConfig from '@config/grid'
 import Experience from '@experience'
 import UI from '@ui/ui'
 import Random from '@utils/random'
@@ -43,7 +42,9 @@ export default class Grid {
     if (this.#perimeter.totalCount !== this.blocksMap.size) {
       this.#perimeter.totalCount = this.blocksMap.size
       this.#perimeter.blocks = this.blocks.filter(block =>
-        gridConfig.directions.some(dir => !this.getBlock(block.q + dir.q, block.r + dir.r)),
+        GridConfig.instance.directions.some(
+          dir => !this.getBlock(block.q + dir.q, block.r + dir.r),
+        ),
       )
     }
 
@@ -144,7 +145,7 @@ export default class Grid {
     while (frontier.length && visited.size < targetVisits) {
       const logs = []
 
-      const current = applySelectionStrategy(frontier, gridConfig.selectionStrategy)
+      const current = GridConfig.instance.applySelectionStrategy(frontier)
       logs.push('current: ' + current)
 
       const neighbors = current.neighbors
@@ -202,7 +203,7 @@ export default class Grid {
   }
 
   addNeighbors(block, nameExpression) {
-    block.neighbors = gridConfig.directions
+    block.neighbors = GridConfig.instance.directions
       .map(dir => {
         const q = block.q + dir.q
         const r = block.r + dir.r
@@ -246,7 +247,7 @@ export default class Grid {
       .filter(b => {
         b.linked = false
         b.invalid = false
-        return isRiverStart(b)
+        return b.isRiverStart
       })
       .forEach(startBlock => {
         updateNeighborLinks(startBlock)
@@ -272,7 +273,7 @@ export default class Grid {
       this.experience.levelComplete()
     } else {
       this.riverBlocks.forEach(b => {
-        if (isRiverStart(b)) return
+        if (b.isRiverStart) return
 
         const invalid = b.links.some(edge => {
           const neighbor = b.neighbors?.at(edge)

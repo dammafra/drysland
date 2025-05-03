@@ -1,4 +1,4 @@
-import gridConfig from '@config/grid'
+import LandscapeConfig from '@config/landscape'
 import Experience from '@experience'
 import { dispose } from '@utils/dispose'
 import gsap from 'gsap'
@@ -72,7 +72,7 @@ export default class Wind {
   }
 
   update() {
-    const speed = gridConfig.landscape.wind.speed
+    const speed = LandscapeConfig.instance.wind.speed
 
     for (let i = 0; i < 42; i++) {
       const t = this.time.elapsed * speed + (i % 21) / 60

@@ -10,11 +10,7 @@ export default class Loading {
   }
 
   constructor() {
-    // Singleton
-    if (Loading.instance) {
-      return Loading.instance
-    }
-
+    if (Loading.instance) return Loading.instance
     Loading.instance = this
 
     this.element = document.querySelector('.loading')

@@ -1,4 +1,4 @@
-import gridConfig from '@config/grid'
+import GridConfig from '@config/grid'
 import Experience from '@experience'
 import {
   CameraHelper,
@@ -15,15 +15,21 @@ import {
 import { Lensflare, LensflareElement } from 'three/examples/jsm/Addons.js'
 
 export default class Environment {
+  get enableLensflare() {
+    return this.settings.isGraphicsQuality
+  }
+
   constructor() {
     // Setup
     this.experience = Experience.instance
+    this.settings = this.experience.settings
     this.debug = this.experience.debug
 
     this.scene = this.experience.scene
     this.resources = this.experience.resources
 
     this.setLight()
+    this.enableLensflare && this.setLensflare()
     this.setEnvironmentMap()
 
     this.setDebug()
@@ -38,7 +44,7 @@ export default class Environment {
     this.directionalLight.shadow.camera.near = 80
     this.directionalLight.shadow.camera.far = 120
 
-    const offset = gridConfig.maxRadius * 2
+    const offset = GridConfig.instance.maxRadius * 2
     this.directionalLight.shadow.camera.right = offset
     this.directionalLight.shadow.camera.left = -offset
     this.directionalLight.shadow.camera.top = offset / 1.5
@@ -107,6 +113,10 @@ export default class Environment {
     this.disposeSunDebug()
   }
 
+  applySettings() {
+    this.enableLensflare ? this.setLensflare() : this.disposeLensFlare()
+  }
+
   setDebug() {
     if (!this.debug) return
 
@@ -118,7 +128,7 @@ export default class Environment {
 
     this.scene.add(this.lightHelper, this.shadowHelper)
 
-    this.folder = this.debug.root.addFolder({ title: '💡 environment', index: 6, expanded: false })
+    this.folder = this.debug.root.addFolder({ title: '💡 environment', index: 7, expanded: false })
 
     this.folder.addBinding(this.scene, 'backgroundBlurriness', {
       label: 'background blur',

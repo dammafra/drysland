@@ -1,64 +1,50 @@
-import WaterBlock from '@blocks/water-block'
-import gridConfig from '@config/grid'
-import Experience from '@experience'
 import Modal from '@ui/modal'
+import RadioGroup from '@ui/radio-group'
+import Text from '@ui/text'
 import UI from '@ui/ui'
+import { EventDispatcher } from 'three'
 
-export default class Settings {
+export default class Settings extends EventDispatcher {
   static #key = 'settings'
 
+  get isGraphicsQuality() {
+    return this.settings.graphics === 'quality'
+  }
+
   constructor() {
-    this.experience = Experience.instance
-    this.renderer = this.experience.renderer
-    this.environment = this.experience.environment
-    this.debug = this.experience.debug
+    super()
 
     this.load()
-    this.apply()
+    this.update()
 
-    UI.settingsButton.onClick(() =>
-      Modal.instance.open('.settings', {
-        onBeforeOpen: content => {
-          const graphicsOptions = content.querySelectorAll('input[name="graphics"]')
-          graphicsOptions.forEach(radio => {
-            radio.value === this.settings.graphics && radio.setAttribute('checked', '')
-            radio.setAttribute('tabIndex', '-1')
-            radio.addEventListener('change', e => this.setGraphics(e.target.value))
-          })
-        },
-      }),
-    )
-
-    this.setDebug()
+    UI.settingsButton.onClick(() => {
+      Modal.instance.open('.settings', { onBeforeOpen: this.onBeforeSettingsModalOpen })
+    })
   }
 
-  apply() {
-    this.setGraphics(this.settings.graphics)
+  update() {
+    for (const key in this.settings) {
+      this.save(key, this.settings[key])
+      this.dispatchEvent({ type: 'change', [key]: this.settings[key] })
+    }
   }
 
-  setGraphics(option) {
-    gridConfig.ocean = {
-      ...gridConfig.ocean,
-      ...gridConfig.ocean.options[option],
-      transparent: option === 'quality',
-    }
+  needsRestart() {
+    this.showRestartWarning = true
+    this.restartWaringText.show()
+  }
 
-    gridConfig.landscape = { ...gridConfig.landscape, ...gridConfig.landscape.options[option] }
-    gridConfig.landscape.wind = {
-      ...gridConfig.landscape.wind,
-      ...gridConfig.landscape.wind.options[option],
-    }
-    gridConfig.landscape.seagulls = {
-      ...gridConfig.landscape.seagulls,
-      ...gridConfig.landscape.seagulls.options[option],
-    }
+  onBeforeSettingsModalOpen = content => {
+    this.restartWaringText = new Text(content.querySelector('#restart-warning'))
+    this.showRestartWarning && this.restartWaringText.show()
 
-    this.renderer.instance.shadowMap.enabled = option === 'quality'
-    option === 'quality' ? this.environment.setLensflare() : this.environment.disposeLensFlare()
-    delete WaterBlock.material
-
-    this.settings.graphics = option
-    this.save('graphics', option)
+    const graphicsRadios = content.querySelectorAll('input[name="graphics"]')
+    this.graphicsRadioGroup = new RadioGroup(graphicsRadios)
+      .setChecked(this.settings.graphics)
+      .onChange(option => {
+        this.settings.graphics = option
+        this.update()
+      })
   }
 
   // persist
@@ -81,14 +67,5 @@ export default class Settings {
     settings[key] = value
 
     localStorage.setItem(Settings.#key, JSON.stringify(settings))
-  }
-
-  setDebug() {
-    if (!this.debug) return
-
-    this.debug.root.addBinding(this.settings, 'graphics', {
-      label: 'graphics settings',
-      readonly: true,
-    })
   }
 }

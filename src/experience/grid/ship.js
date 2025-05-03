@@ -1,5 +1,5 @@
 import WaterBlock from '@blocks/water-block'
-import gridConfig from '@config/grid'
+import LandscapeConfig from '@config/landscape'
 import Experience from '@experience'
 import { dispose } from '@utils/dispose'
 import Random from '@utils/random'
@@ -14,10 +14,10 @@ export default class Ship {
     this.scene = this.experience.scene
     this.path = new Path(radius)
 
-    this.name = Random.oneOf(Object.keys(gridConfig.landscape.ship.models))
-    this.scale = gridConfig.landscape.ship.models[this.name].scale
-    this.rotationOffset = gridConfig.landscape.ship.models[this.name].rotationOffset
-    this.elevationOffset = gridConfig.landscape.ship.models[this.name].elevationOffset
+    this.name = Random.oneOf(Object.keys(LandscapeConfig.instance.ship.models))
+    this.scale = LandscapeConfig.instance.ship.models[this.name].scale
+    this.rotationOffset = LandscapeConfig.instance.ship.models[this.name].rotationOffset
+    this.elevationOffset = LandscapeConfig.instance.ship.models[this.name].elevationOffset
 
     this.setMesh()
     this.init()
@@ -46,7 +46,7 @@ export default class Ship {
   }
 
   update() {
-    const speed = gridConfig.landscape.ship.speed * 0.1
+    const speed = LandscapeConfig.instance.ship.speed * 0.1
     const { position, angle } = this.path.update(speed)
 
     this.mesh.position.copy(position)
