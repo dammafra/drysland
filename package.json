@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@pmndrs/pointer-events": "^6.6.14",
+    "@sentry/browser": "^9.15.0",
+    "@sentry/vite-plugin": "^3.3.1",
     "@tailwindcss/vite": "^4.0.9",
     "@tweakpane/plugin-essentials": "^0.2.1",
     "@vercel/analytics": "^1.5.0",
