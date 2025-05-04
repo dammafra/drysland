@@ -8,7 +8,7 @@ export default class Button extends Element {
   }
 
   onClick(callback) {
-    this.element.onclick = async () => {
+    this.element.addEventListener('click', async () => {
       this.disable()
 
       gsap
@@ -26,7 +26,7 @@ export default class Button extends Element {
 
       callback()
       this.element.blur()
-    }
+    })
 
     return this
   }

@@ -46,7 +46,10 @@ export default class Modal extends Element {
       duration: 0.25,
       ease: 'back.in',
       onStart: () => this.closeButton.hide(),
-      onComplete: () => this.content.remove(),
+      onComplete: () => {
+        this.content.remove()
+        delete this.content
+      },
     })
 
     document.removeEventListener('keydown', this.onKeydown)

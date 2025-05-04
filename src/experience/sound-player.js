@@ -6,24 +6,18 @@ export default class SoundPlayer {
     this.resources = this.experience.resources
 
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
-    this.unlockAudioContext()
 
     this.muted = false
     this.backgrounds = new Map()
-  }
 
-  unlockAudioContext() {
-    if (this.audioContext.state !== 'suspended') return
-
-    const b = document.body
-    const events = ['touchstart', 'touchend', 'mousedown', 'keydown']
-    events.forEach(e => b.addEventListener(e, unlock.bind(this), false))
-    function unlock() {
-      this.audioContext.resume().then(clean)
-    }
-    function clean() {
-      events.forEach(e => b.removeEventListener(e, unlock))
-    }
+    /**
+     * This code helps resume audioContext when the tab is suspended (e.g., when switching apps or locking the phone) and later resumed,
+     * especially on mobile where browsers often suspend audio contexts to save resources;
+     * by listening to user interactions (touchstart, touchend, mousedown, keydown), it ensures audio resumes reliably after the tab becomes active again.
+     */
+    ;['touchstart', 'touchend', 'mousedown', 'keydown'].forEach(e =>
+      document.body.addEventListener(e, () => this.audioContext.resume(), false),
+    )
   }
 
   setMuted(value) {
