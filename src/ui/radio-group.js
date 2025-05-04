@@ -19,9 +19,9 @@ export default class RadioGroup {
   }
 
   onChange(callback) {
-    this.radios
-      .values()
-      .forEach(radio => radio.element.addEventListener('change', e => callback(e.target.value)))
+    Array.from(this.radios.values()).forEach(radio =>
+      radio.element.addEventListener('change', e => callback(e.target.value)),
+    )
 
     return this
   }
