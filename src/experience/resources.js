@@ -1,7 +1,19 @@
 import resourcesConfig from '@config/resources'
-import { CubeTextureLoader, EventDispatcher, TextureLoader } from 'three'
+import { CubeTextureLoader, EventDispatcher, Texture, TextureLoader } from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import SoundLoader from './sound-loader'
+
+class IgnoreBlockTexture {
+  constructor(parser) {
+    this.parser = parser
+    this.name = IgnoreBlockTexture.name
+  }
+
+  loadTexture(_textureIndex) {
+    const isBlockTexture = this.parser.json.images?.find(i => i.uri === 'Textures/colormap.png')
+    if (isBlockTexture) return Promise.resolve(new Texture())
+  }
+}
 
 export default class Resources extends EventDispatcher {
   constructor(loading) {
@@ -21,7 +33,7 @@ export default class Resources extends EventDispatcher {
   }
 
   setLoaders() {
-    const gltfLoader = new GLTFLoader()
+    const gltfLoader = new GLTFLoader().register(parser => new IgnoreBlockTexture(parser))
     const textureLoader = new TextureLoader()
     const cubeTextureLoader = new CubeTextureLoader()
     const soundLoader = new SoundLoader()

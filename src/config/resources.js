@@ -1,4 +1,21 @@
 const resourcesConfig = [
+  // textures
+  {
+    name: 'colormap',
+    type: 'texture',
+    path: 'textures/colormap.png',
+  },
+  {
+    name: 'colormapDesert',
+    type: 'texture',
+    path: 'textures/colormap-desert.png',
+  },
+  {
+    name: 'colormapSnow',
+    type: 'texture',
+    path: 'textures/colormap-snow.png',
+    skip: true,
+  },
   {
     name: 'envMap',
     type: 'texture',
@@ -60,13 +77,6 @@ const resourcesConfig = [
     type: 'sound',
     path: 'sounds/waves.mp3',
   },
-  // textures
-  {
-    name: 'perlin',
-    type: 'texture',
-    path: 'textures/perlin.png',
-    skip: true,
-  },
   // models
   {
     name: 'seagull',
@@ -83,23 +93,6 @@ const resourcesConfig = [
     type: 'gltfModel',
     path: 'models/ship.glb',
   },
-  // blocks textures
-  {
-    name: 'colormap',
-    type: 'texture',
-    path: 'blocks/Textures/colormap.png',
-  },
-  {
-    name: 'colormapDesert',
-    type: 'texture',
-    path: 'blocks/Textures/colormap-desert.png',
-  },
-  {
-    name: 'colormapSnow',
-    type: 'texture',
-    path: 'blocks/Textures/colormap-snow.png',
-  },
-  // blocks models
   {
     name: 'buildingArchery',
     type: 'gltfModel',
