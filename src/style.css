@@ -202,6 +202,14 @@ main {
   @apply text-2xl;
 }
 
+#credits.modal {
+  @apply gap-2;
+}
+
+#credits.modal a {
+  @apply underline hover:text-primary;
+}
+
 /* UI */
 button.hex {
   @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary min-w-12 min-h-12;

@@ -76,6 +76,9 @@ Check out the credits section in the project for a full list of resources used
 - **Cursor Pack**  
   by [Kenney.nl](https://kenney.nl/assets/cursor-pack)
 
+- **Wind flow implementation**  
+  by [@boytchev](https://github.com/boytchev) from [CodePen](https://codepen.io/boytchev/pen/qBLNEVZ)
+
 - **Happy Relaxing Loop Sound Effect**  
   by [Sergei Chetvertnykh](https://pixabay.com/users/sergequadrado-24990007/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487) from [Pixabay](https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=275487)
 
