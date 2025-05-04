@@ -276,23 +276,23 @@
       </div>
 
       <div class="menu">
-        <div class="relative text-center">
+        <div class="relative text-center flex flex-col items-center">
           <div class="bg-hex"></div>
           <h1 class="title">Drysland</h1>
-          <div class="w-full flex flex-row justify-center">
+          <div class="flex flex-row justify-center relative">
             <button id="start" class="hex">
               <i class="fa-solid fa-play"></i>
               <label>Start</label>
             </button>
             <button id="auth" class="hex">
               <i class="fa-brands fa-google"></i>
-              <label>Login</label>
+              <label>Log in</label>
             </button>
             <button id="credits" class="hex absolute -bottom-20">
               <i class="fa-solid fa-circle-info"></i>
               <label>Credits</label>
             </button>
-            <button id="settings" class="hex absolute -bottom-[44px] right-[49px]">
+            <button id="settings" class="hex absolute -bottom-[44px] -right-[3px]">
               <i class="fa-solid fa-cog text-2xl"></i>
             </button>
           </div>
@@ -305,7 +305,7 @@
       </div>
 
       <div class="modal-container">
-        <div id="modal" class="flex hidden"></div>
+        <div class="modal-content hidden"></div>
         <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
           <i class="fa-solid fa-xmark"></i>
         </button>
@@ -314,8 +314,8 @@
       <canvas class="webgl grab"></canvas>
 
       <!-- modals -->
-      <div class="credits hidden">
-        <div class="pb-5 text-xl">Thanks to</div>
+      <div id="credits" class="modal hidden">
+        <h2>Thanks to</h2>
         <div class="flex flex-col gap-2">
           <div>
             <a href="https://kenney.nl/assets/hexagon-kit" target="_blank">Hexagon Kit</a> and
@@ -393,23 +393,19 @@
         </div>
       </div>
 
-      <div class="state-conflict hidden">
-        <div class="flex flex-col gap-2">
-          <p class="text-sm text-center">
-            Looks like your local and remote saves don’t match, choose the one you want to keep:
-          </p>
-          <div class="slots flex justify-center gap-2"></div>
+      <div id="state-conflict" class="modal hidden">
+        <p>Looks like your local and remote saves don’t match, choose the one to keep:</p>
+        <div class="slots flex justify-center gap-2">
+          <button id="save-slot" class="hex primary hidden size-32">
+            <p class="level text-xl">level</p>
+            <p class="date text-xs">date</p>
+          </button>
         </div>
       </div>
 
-      <button id="save-slot" class="hex primary hidden">
-        <p class="level text-xl">level</p>
-        <p class="date leading-4">date</p>
-      </button>
-
-      <div class="settings hidden text-center">
-        <div class="pb-5 text-2xl">Graphics Settings</div>
-        <div class="flex flex-col gap-2">
+      <div id="settings" class="modal hidden">
+        <h2>Graphics Settings</h2>
+        <div class="flex flex-col gap-2 w-44">
           <label>
             <input type="radio" name="graphics" value="quality" />
             <span class="radio-mark"></span>
@@ -421,12 +417,33 @@
             Performance
           </label>
         </div>
-        <p
-          id="restart-warning"
-          class="absolute bottom-[4.5rem] left-0 px-14 text-amber-500 scale-0"
-        >
+        <p id="restart-warning" class="text-amber-500 scale-0">
           You might need to restart the game for some changes to take effect
         </p>
+      </div>
+
+      <div id="auth-login" class="modal hidden">
+        <h2>Log in</h2>
+        <p>
+          Your progress is automatically saved on this device. <br />
+          Log in with Google to back up and sync it across all your devices.
+        </p>
+        <div class="flex justify-center gap-2">
+          <button id="cancel" class="hex secondary size-20">Cancel</button>
+          <button id="continue" class="hex primary size-20">Continue</button>
+        </div>
+      </div>
+
+      <div id="auth-logout" class="modal hidden">
+        <h2>Log out</h2>
+        <p>
+          You’re currently syncing your progress with your Google account. <br />
+          Logging out will stop cloud sync, but your progress will still be saved locally.
+        </p>
+        <div class="flex justify-center gap-2">
+          <button id="cancel" class="hex secondary size-20">Cancel</button>
+          <button id="continue" class="hex primary size-20">Continue</button>
+        </div>
       </div>
 
       <!-- header -->

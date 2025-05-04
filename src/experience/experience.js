@@ -77,6 +77,7 @@ export default class Experience {
   }
 
   applySettings = () => {
+    this.camera.applySettings()
     this.renderer.applySettings()
     this.environment.applySettings()
     delete WaterBlock.material
@@ -96,17 +97,9 @@ export default class Experience {
     this.menu = new Menu()
     this.soundControls = new SoundControls()
 
-    Auth.instance.subscribe(user => {
-      UI.authToggle
-        .setLabel(user ? 'Logout' : 'Login')
-        .toggle(!user)
-        .enable()
-      UI.startButton.enable()
-      user && State.instance.sync()
-    })
-    UI.authToggle.onClick(() => Auth.instance.user ? Auth.instance.signOut() : Auth.instance.signIn()).disable(true) //prettier-ignore
     UI.startButton.onClick(this.start.bind(this)).disable(true)
-    UI.creditsButton.onClick(() => Modal.instance.open('.credits'))
+    Auth.instance.subscribe(() => UI.startButton.enable())
+    UI.creditsButton.onClick(() => Modal.instance.open('#credits.modal'))
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
     UI.backButton.onClick(this.setExplorationMode.bind(this))

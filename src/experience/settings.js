@@ -18,7 +18,7 @@ export default class Settings extends EventDispatcher {
     this.update()
 
     UI.settingsButton.onClick(() => {
-      Modal.instance.open('.settings', { onBeforeOpen: this.onBeforeSettingsModalOpen })
+      Modal.instance.open('#settings.modal', { onBeforeOpen: this.onBeforeSettingsModalOpen })
     })
   }
 

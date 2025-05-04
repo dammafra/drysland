@@ -43,6 +43,7 @@ TBD
 
 ### Save System & Sync
 
+<img src="./screens/log-in.png" alt="Log in"  >
 <img src="./screens/state-conflict.png" alt="Cover"  >
 
 Drysland automatically saves your progress locally using the browser’s local storage, so you can pick up right where you left off.

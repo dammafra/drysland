@@ -7,7 +7,7 @@ export default class Modal extends Element {
 
   constructor() {
     if (Modal.instance) return Modal.instance
-    super('#modal')
+    super('.modal-content')
 
     this.closeButton = new Button('#modal-close')
     this.closeButton.onClick(this.close.bind(this))

@@ -178,7 +178,7 @@ main {
 
 /* credits */
 .credits {
-  @apply text-base text-center;
+  @apply text-base;
 }
 
 .credits a {
@@ -190,8 +190,16 @@ main {
   @apply relative h-full w-full flex items-center justify-center p-mobile;
 }
 
-.modal-container #modal {
-  @apply hex bg-white text-slate-600 size-96 min-w-96 z-10 items-center justify-center px-12;
+.modal-container .modal-content {
+  @apply hex bg-white text-slate-600 size-96 min-w-96 z-10 flex items-center justify-center px-12 scale-0;
+}
+
+.modal {
+  @apply flex flex-col items-center gap-4 text-center;
+}
+
+.modal h2 {
+  @apply text-2xl;
 }
 
 /* UI */
@@ -213,6 +221,10 @@ button.hex label {
 
 button.hex.primary {
   @apply bg-primary text-white hover:bg-sky-400;
+}
+
+button.hex.secondary {
+  @apply bg-slate-200 hover:bg-slate-100;
 }
 
 div:has(#level) {

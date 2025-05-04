@@ -49,9 +49,14 @@ CameraControls.install({ THREE: subsetOfTHREE })
 // this.controls.rotate(delta, 0, true)
 
 export default class Camera {
+  get boundary() {
+    return this.settings.isGraphicsQuality ? 10 : 5
+  }
+
   constructor() {
     // Setup
     this.experience = Experience.instance
+    this.settings = this.experience.settings
     this.debug = this.experience.debug
     this.time = this.experience.time
     this.sizes = this.experience.sizes
@@ -80,10 +85,7 @@ export default class Camera {
     this.autoRotate = false
     this.autorotationSpeed = 3
 
-    const box = new Box3()
-    box.min.set(-10, 0, -10)
-    box.max.set(10, 10, 10)
-    this.controls.setBoundary(box)
+    this.setBoundary()
 
     this.controls.addEventListener('controlstart', () => {
       this.controls.removeEventListener('rest', onRest)
@@ -100,6 +102,13 @@ export default class Camera {
       this.userDragging = false
       this.disableAutoRotate = false
     }
+  }
+
+  setBoundary() {
+    const box = new Box3()
+    box.min.set(-this.boundary, 0, -this.boundary)
+    box.max.setScalar(this.boundary)
+    this.controls.setBoundary(box)
   }
 
   resize() {
@@ -175,6 +184,10 @@ export default class Camera {
       ),
     )
     return frustum.containsPoint(position)
+  }
+
+  applySettings() {
+    this.setBoundary()
   }
 
   setDebug() {

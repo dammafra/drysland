@@ -41,7 +41,7 @@ export default class State {
       }
 
       // handle conflict
-      Modal.instance.open('.state-conflict', {
+      Modal.instance.open('#state-conflict.modal', {
         disableClose: true,
         onBeforeOpen: content => {
           const slot1 = new SaveSlot(localState)
@@ -59,6 +59,7 @@ export default class State {
             })
             .show()
 
+          content.querySelector('.slots').innerHTML = ''
           content.querySelector('.slots').append(slot1.element, slot2.element)
         },
       })
