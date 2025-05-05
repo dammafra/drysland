@@ -292,7 +292,7 @@
               <i class="fa-solid fa-circle-info"></i>
               <label>Credits</label>
             </button>
-            <button id="settings" class="hex absolute -bottom-[44px] -right-[3px]">
+            <button id="settings" title="Settings" class="hex absolute -bottom-[44px] -right-[3px]">
               <i class="fa-solid fa-cog text-2xl"></i>
             </button>
           </div>
@@ -306,7 +306,7 @@
 
       <div class="modal-container">
         <div class="modal-content hidden"></div>
-        <button id="modal-close" class="hex absolute mb-70 ml-74 z-10 hidden">
+        <button id="modal-close" title="Close" class="hex absolute mb-70 ml-74 z-10 hidden">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -454,7 +454,7 @@
       </div>
 
       <!-- header -->
-      <button id="menu" class="hex absolute top-4 left-4 z-10 hidden">
+      <button id="menu" title="Main menu" class="hex absolute top-4 left-4 z-10 hidden">
         <i class="fa-solid fa-bars"></i>
       </button>
       <div>
@@ -469,22 +469,34 @@
         <button id="next" class="hex text-2xl pointer-events-auto hidden">Next</button>
       </div>
 
-      <button id="back" class="hex hidden absolute bottom-4 left-4">
+      <button id="back" title="Back to exploration" class="hex hidden absolute bottom-4 left-4">
         <i class="fa-regular fa-compass text-2xl"></i>
       </button>
 
       <div id="controls" class="absolute bottom-4 right-4">
-        <button id="fullscreen" class="hex absolute bottom-10 right-18 hidden">
+        <button
+          id="fullscreen"
+          title="Toggle fullscreen"
+          class="hex absolute bottom-10 right-18 hidden"
+        >
           <i class="fa-solid fa-expand"></i>
           <i class="fa-solid fa-compress"></i>
         </button>
-        <button id="sounds" class="hex absolute bottom-10 right-6 hidden">
+        <button
+          id="sounds"
+          title="Toggle sound effects"
+          class="hex absolute bottom-10 right-6 hidden"
+        >
           <i class="fa-solid fa-volume-low"></i>
         </button>
-        <button id="loop" class="hex absolute bottom-0 right-12 hidden">
+        <button id="loop" title="Toggle music" class="hex absolute bottom-0 right-12 hidden">
           <i class="fa-solid fa-music"></i>
         </button>
-        <button id="ambience" class="hex absolute bottom-0 right-0 hidden">
+        <button
+          id="ambience"
+          title="Toggle ambient sound"
+          class="hex absolute bottom-0 right-0 hidden"
+        >
           <i class="fa-solid fa-water"></i>
         </button>
       </div>
