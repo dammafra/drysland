@@ -245,8 +245,8 @@ export default class Block {
     this.material.uniforms.uHovered.value = false
   }
 
-  onClick() {
-    this.rotate()
+  onClick(e) {
+    this.rotate(e.type === 'contextmenu' ? -1 : 1)
     this.soundPlayer.play('swing')
     this.experience.setGameMode(this)
 
