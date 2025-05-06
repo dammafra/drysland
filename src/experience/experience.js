@@ -106,6 +106,8 @@ export default class Experience {
   }
 
   async start() {
+    this.setGridDebug()
+
     this.menu.close()
     await this.nextLevel()
 
@@ -141,6 +143,8 @@ export default class Experience {
   }
 
   openMenu() {
+    this.disposeGridDebug()
+
     this.grid?.dispose()
     delete this.grid
 
@@ -239,6 +243,13 @@ export default class Experience {
         this.camera.controls.maxDistance = event.value ? 50 : 25
       })
 
+    LandscapeConfig.instance.setDebug()
+    OceanConfig.instance.setDebug()
+  }
+
+  setGridDebug() {
+    if (!this.debug) return
+
     const folder = this.debug.root.addFolder({
       title: '⬢ grid',
       index: 5,
@@ -318,8 +329,10 @@ export default class Experience {
 
     this.generateParams = generateParams
     this.updateSelectLevelPane = updateSelectLevelPane
+  }
 
-    LandscapeConfig.instance.setDebug()
-    OceanConfig.instance.setDebug()
+  disposeGridDebug() {
+    if (!this.debug) return
+    this.debug.root.children.at(5).dispose()
   }
 }
