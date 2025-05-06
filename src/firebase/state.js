@@ -1,6 +1,7 @@
 import Modal from '@ui/modal'
 import SaveSlot from '@ui/save-slot'
 import debounce from '@utils/debounce'
+import Debug from '@utils/debug'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 import FirebasApp from './app'
 import Auth from './auth'
@@ -13,10 +14,16 @@ export default class State {
     this.db = getFirestore(FirebasApp.instance)
   }
 
-  #save = state => (Auth.instance.user ? this.saveRemote(state) : this.saveLocal(state))
+  #save(state) {
+    if (Debug.enabled) return
+    return Auth.instance.user ? this.saveRemote(state) : this.saveLocal(state)
+  }
+
   save = debounce(this.#save.bind(this), 1000)
 
-  load = () => (Auth.instance.user ? this.loadRemote() : this.loadLocal())
+  load() {
+    return Auth.instance.user ? this.loadRemote() : this.loadLocal()
+  }
 
   async sync() {
     const localState = this.loadLocal()
