@@ -72,7 +72,7 @@ export default class State {
   }
 
   saveLocal(state) {
-    localStorage.setItem('state', JSON.stringify(state))
+    localStorage.setItem('state', btoa(JSON.stringify(state)))
   }
 
   async saveRemote(state) {
@@ -82,7 +82,7 @@ export default class State {
 
   loadLocal() {
     const state = localStorage.getItem('state')
-    if (state) return JSON.parse(state)
+    if (state) return JSON.parse(atob(state))
   }
 
   async loadRemote() {

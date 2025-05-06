@@ -27,9 +27,12 @@ Sentry.init({
 })
 
 DoubleTapPreventer.init()
-Versioning.init('1.2', () => {
+Versioning.init('1.3', () => {
   localStorage.removeItem('debug')
   localStorage.removeItem('settings')
+
+  const currentState = localStorage.getItem('state')
+  if (currentState) localStorage.setItem('state', btoa(currentState))
 })
 Fullscreen.init('#fullscreen')
 
