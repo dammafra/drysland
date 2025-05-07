@@ -96,6 +96,7 @@ export default class Grid {
       this.ocean = new Ocean(this)
     }
 
+    UI.menuButton.disable()
     this.soundPlayer.play('multiPop')
     await Promise.all(this.blocks.map(b => b.init()))
 

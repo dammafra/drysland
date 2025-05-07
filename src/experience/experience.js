@@ -113,7 +113,7 @@ export default class Experience {
 
     this.soundControls.show()
     UI.fullscreenToggle.show()
-    UI.menuButton.disable().show()
+    UI.menuButton.show()
     UI.levelText.show()
   }
 
