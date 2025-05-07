@@ -55,7 +55,6 @@ export default class Grid {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.soundPlayer = this.experience.soundPlayer
-    this.soundControls = this.experience.soundControls
     this.pointer = this.experience.pointer
     this.blocksMap = new Map()
 
@@ -102,14 +101,6 @@ export default class Grid {
     this.landscape?.init()
     this.experience.save()
     UI.menuButton.enable()
-
-    if (this.level === 1) return
-
-    window.CrazyGames.SDK.ad.requestAd('midgame', {
-      adFinished: () => this.soundControls.show(),
-      adError: () => this.soundControls.show(),
-      adStarted: () => this.soundControls.hide(),
-    })
   }
 
   setBlock(q, r) {

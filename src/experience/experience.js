@@ -104,7 +104,6 @@ export default class Experience {
     this.menu.close()
     await this.nextLevel()
 
-    this.soundControls.show()
     UI.fullscreenToggle.show()
     UI.menuButton.show()
     UI.levelText.show()
@@ -112,17 +111,27 @@ export default class Experience {
     window.CrazyGames.SDK.game.gameplayStart()
   }
 
-  async nextLevel() {
-    const state = await this.load()
-    const level = state ? state.level : this.level + 1
-    const blocks = state?.blocks
+  nextLevel() {
+    const proceed = async () => {
+      this.soundControls.show()
 
-    this.level = level
-    UI.levelText.set(`Level ${this.level}`)
+      const state = await this.load()
+      const level = state ? state.level : this.level + 1
+      const blocks = state?.blocks
 
-    this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
-    this.grid?.dispose()
-    this.grid = new Grid({ level, blocks, ...this.levelParams })
+      this.level = level
+      UI.levelText.set(`Level ${this.level}`)
+
+      this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
+      this.grid?.dispose()
+      this.grid = new Grid({ level, blocks, ...this.levelParams })
+    }
+
+    window.CrazyGames.SDK.ad.requestAd('midgame', {
+      adFinished: proceed,
+      adError: proceed,
+      adStarted: () => this.soundControls.hide(),
+    })
   }
 
   levelStart() {
