@@ -105,7 +105,7 @@ export default class Experience {
     await this.nextLevel()
 
     UI.fullscreenToggle.show()
-    UI.menuButton.disable().show()
+    UI.menuButton.show()
     UI.levelText.show()
 
     window.CrazyGames.SDK.game.gameplayStart()
