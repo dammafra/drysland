@@ -27,7 +27,6 @@ export default class OceanConfig {
 
     this.experience = Experience.instance
     this.settings = this.experience.settings
-    this.debug = this.experience.debug
 
     this.waves = {
       frequencyX: 0.03,
@@ -35,46 +34,5 @@ export default class OceanConfig {
       speed: 0.05,
       scale: 0.25,
     }
-  }
-
-  setDebug() {
-    if (!this.debug) return
-
-    const folder = this.debug.root.addFolder({ title: '🌊 ocean', index: 9, expanded: false })
-
-    folder.addBinding(this.roughness, 'value', {
-      label: 'roughness',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.waves, 'frequencyX', {
-      label: 'waves frequencyX',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.waves, 'frequencyY', {
-      label: 'waves frequencyY',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.waves, 'speed', {
-      label: 'waves speed',
-      min: 0,
-      max: 5,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.waves, 'scale', {
-      label: 'waves scale',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
   }
 }

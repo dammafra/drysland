@@ -37,7 +37,6 @@ export default class LandscapeConfig {
 
     this.experience = Experience.instance
     this.settings = this.experience.settings
-    this.debug = this.experience.debug
 
     this.ship = {
       maxVolume: 0.3,
@@ -47,46 +46,5 @@ export default class LandscapeConfig {
         boat: { scale: 0.005, rotationOffset: -Math.PI * 0.5, elevationOffset: 0.1 },
       },
     }
-  }
-
-  setDebug() {
-    if (!this.debug) return
-
-    const folder = this.debug.root.addFolder({ title: '🏔️ landscape', index: 8, expanded: false })
-
-    folder.addBinding(this.wind, 'speed', {
-      label: 'wind speed',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.ship, 'speed', {
-      label: 'ship speed',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.ship, 'maxVolume', {
-      label: 'ship volume',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.seagulls, 'speed', {
-      label: 'seagulls speed',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
-
-    folder.addBinding(this.seagulls, 'maxVolume', {
-      label: 'seagulls volume',
-      min: 0,
-      max: 1,
-      step: 0.01,
-    })
   }
 }

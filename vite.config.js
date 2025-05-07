@@ -1,4 +1,3 @@
-import { sentryVitePlugin } from '@sentry/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import glsl from 'vite-plugin-glsl'
@@ -20,17 +19,12 @@ export default {
     tailwindcss(), // Restart server on static file change
     restart({ restart: ['../static/**'] }),
     glsl(),
-    sentryVitePlugin({
-      org: 'dammafra',
-      project: 'drysland',
-    }),
   ],
   resolve: {
     alias: {
       '@blocks': path.resolve(__dirname, 'src/experience/blocks'),
       '@config': path.resolve(__dirname, 'src/config'),
       '@experience': path.resolve(__dirname, 'src/experience/experience.js'),
-      '@fire': path.resolve(__dirname, 'src/firebase'),
       '@grid': path.resolve(__dirname, 'src/experience/grid'),
       '@shaders': path.resolve(__dirname, 'src/shaders'),
       '@ui': path.resolve(__dirname, 'src/ui'),

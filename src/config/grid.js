@@ -63,7 +63,6 @@ export default class GridConfig {
         case 2: return frontier.at(0)
         case 3: return Random.oneOf(frontier)
         default:
-          debug.warn('The selected strategy doe not exixt, fallback to DFS')
           this.selectionStrategy = 1
           return this.applySelectionStrategy(frontier)
       }

@@ -3,13 +3,11 @@ import BlocksConfig from '@config/blocks'
 import { default as GridConfig } from '@config/grid'
 import LandscapeConfig from '@config/landscape'
 import OceanConfig from '@config/ocean'
-import Auth from '@fire/auth'
-import State from '@fire/state'
 import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import Modal from '@ui/modal'
 import UI from '@ui/ui'
-import { AxesHelper, GridHelper, Scene } from 'three'
+import { Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
 import Pointer from './pointer'
@@ -19,17 +17,18 @@ import Settings from './settings'
 import Sizes from './sizes'
 import SoundControls from './sound-controls'
 import SoundPlayer from './sound-player'
+import State from './state'
 import Time from './time'
 
 export default class Experience {
   /** @type {Experience} */
   static instance
 
-  static async init(canvasSelector, loading, debug) {
-    return new Experience(document.querySelector(canvasSelector), loading, await debug)
+  static async init(canvasSelector, loading) {
+    return new Experience(document.querySelector(canvasSelector), loading)
   }
 
-  constructor(canvas, loading, debug) {
+  constructor(canvas, loading) {
     if (Experience.instance) return Experience.instance
     Experience.instance = this
 
@@ -39,7 +38,6 @@ export default class Experience {
     this.canvas.addEventListener('mouseup', () => this.canvas.classList.remove('grabbing'))
 
     this.loading = loading
-    this.debug = debug
     this.settings = new Settings()
 
     BlocksConfig.init()
@@ -72,8 +70,6 @@ export default class Experience {
       if (!this.grid || e.code !== 'Escape' || UI.menuButton.disabled) return
       this.openMenu()
     })
-
-    this.setDebug()
   }
 
   applySettings = () => {
@@ -97,8 +93,7 @@ export default class Experience {
     this.menu = new Menu()
     this.soundControls = new SoundControls()
 
-    UI.startButton.onClick(this.start.bind(this)).disable(true)
-    Auth.instance.subscribe(() => UI.startButton.enable())
+    UI.startButton.onClick(this.start.bind(this))
     UI.creditsButton.onClick(() => Modal.instance.open('#credits.modal'))
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(this.nextLevel.bind(this))
@@ -106,29 +101,37 @@ export default class Experience {
   }
 
   async start() {
-    this.setGridDebug()
-
     this.menu.close()
     await this.nextLevel()
 
-    this.soundControls.show()
     UI.fullscreenToggle.show()
     UI.menuButton.disable().show()
     UI.levelText.show()
+
+    window.CrazyGames.SDK.game.gameplayStart()
   }
 
-  async nextLevel() {
-    const state = await this.load()
-    const level = state ? state.level : this.level + 1
-    const blocks = state?.blocks
+  nextLevel() {
+    const proceed = async () => {
+      this.soundControls.show()
 
-    this.level = level
-    UI.levelText.set(`Level ${this.level}`)
+      const state = await this.load()
+      const level = state ? state.level : this.level + 1
+      const blocks = state?.blocks
 
-    this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
-    debug.log(`level ${this.level}: `, this.levelParams)
-    this.grid?.dispose()
-    this.grid = new Grid({ level, blocks, ...this.levelParams })
+      this.level = level
+      UI.levelText.set(`Level ${this.level}`)
+
+      this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
+      this.grid?.dispose()
+      this.grid = new Grid({ level, blocks, ...this.levelParams })
+    }
+
+    window.CrazyGames.SDK.ad.requestAd('midgame', {
+      adFinished: proceed,
+      adError: proceed,
+      adStarted: () => this.soundControls.hide(),
+    })
   }
 
   levelStart() {
@@ -143,8 +146,6 @@ export default class Experience {
   }
 
   openMenu() {
-    this.disposeGridDebug()
-
     this.grid?.dispose()
     delete this.grid
 
@@ -162,6 +163,8 @@ export default class Experience {
     this.camera.autoRotate = false
     UI.startButton.setLabel('Resume')
     this.menu.open()
+
+    window.CrazyGames.SDK.game.gameplayStop()
   }
 
   setGameMode(block) {
@@ -205,134 +208,5 @@ export default class Experience {
     this.loaded = true
 
     return await State.instance.load()
-  }
-
-  setDebug() {
-    if (!this.debug) return
-
-    window.experience = Experience.instance
-
-    const helpersSize = GridConfig.instance.maxRadius * 2 + 4
-    const axesHelper = new AxesHelper(helpersSize)
-    axesHelper.visible = false
-    axesHelper.position.x = -helpersSize * 0.5
-    axesHelper.position.y = 1.01
-    axesHelper.position.z = -helpersSize * 0.5
-
-    const gridHelper = new GridHelper(helpersSize, helpersSize * 2, 'gray', 'gray')
-    gridHelper.visible = false
-    gridHelper.position.y = 1
-
-    this.scene.add(axesHelper, gridHelper)
-
-    this.debug.root.addBinding(this.settings.settings, 'graphics', {
-      label: 'graphics settings',
-      readonly: true,
-      index: 3,
-    })
-
-    this.debug.root
-      .addBinding(axesHelper, 'visible', { label: 'helpers', index: 4 })
-      .on('change', event => {
-        axesHelper.visible = event.value
-        gridHelper.visible = event.value
-
-        this.scene.backgroundIntensity = event.value ? 0 : 1
-        this.environment.lightHelper.visible = event.value
-        this.environment.shadowHelper.visible = event.value
-        this.camera.controls.maxDistance = event.value ? 50 : 25
-      })
-
-    LandscapeConfig.instance.setDebug()
-    OceanConfig.instance.setDebug()
-  }
-
-  setGridDebug() {
-    if (!this.debug) return
-
-    const folder = this.debug.root.addFolder({
-      title: '⬢ grid',
-      index: 5,
-      expanded: false,
-    })
-
-    const generateParams = {
-      radius: 1,
-      coverage: 0.5,
-      extraLinks: 0,
-      minDeadEnds: 2,
-      linksOnly: false,
-    }
-
-    folder
-      .addBlade({
-        view: 'list',
-        label: 'strategy',
-        options: [
-          { text: 'DFS', value: 1 },
-          { text: 'BFS', value: 2 },
-          { text: "Prim's", value: 3 },
-        ],
-        value: 1,
-      })
-      .on('change', e => (GridConfig.instance.selectionStrategy = e.value))
-    folder.addBinding(generateParams, 'radius', { min: 1, max: 10, step: 1 })
-    folder.addBinding(generateParams, 'coverage', { min: 0.1, max: 1, step: 0.1 })
-    folder.addBinding(generateParams, 'extraLinks', { min: 0, max: 1, step: 0.05 })
-    folder.addBinding(generateParams, 'minDeadEnds', { min: 2, max: 10, step: 1 })
-    folder.addBinding(generateParams, 'linksOnly')
-
-    const onGenerateClick = () => {
-      disableGridPanes()
-
-      delete this.level
-      this.levelParams = generateParams
-      UI.levelText.set(`DEBUG`).show()
-
-      this.grid?.dispose()
-      this.grid = new Grid(generateParams)
-    }
-
-    const onSelectLevelChange = e => {
-      if (isNaN(e.value)) return
-
-      disableGridPanes()
-
-      this.level = e.value - 1
-      this.nextLevel()
-    }
-
-    const updateSelectLevelPane = level => {
-      selectLevelPane.off('change', onSelectLevelChange)
-      selectLevelPane.controller.value.setRawValue(level || 'debug')
-      selectLevelPane.on('change', onSelectLevelChange)
-    }
-
-    const disableGridPanes = () => {
-      selectLevelPane.disabled = true
-      generatePane.disabled = true
-      setTimeout(() => {
-        selectLevelPane.disabled = false
-        generatePane.disabled = false
-      }, 2000)
-    }
-
-    const generatePane = folder.addButton({ title: 'generate' }).on('click', onGenerateClick)
-    const selectLevelPane = folder
-      .addBlade({
-        view: 'text',
-        label: 'select level',
-        parse: v => +v,
-        value: 0,
-      })
-      .on('change', onSelectLevelChange)
-
-    this.generateParams = generateParams
-    this.updateSelectLevelPane = updateSelectLevelPane
-  }
-
-  disposeGridDebug() {
-    if (!this.debug) return
-    this.debug.root.children.at(5).dispose()
   }
 }

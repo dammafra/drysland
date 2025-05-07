@@ -4,7 +4,6 @@ import Toggle from './toggle'
 
 export default class UI {
   static startButton = new Button('#start')
-  static authToggle = new Toggle('#auth')
   static creditsButton = new Button('#credits')
   static settingsButton = new Button('#settings')
 

@@ -86,8 +86,6 @@ export default class Grid {
 
     this.updateLinks()
     this.checkSolution()
-
-    this.setDebug()
   }
 
   async init() {
@@ -138,10 +136,6 @@ export default class Grid {
     visited.add(start.key)
     frontier.push(start)
 
-    debug.groupCollapsed('Grid.generateLinks')
-    debug.log(this.toString())
-    debug.log('start from', start.key)
-
     while (frontier.length && visited.size < targetVisits) {
       const logs = []
 
@@ -167,11 +161,7 @@ export default class Grid {
         visited.add(next.key)
         frontier.push(next)
       }
-
-      debug.log(logs.join(' ->\t'))
     }
-
-    debug.groupEnd()
   }
 
   addExtraLinks() {
@@ -336,17 +326,5 @@ export default class Grid {
     }
 
     return res
-  }
-
-  setDebug() {
-    if (!this.experience.debug) return
-
-    this.experience.generateParams.radius = this.radius
-    this.experience.generateParams.coverage = this.coverage
-    this.experience.generateParams.extraLinks = this.extraLinks
-    this.experience.generateParams.minDeadEnds = this.minDeadEnds
-    this.experience.generateParams.linksOnly = this.linksOnly
-    this.experience.updateSelectLevelPane(this.level)
-    this.experience.debug.root.refresh()
   }
 }

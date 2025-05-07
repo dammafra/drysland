@@ -21,7 +21,7 @@ export default class Loading {
     this.start()
   }
 
-  start() {
+  async start() {
     gsap
       .timeline()
       .to(this.spinner, {

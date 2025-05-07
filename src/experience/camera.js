@@ -1,5 +1,4 @@
 import Experience from '@experience'
-import Grid from '@grid/grid'
 import CameraControls from 'camera-controls'
 import {
   Box3,
@@ -57,7 +56,6 @@ export default class Camera {
     // Setup
     this.experience = Experience.instance
     this.settings = this.experience.settings
-    this.debug = this.experience.debug
     this.time = this.experience.time
     this.sizes = this.experience.sizes
     this.scene = this.experience.scene
@@ -65,8 +63,6 @@ export default class Camera {
 
     this.setInstance()
     this.setControls()
-
-    this.setDebug()
   }
 
   setInstance() {
@@ -188,32 +184,5 @@ export default class Camera {
 
   applySettings() {
     this.setBoundary()
-  }
-
-  setDebug() {
-    if (!this.debug) return
-
-    const folder = this.debug.root.addFolder({ title: '🎥 camera', index: 6, expanded: false })
-
-    folder
-      .addBinding(this.controls, 'enabled', { label: 'controls' })
-      .on('change', e => (this.cameraPositionPane.disabled = e.value))
-
-    this.autoRotatePane = folder.addBinding(this, 'autoRotate', { label: 'auto rotation' })
-
-    folder.addBinding(this, 'autorotationSpeed', {
-      label: 'auto rotation speed',
-      min: 0,
-      max: 20,
-      step: 0.1,
-    })
-
-    this.cameraPositionPane = folder
-      .addBinding(this.instance, 'position', { disabled: true })
-      .on('change', () => {
-        if (!this.controls.enabled) {
-          this.instance.lookAt(Grid.center)
-        }
-      })
   }
 }

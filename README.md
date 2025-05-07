@@ -2,8 +2,6 @@
 
 ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 ![Three.js	](https://img.shields.io/badge/ThreeJs-black?style=for-the-badge&logo=three.js&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Firebase](https://img.shields.io/badge/firebase-a08021?style=for-the-badge&logo=firebase&logoColor=ffcd34)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 > Try it live here 👉 [drysland.vercel.app](https://drysland.vercel.app)
@@ -18,10 +16,8 @@ Pipe networks are created using a simplified version of the **Growing Tree algor
 ## Technologies Used
 
 - [Three.js](https://threejs.org/) (3D rendering)
-- [Tweakpane](https://tweakpane.github.io/docs/) (Debug)
 - [@yomotsu/camera-controls](https://github.com/yomotsu/camera-controls) -[@pmndrs/pointer-events](https://www.npmjs.com/package/@pmndrs/pointer-events)
 - [GSAP](https://gsap.com/)
-- [Firebase](https://firebase.google.com/)
 - [Tailwind](https://tailwindcss.com/)
 
 ## Setup
@@ -60,15 +56,6 @@ The algorithm is configurable, the main parameters currently in use are:
 - **Dead-end preservation**: percentage of dead ends that are intentionally left untouched to preserve challenge and variety.
 
 These parameters allow for fine-tuning the level structure and difficulty, and can be adjusted to explore different types of puzzle layouts. There’s room to explore more sophisticated path-building strategies.
-
-### Save System & Sync
-
-<img src="./screens/log-in.png" alt="Log in"  >
-<img src="./screens/state-conflict.png" alt="Cover"  >
-
-Drysland automatically saves your progress locally using the browser’s local storage, so you can pick up right where you left off.
-For cross-device play, you can optionally log in with a Google account to sync your progress across multiple devices.
-If differences are detected between the local and cloud save data, a simple conflict resolution system will help you choose which version to keep.
 
 ### Graphics Settings
 

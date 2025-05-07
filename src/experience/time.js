@@ -12,7 +12,6 @@ export default class Time extends EventDispatcher {
 
     // Setup
     this.experience = Experience.instance
-    this.debug = this.experience.debug
     this.timer = new Timer()
 
     // Events
@@ -21,7 +20,6 @@ export default class Time extends EventDispatcher {
   }
 
   tick = () => {
-    this.debug?.stats.begin()
     this.timer.update()
 
     this.delta = this.timer.getDelta()
@@ -29,7 +27,6 @@ export default class Time extends EventDispatcher {
 
     this.dispatchEvent({ type: 'tick' })
 
-    this.debug?.stats.end()
     window.requestAnimationFrame(this.tick)
   }
 }

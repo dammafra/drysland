@@ -113,13 +113,6 @@ export default class Landscape {
     this.winds?.forEach(w => w.update())
     this.seagulls?.forEach(s => s.update())
 
-    if (this.ship) {
-      const distance = this.camera.normalizedDistanceTo(this.ship.mesh.position)
-      const volume = Math.pow(1 - distance, 10)
-      const clampedVolume = Math.max(0, Math.min(volume, LandscapeConfig.instance.ship.maxVolume))
-      this.soundPlayer.updateBackgoundVolume('sailing', clampedVolume)
-    }
-
     if (this.seagulls) {
       const distance = Math.min(
         ...this.seagulls.map(s => s.mesh.position).map(p => this.camera.normalizedDistanceTo(p)),
