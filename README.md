@@ -41,6 +41,26 @@ npm run build
 
 TBD
 
+### Level Generation
+
+All levels in Drysland are guaranteed to be solvable. The game uses a custom adaptation of the **Growing Tree algorithm**, commonly used for maze generation.
+
+The core idea is to “carve” one or more continuous paths through a fixed-size hexagonal grid, primarily using a depth-first traversal (DFS).
+
+Once the main paths are generated, the algorithm performs a second pass to insert additional connections between blocks along the existing routes, subtly increasing the complexity without breaking solvability.
+
+Finally, all tiles are randomly rotated to scramble the solution and form the playable puzzle.
+
+The algorithm is configurable, the main parameters currently in use are:
+
+- **Traversal strategy**: defines the node selection method during path carving (e.g. DFS, BFS, or hybrid approaches).
+- **Grid radius**: determines the size of the hexagonal level.
+- **Grid coverage**: controls how much of the grid is used to generate the main path(s).
+- **Extra link probability**: chance to add additional connections between blocks during the second pass.
+- **Dead-end preservation**: percentage of dead ends that are intentionally left untouched to preserve challenge and variety.
+
+These parameters allow for fine-tuning the level structure and difficulty, and can be adjusted to explore different types of puzzle layouts. There’s room to explore more sophisticated path-building strategies.
+
 ### Save System & Sync
 
 <img src="./screens/log-in.png" alt="Log in"  >
