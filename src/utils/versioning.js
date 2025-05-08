@@ -12,13 +12,13 @@ export default class Versioning {
     }
 
     if (
-      version !== localStorage.getItem(Versioning.#key) &&
+      version !== GamePix.localStorage.getItem(Versioning.#key) &&
       onVersionChange &&
       typeof onVersionChange === 'function'
     ) {
       onVersionChange()
     }
 
-    localStorage.setItem(Versioning.#key, version)
+    GamePix.localStorage.setItem(Versioning.#key, version)
   }
 }

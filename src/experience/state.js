@@ -7,11 +7,11 @@ export default class State {
   }
 
   save(state) {
-    localStorage.setItem(State.#key, btoa(JSON.stringify(state)))
+    GamePix.localStorage.setItem(State.#key, btoa(JSON.stringify(state)))
   }
 
   load() {
-    const state = localStorage.getItem(State.#key)
+    const state = GamePix.localStorage.getItem(State.#key)
     if (state) return JSON.parse(atob(state))
   }
 }

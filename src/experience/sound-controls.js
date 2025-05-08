@@ -40,8 +40,8 @@ export default class SoundControls {
 
   // persist
   ensureDefault() {
-    if (!localStorage.getItem(SoundControls.#key)) {
-      localStorage.setItem(
+    if (!GamePix.localStorage.getItem(SoundControls.#key)) {
+      GamePix.localStorage.setItem(
         SoundControls.#key,
         JSON.stringify({ sounds: true, loop: true, ambience: true }),
       )
@@ -50,16 +50,16 @@ export default class SoundControls {
 
   load() {
     this.ensureDefault()
-    return JSON.parse(localStorage.getItem(SoundControls.#key))
+    return JSON.parse(GamePix.localStorage.getItem(SoundControls.#key))
   }
 
   save(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(localStorage.getItem(SoundControls.#key))
+    const settings = JSON.parse(GamePix.localStorage.getItem(SoundControls.#key))
     settings[key] = value
 
-    localStorage.setItem(SoundControls.#key, JSON.stringify(settings))
+    GamePix.localStorage.setItem(SoundControls.#key, JSON.stringify(settings))
   }
 
   // toggle

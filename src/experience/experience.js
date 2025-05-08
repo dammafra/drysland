@@ -107,8 +107,6 @@ export default class Experience {
     UI.fullscreenToggle.show()
     UI.menuButton.show()
     UI.levelText.show()
-
-    window.CrazyGames.SDK.game.gameplayStart()
   }
 
   nextLevel() {
@@ -121,17 +119,15 @@ export default class Experience {
 
       this.level = level
       UI.levelText.set(`Level ${this.level}`)
+      GamePix.updateLevel(this.level)
 
       this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
       this.grid?.dispose()
       this.grid = new Grid({ level, blocks, ...this.levelParams })
     }
 
-    window.CrazyGames.SDK.ad.requestAd('midgame', {
-      adFinished: proceed,
-      adError: proceed,
-      adStarted: () => this.soundControls.hide(),
-    })
+    this.soundControls.hide()
+    GamePix.interstitialAd().then(proceed)
   }
 
   levelStart() {
@@ -163,8 +159,6 @@ export default class Experience {
     this.camera.autoRotate = false
     UI.startButton.setLabel('Resume')
     this.menu.open()
-
-    window.CrazyGames.SDK.game.gameplayStop()
   }
 
   setGameMode(block) {
