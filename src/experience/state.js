@@ -1,4 +1,5 @@
 export default class State {
+  static #key = 'drysland-state'
   static instance = new State()
 
   constructor() {
@@ -6,11 +7,11 @@ export default class State {
   }
 
   save(state) {
-    localStorage.setItem('state', btoa(JSON.stringify(state)))
+    localStorage.setItem(State.#key, btoa(JSON.stringify(state)))
   }
 
   load() {
-    const state = localStorage.getItem('state')
+    const state = localStorage.getItem(State.#key)
     if (state) return JSON.parse(atob(state))
   }
 }

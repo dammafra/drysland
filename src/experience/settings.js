@@ -5,7 +5,7 @@ import UI from '@ui/ui'
 import { EventDispatcher } from 'three'
 
 export default class Settings extends EventDispatcher {
-  static #key = 'settings'
+  static #key = 'drysland-settings'
 
   get isGraphicsQuality() {
     return this.settings.graphics === 'quality'

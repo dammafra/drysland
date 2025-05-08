@@ -2,7 +2,7 @@ import Experience from '@experience'
 import UI from '@ui/ui'
 
 export default class SoundControls {
-  static #key = 'sound-controls'
+  static #key = 'drysland-sound-controls'
 
   constructor() {
     this.experience = Experience.instance

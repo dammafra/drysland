@@ -1,4 +1,6 @@
 export default class Versioning {
+  static #key = 'drysland-version'
+
   static init(version, onVersionChange) {
     if (!version) {
       console.warn('[Versioning] missing version, skipping...')
@@ -10,13 +12,13 @@ export default class Versioning {
     }
 
     if (
-      version !== localStorage.getItem('version') &&
+      version !== localStorage.getItem(Versioning.#key) &&
       onVersionChange &&
       typeof onVersionChange === 'function'
     ) {
       onVersionChange()
     }
 
-    localStorage.setItem('version', version)
+    localStorage.setItem(Versioning.#key, version)
   }
 }
