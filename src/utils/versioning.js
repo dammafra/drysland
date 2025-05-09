@@ -5,16 +5,14 @@ export default class Versioning {
       return
     }
 
-    if (!onVersionChange) {
-      console.warn('[Versioning] missing version changed callback')
-    }
+    const oldVersion = localStorage.getItem('version')
 
-    if (
-      version !== localStorage.getItem('version') &&
-      onVersionChange &&
-      typeof onVersionChange === 'function'
-    ) {
-      onVersionChange()
+    if (oldVersion && version !== oldVersion) {
+      if (onVersionChange && typeof onVersionChange === 'function') {
+        onVersionChange()
+      } else {
+        console.warn('[Versioning] missing version changed callback')
+      }
     }
 
     localStorage.setItem('version', version)
