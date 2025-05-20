@@ -92,7 +92,7 @@ main button * {
 }
 
 a {
-  @apply inline-block underline hover:text-primary;
+  @apply inline-block underline hover:text-primary active:text-primary;
 }
 
 html,
@@ -173,7 +173,7 @@ main {
 }
 
 .menu footer a {
-  @apply hover:text-sky-200;
+  @apply hover:text-sky-200 active:text-sky-200;
 }
 
 /* modal */
@@ -198,12 +198,12 @@ main {
 }
 
 #credits.modal a {
-  @apply underline hover:text-primary;
+  @apply underline hover:text-primary active:text-primary;
 }
 
 /* UI */
 button.hex {
-  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 text-primary min-w-12 min-h-12;
+  @apply bg-white shadow-2xl p-3 hover:bg-sky-200 active:bg-sky-200 text-primary min-w-12 min-h-12;
 }
 
 button.hex.disabled {
@@ -219,11 +219,11 @@ button.hex label {
 }
 
 button.hex.primary {
-  @apply bg-primary text-white hover:bg-sky-400;
+  @apply bg-primary text-white hover:bg-sky-400 active:bg-sky-400;
 }
 
 button.hex.secondary {
-  @apply bg-slate-200 hover:bg-slate-100;
+  @apply bg-slate-200 hover:bg-slate-100 active:bg-slate-100;
 }
 
 div:has(#level) {
