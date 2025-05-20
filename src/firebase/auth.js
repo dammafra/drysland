@@ -29,11 +29,12 @@ export default class Auth {
       .disable(true)
 
     this.subscribe(user => {
-      UI.authToggle
-        .setLabel(user ? 'Log out' : 'Log in')
-        .toggle(!user)
-        .enable()
+      UI.authToggle.setLabel(user ? 'Log out' : 'Log in').toggle(!user)
       user && State.instance.sync()
+
+      navigator.onLine && UI.authToggle.enable()
+      window.addEventListener('offline', () => UI.authToggle.disable(true))
+      window.addEventListener('online', () => UI.authToggle.enable())
     })
   }
 
@@ -59,7 +60,6 @@ export default class Auth {
         new Button(content.querySelector('#cancel')).onClick(() => Modal.instance.close()).show()
         new Button(content.querySelector('#continue'))
           .onClick(async () => {
-            await State.instance.desync()
             signOut(this.auth)
             Modal.instance.close()
           })

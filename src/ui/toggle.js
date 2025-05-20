@@ -17,10 +17,7 @@ export default class Toggle extends Button {
   }
 
   toggle(value) {
-    value
-      ? this.element.classList.remove('!text-red-700')
-      : this.element.classList.add('!text-red-700')
-
+    this.element.classList.toggle('toggle-off', !value)
     return this
   }
 }

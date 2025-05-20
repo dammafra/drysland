@@ -16,87 +16,77 @@ export default class State {
 
   #save(state) {
     if (Debug.enabled) return
-    return Auth.instance.user ? this.saveRemote(state) : this.saveLocal(state)
+
+    this.#saveLocal(state)
+    return this.#saveRemote(state)
   }
 
   save = debounce(this.#save.bind(this), 1000)
 
-  load() {
-    return Auth.instance.user ? this.loadRemote() : this.loadLocal()
-  }
+  load = this.#loadLocal.bind(this)
 
   async sync() {
-    const localState = this.loadLocal()
-    const remoteState = await this.loadRemote()
+    const localState = this.#loadLocal()
+    const remoteState = await this.#loadRemote()
 
     if (!localState && !remoteState) return // nothing to do
-    if (!localState && remoteState) return // will use remote
 
-    if (localState && !remoteState) {
-      this.saveRemote(localState) // upload local, will use remote
-      this.deleteLocal() // avoid conflict on next reload
+    if (!localState && remoteState) {
+      this.#saveLocal(remoteState) // download remote
       return
     }
 
-    if (localState && remoteState) {
-      if (
-        localState.level === remoteState.level &&
-        localState.timestamp === remoteState.timestamp
-      ) {
-        this.deleteLocal() // are the same state, will use remote
-        return
-      }
-
-      // handle conflict
-      Modal.instance.open('#state-conflict.modal', {
-        disableClose: true,
-        onBeforeOpen: content => {
-          const slot1 = new SaveSlot(localState)
-            .onClick(() => {
-              this.saveRemote(localState) // upload local, will use remote
-              this.deleteLocal() // avoid conflict on next reload
-              Modal.instance.close()
-            })
-            .show()
-
-          const slot2 = new SaveSlot(remoteState)
-            .onClick(() => {
-              this.deleteLocal() // will use remote, avoid conflict on next reload
-              Modal.instance.close()
-            })
-            .show()
-
-          content.querySelector('.slots').innerHTML = ''
-          content.querySelector('.slots').append(slot1.element, slot2.element)
-        },
-      })
+    if (localState && !remoteState) {
+      this.#saveRemote(localState) // upload local
+      return
     }
+
+    if (localState.level === remoteState.level && localState.timestamp === remoteState.timestamp) {
+      // are the same state, nothing to do
+      return
+    }
+
+    // handle conflict
+    Modal.instance.open('#state-conflict.modal', {
+      disableClose: true,
+      onBeforeOpen: content => {
+        const slot1 = new SaveSlot(localState)
+          .onClick(() => {
+            this.#saveRemote(localState) // upload local
+            Modal.instance.close()
+          })
+          .show()
+
+        const slot2 = new SaveSlot(remoteState)
+          .onClick(() => {
+            this.#saveLocal(remoteState) // download remote
+            Modal.instance.close()
+          })
+          .show()
+
+        content.querySelector('.slots').innerHTML = ''
+        content.querySelector('.slots').append(slot1.element, slot2.element)
+      },
+    })
   }
 
-  async desync() {
-    const remoteState = await this.loadRemote()
-    this.saveLocal(remoteState)
-  }
-
-  saveLocal(state) {
+  #saveLocal(state) {
     localStorage.setItem('state', btoa(JSON.stringify(state)))
   }
 
-  async saveRemote(state) {
+  async #saveRemote(state) {
+    if (!navigator.onLine || !Auth.instance.user) return
+
     const docRef = doc(this.db, 'states', Auth.instance.user.uid)
     await setDoc(docRef, state, { merge: true })
   }
 
-  loadLocal() {
+  #loadLocal() {
     const state = localStorage.getItem('state')
     if (state) return JSON.parse(atob(state))
   }
 
-  async loadRemote() {
+  async #loadRemote() {
     return getDoc(doc(this.db, 'states', Auth.instance.user.uid)).then(res => res.data())
-  }
-
-  deleteLocal() {
-    localStorage.removeItem('state')
   }
 }

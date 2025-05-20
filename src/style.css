@@ -206,8 +206,12 @@ button.hex {
   @apply bg-white shadow-2xl p-3 hover:bg-sky-200 active:bg-sky-200 text-primary min-w-12 min-h-12;
 }
 
+button.hex.toggle-off {
+  @apply text-red-700;
+}
+
 button.hex.disabled {
-  @apply grayscale;
+  @apply bg-gray-200 text-gray-400;
 }
 
 button.hex:has(label) {
