@@ -134,3 +134,9 @@ Check out the credits section in the project for a full list of resources used
 ## Feedback
 
 If you have any suggestions, feel free to reach out!
+
+## License
+
+© 2025 Francesco Dammacco  
+This project is licensed under the GNU Affero General Public License v3.0.  
+See the [LICENSE](./LICENSE) file for details.
