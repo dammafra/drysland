@@ -7,7 +7,9 @@ import FirebasApp from './app'
 import Auth from './auth'
 
 export default class State {
+  static #key = 'state'
   static instance = new State()
+
   constructor() {
     if (State.instance) return State.instance
 
@@ -71,7 +73,7 @@ export default class State {
   }
 
   #saveLocal(state) {
-    localStorage.setItem('state', btoa(JSON.stringify(state)))
+    localStorage.setItem(State.#key, btoa(JSON.stringify(state)))
   }
 
   async #saveRemote(state) {
@@ -82,7 +84,7 @@ export default class State {
   }
 
   #loadLocal() {
-    const state = localStorage.getItem('state')
+    const state = localStorage.getItem(State.#key)
     if (state) return JSON.parse(atob(state))
   }
 
