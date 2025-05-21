@@ -47,8 +47,7 @@ export default class Resources extends EventDispatcher {
   }
 
   async startLoading() {
-    await window.CrazyGames.SDK.init()
-    window.CrazyGames.SDK.game.loadingStart()
+    await PokiSDK.init()
 
     for (const source of this.sources) {
       switch (source.type) {
@@ -80,7 +79,7 @@ export default class Resources extends EventDispatcher {
 
     if (this.loaded === this.toLoad) {
       this.dispatchEvent({ type: 'ready' })
-      window.CrazyGames.SDK.game.loadingStop()
+      PokiSDK.gameLoadingFinished()
     }
   }
 }

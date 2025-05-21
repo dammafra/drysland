@@ -96,42 +96,37 @@ export default class Experience {
     UI.startButton.onClick(this.start.bind(this))
     UI.creditsButton.onClick(() => Modal.instance.open('#credits.modal'))
     UI.menuButton.onClick(this.openMenu.bind(this))
-    UI.nextButton.onClick(this.nextLevel.bind(this))
+    UI.nextButton.onClick(async () => {
+      await PokiSDK.commercialBreak(() => this.soundControls.hide())
+      this.nextLevel()
+    })
     UI.backButton.onClick(this.setExplorationMode.bind(this))
   }
 
   async start() {
+    PokiSDK.gameplayStart()
+
     this.menu.close()
     await this.nextLevel()
 
     UI.fullscreenToggle.show()
     UI.menuButton.show()
     UI.levelText.show()
-
-    window.CrazyGames.SDK.game.gameplayStart()
   }
 
-  nextLevel() {
-    const proceed = async () => {
-      this.soundControls.show()
+  async nextLevel() {
+    this.soundControls.show()
 
-      const state = await this.load()
-      const level = state ? state.level : this.level + 1
-      const blocks = state?.blocks
+    const state = await this.load()
+    const level = state ? state.level : this.level + 1
+    const blocks = state?.blocks
 
-      this.level = level
-      UI.levelText.set(`Level ${this.level}`)
+    this.level = level
+    UI.levelText.set(`Level ${this.level}`)
 
-      this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
-      this.grid?.dispose()
-      this.grid = new Grid({ level, blocks, ...this.levelParams })
-    }
-
-    window.CrazyGames.SDK.ad.requestAd('midgame', {
-      adFinished: proceed,
-      adError: proceed,
-      adStarted: () => this.soundControls.hide(),
-    })
+    this.levelParams = GridConfig.instance.generateLevel(this.level - 1)
+    this.grid?.dispose()
+    this.grid = new Grid({ level, blocks, ...this.levelParams })
   }
 
   levelStart() {
@@ -146,6 +141,8 @@ export default class Experience {
   }
 
   openMenu() {
+    PokiSDK.gameplayStop()
+
     this.grid?.dispose()
     delete this.grid
 
@@ -163,8 +160,6 @@ export default class Experience {
     this.camera.autoRotate = false
     UI.startButton.setLabel('Resume')
     this.menu.open()
-
-    window.CrazyGames.SDK.game.gameplayStop()
   }
 
   setGameMode(block) {
