@@ -1,5 +1,5 @@
 {
-  "name": "island",
+  "name": "drysland",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +12,7 @@
   "devDependencies": {
     "prettier": "^3.4.2",
     "vite": "^6.0.11",
+    "vite-plugin-pwa": "^1.0.0",
     "vite-plugin-restart": "^0.4.1"
   },
   "dependencies": {

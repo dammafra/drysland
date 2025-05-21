@@ -7,12 +7,11 @@ export default class Versioning {
       return
     }
 
-    if (!onVersionChange) {
-      console.warn('[Versioning] missing version changed callback')
-    }
+    const oldVersion = localStorage.getItem(Versioning.#key)
 
     if (
-      version !== localStorage.getItem(Versioning.#key) &&
+      oldVersion &&
+      version !== oldVersion &&
       onVersionChange &&
       typeof onVersionChange === 'function'
     ) {

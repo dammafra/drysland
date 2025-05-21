@@ -4,6 +4,8 @@
 ![Three.js	](https://img.shields.io/badge/ThreeJs-black?style=for-the-badge&logo=three.js&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
+> 🥇 1st place in the [Three.js Journey Challenge 017](https://threejs-journey.com/challenges/017-island)
+
 > Try it live here 👉 [drysland.vercel.app](https://drysland.vercel.app)
 
 Inspired by classic **pipe-connection games**, Drysland is a relaxing, minimalist puzzle experience where you restore the flow of a river across a parched island by rotating and reconnecting its broken segments to bring water — and life — back to the land.
@@ -119,3 +121,9 @@ Check out the credits section in the project for a full list of resources used
 ## Feedback
 
 If you have any suggestions, feel free to reach out!
+
+## License
+
+© 2025 Francesco Dammacco  
+This project is licensed under the GNU Affero General Public License v3.0.  
+See the [LICENSE](./LICENSE) file for details.

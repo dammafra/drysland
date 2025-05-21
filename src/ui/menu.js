@@ -101,7 +101,7 @@ export default class Menu {
   }
 
   dispose() {
-    this.idle.kill()
+    this.idle?.kill()
     this.element.classList.add('hidden')
   }
 }
