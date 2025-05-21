@@ -109,7 +109,6 @@ export default class Experience {
     this.menu.close()
     await this.nextLevel()
 
-    UI.fullscreenToggle.show()
     UI.menuButton.show()
     UI.levelText.show()
   }
@@ -151,7 +150,6 @@ export default class Experience {
 
     this.soundControls.hide()
     UI.menuButton.hide()
-    UI.fullscreenToggle.hide()
     UI.levelText.hide()
     UI.tutorialText.hide()
     UI.backButton.hide()

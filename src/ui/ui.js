@@ -14,7 +14,6 @@ export default class UI {
   static soundsToggle = new Toggle('#sounds')
   static loopToggle = new Toggle('#loop')
   static ambienceToggle = new Toggle('#ambience')
-  static fullscreenToggle = new Toggle('#fullscreen')
 
   static levelText = new Text('#level')
   static tutorialText = new Text('#tutorial')

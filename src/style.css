@@ -263,25 +263,3 @@ input[type='radio']:checked ~ .radio-mark::after {
   @apply absolute bottom-28 px-10 w-full text-center text-2xl leading-6 text-white animate-pulse pointer-events-none;
   text-shadow: 1px 1px 2px black;
 }
-
-/* fullscreen - standalone */
-body.fullscreen .fa-expand,
-body:not(.fullscreen) .fa-compress {
-  @apply hidden;
-}
-
-body.fullscreen .fa-compress,
-body:not(.fullscreen) .fa-expand {
-  @apply inline-block;
-}
-
-body.standalone .menu footer,
-body.standalone #back,
-body.standalone #controls,
-body.standalone div:has(#next) {
-  @apply bottom-8;
-}
-
-body.standalone #tutorial {
-  @apply bottom-32;
-}
