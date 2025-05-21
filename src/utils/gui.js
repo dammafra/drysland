@@ -2,6 +2,8 @@ import * as TweakpaneEssentialsPlugin from '@tweakpane/plugin-essentials'
 import { Pane } from 'tweakpane'
 
 export default class GUI {
+  static #key = 'debug'
+
   constructor() {
     this.root = new Pane({ title: 'DEBUG' })
     this.root.registerPlugin(TweakpaneEssentialsPlugin)
@@ -30,14 +32,14 @@ export default class GUI {
 
   saveState = () => {
     const state = this.root.exportState()
-    localStorage.setItem('debug', JSON.stringify(state))
+    localStorage.setItem(GUI.#key, JSON.stringify(state))
   }
 
   loadState = () => {
-    const state = localStorage.getItem('debug')
+    const state = localStorage.getItem(GUI.#key)
     if (state) {
       this.root.importState(JSON.parse(state))
-      localStorage.removeItem('debug')
+      localStorage.removeItem(GUI.#key)
     }
   }
 

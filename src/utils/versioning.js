@@ -1,20 +1,23 @@
 export default class Versioning {
+  static #key = 'version'
+
   static init(version, onVersionChange) {
     if (!version) {
       console.warn('[Versioning] missing version, skipping...')
       return
     }
 
-    const oldVersion = localStorage.getItem('version')
+    const oldVersion = localStorage.getItem(Versioning.#key)
 
-    if (oldVersion && version !== oldVersion) {
-      if (onVersionChange && typeof onVersionChange === 'function') {
-        onVersionChange()
-      } else {
-        console.warn('[Versioning] missing version changed callback')
-      }
+    if (
+      oldVersion &&
+      version !== oldVersion &&
+      onVersionChange &&
+      typeof onVersionChange === 'function'
+    ) {
+      onVersionChange()
     }
 
-    localStorage.setItem('version', version)
+    localStorage.setItem(Versioning.#key, version)
   }
 }
