@@ -6,6 +6,7 @@ import DoubleTapPreventer from '@utils/double-tap-preventer'
 import Fullscreen from '@utils/fullscreen'
 import Versioning from '@utils/versioning'
 import { inject } from '@vercel/analytics'
+import 'core-js/actual'
 
 inject()
 
