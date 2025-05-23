@@ -32,12 +32,13 @@ export default class Pointer {
     }
 
     object.onClick = e => {
-      onClick && typeof onClick === 'function' && onClick.apply(object)
+      onClick && typeof onClick === 'function' && onClick.apply(object, [e])
     }
 
     object.mesh.addEventListener('pointerover', object.onHover)
     object.mesh.addEventListener('pointerout', object.onLeave)
     object.mesh.addEventListener('click', object.onClick)
+    object.mesh.addEventListener('contextmenu', object.onClick)
   }
 
   remove(object) {
