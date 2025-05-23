@@ -21,6 +21,7 @@
     "camera-controls": "^2.10.0",
     "core-js": "^3.42.0",
     "gsap": "^3.12.7",
+    "js-confetti": "^0.12.0",
     "tailwindcss": "^4.0.9",
     "three": "^0.175.0",
     "vite-plugin-glsl": "^1.4.0"

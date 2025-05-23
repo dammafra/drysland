@@ -7,6 +7,7 @@ import Grid from '@grid/grid'
 import Menu from '@ui/menu'
 import Modal from '@ui/modal'
 import UI from '@ui/ui'
+import JSConfetti from 'js-confetti'
 import { Scene } from 'three'
 import Camera from './camera'
 import Environment from './environment'
@@ -39,6 +40,7 @@ export default class Experience {
 
     this.loading = loading
     this.settings = new Settings()
+    this.confetti = new JSConfetti()
 
     BlocksConfig.init()
     GridConfig.init()
@@ -137,6 +139,7 @@ export default class Experience {
     this.soundPlayer.play('success')
     if (this.level) UI.nextButton.show({ wiggle: true })
     this.setExplorationMode()
+    this.showConfetti()
   }
 
   openMenu() {
@@ -201,5 +204,22 @@ export default class Experience {
     this.loaded = true
 
     return await State.instance.load()
+  }
+
+  showConfetti() {
+    this.confetti.addConfetti({
+      confettiColors: [
+        '#ff6f91',
+        '#6fc3df',
+        '#77dd77',
+        '#fff75e',
+        '#c08ef3',
+        '#ffb347',
+        '#9dfdcf',
+        '#cba0ff',
+        '#ffd1a4',
+        '#8be8fd',
+      ],
+    })
   }
 }
