@@ -246,7 +246,7 @@ export default class Block {
   }
 
   onClick(e) {
-    this.rotate(e.type === 'contextmenu' ? -1 : 1)
+    this.rotate(e?.type === 'contextmenu' ? -1 : 1)
     this.soundPlayer.play('swing')
     this.experience.setGameMode(this)
 
