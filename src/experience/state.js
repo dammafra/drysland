@@ -7,11 +7,15 @@ export default class State {
   }
 
   save(state) {
-    localStorage.setItem(State.#key, btoa(JSON.stringify(state)))
+    localStorage.setItem(State.#key, JSON.stringify(state))
   }
 
   load() {
     const state = localStorage.getItem(State.#key)
-    if (state) return JSON.parse(atob(state))
+    if (state) return JSON.parse(state)
+  }
+
+  static reset() {
+    localStorage.removeItem(State.#key)
   }
 }
