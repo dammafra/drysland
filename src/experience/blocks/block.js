@@ -217,7 +217,7 @@ export default class Block {
   async rotate(times = 1, animate = true) {
     this.rotationAnimation?.totalProgress(1)
 
-    this.links = this.links.map(edge => (edge + times + 6) % 6)
+    this.links = this.links.map(edge => (edge + times) % 6)
 
     if (!this.mesh) return
     this.rotation = this.mesh.rotation.y - (Math.PI / 3) * times
@@ -245,8 +245,8 @@ export default class Block {
     this.material.uniforms.uHovered.value = false
   }
 
-  onClick(e) {
-    this.rotate(e?.type === 'contextmenu' ? -1 : 1)
+  onClick() {
+    this.rotate()
     this.soundPlayer.play('swing')
     this.experience.setGameMode(this)
 
