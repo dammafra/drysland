@@ -19,6 +19,7 @@ Pipe networks are created using a simplified version of the **Growing Tree algor
 
 - [Three.js](https://threejs.org/) (3D rendering)
 - [@yomotsu/camera-controls](https://github.com/yomotsu/camera-controls)
+- [@pmndrs/pointer-events](https://www.npmjs.com/package/@pmndrs/pointer-events)
 - [GSAP](https://gsap.com/)
 - [Tailwind](https://tailwindcss.com/)
 
