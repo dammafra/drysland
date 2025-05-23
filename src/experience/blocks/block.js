@@ -43,10 +43,6 @@ export default class Block {
     return this.links.sort((a, b) => a - b).join('')
   }
 
-  get targetKey() {
-    return this.target.sort((a, b) => a - b).join('')
-  }
-
   get linked() {
     return this.#linked
   }
@@ -66,7 +62,7 @@ export default class Block {
     this.material.uniforms.uInvalid.value = value
   }
 
-  constructor({ grid, name, q, r, links, target, rotation }) {
+  constructor({ grid, name, q, r, links, rotation }) {
     this.experience = Experience.instance
     this.camera = this.experience.camera
     this.time = this.experience.time
@@ -81,7 +77,6 @@ export default class Block {
     this.r = r
 
     this.links = links || []
-    this.target = target || []
     this.rotation = rotation
   }
 
@@ -106,8 +101,6 @@ export default class Block {
   }
 
   normalizeLinks() {
-    this.target = this.links
-
     if (!this.linksKey) return
     while (!BlocksConfig.instance.links.includes(this.linksKey)) this.rotate(1, false)
   }
