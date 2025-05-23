@@ -254,7 +254,19 @@ export default class Grid {
     if (!this.riverBlocks.every(b => b.linked)) return
 
     // TODO improve
-    if (this.riverBlocks.every(b => b.linksKey === b.targetKey)) {
+    this.riverBlocks.forEach(b => {
+      if (b.isRiverStart) return
+
+      const invalid = b.links.some(edge => {
+        const neighbor = b.neighbors?.at(edge)
+        if (!neighbor) return true // no neighbor where there should be one
+        return !neighbor.links.includes(opposite(edge)) // neighbor does not link back
+      })
+
+      b.invalid = invalid
+    })
+
+    if (this.riverBlocks.every(b => b.linked && !b.invalid)) {
       this.riverBlocks.forEach(b => {
         b.onLeave()
         this.pointer.remove(b)
@@ -262,18 +274,6 @@ export default class Grid {
 
       this.tutorial?.third()
       this.experience.levelComplete()
-    } else {
-      this.riverBlocks.forEach(b => {
-        if (b.isRiverStart) return
-
-        const invalid = b.links.some(edge => {
-          const neighbor = b.neighbors?.at(edge)
-          if (!neighbor) return true // no neighbor where there should be one
-          return !neighbor.links.includes(opposite(edge)) // neighbor does not link back
-        })
-
-        b.invalid = invalid
-      })
     }
   }
 
