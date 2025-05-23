@@ -312,7 +312,6 @@ export default class Grid {
       q: b.q,
       r: b.r,
       links: b.links,
-      target: b.target,
       rotation: b.rotation,
     }))
   }
