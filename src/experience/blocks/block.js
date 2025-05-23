@@ -58,6 +58,10 @@ export default class Block {
     this.mesh.material.map = this.#linked ? Block.colormapDefault : Block.colormapDesert
   }
 
+  get invalid() {
+    return this.material.uniforms.uInvalid.value
+  }
+
   set invalid(value) {
     this.material.uniforms.uInvalid.value = value
   }
