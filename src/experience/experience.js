@@ -106,8 +106,6 @@ export default class Experience {
   }
 
   async start() {
-    PokiSDK.gameplayStart()
-
     this.menu.close()
     await this.nextLevel()
 
@@ -116,6 +114,8 @@ export default class Experience {
   }
 
   async nextLevel() {
+    PokiSDK.gameplayStart()
+
     this.soundControls.show()
 
     const state = await this.load()
@@ -136,6 +136,8 @@ export default class Experience {
   }
 
   levelComplete() {
+    PokiSDK.gameplayStop()
+
     this.soundPlayer.play('success')
     if (this.level) UI.nextButton.show({ wiggle: true })
     this.setExplorationMode()
