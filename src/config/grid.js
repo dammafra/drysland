@@ -17,7 +17,7 @@ export default class GridConfig {
     this.settings = this.experience.settings
 
     this.selectionStrategy = 1 // DFS, see `applySelectionStrategy` below
-    this.minRadius = 2
+    this.minRadius = 1
     this.maxRadius = 8
     this.minCoverage = 0.6
     this.maxCoverage = 0.9
