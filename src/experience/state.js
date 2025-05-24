@@ -12,10 +12,13 @@ export default class State {
 
   load() {
     const state = localStorage.getItem(State.#key)
-    if (state) return JSON.parse(state)
-  }
+    if (!state) return
 
-  static reset() {
-    localStorage.removeItem(State.#key)
+    try {
+      return JSON.parse(state)
+    } catch {
+      localStorage.removeItem(State.#key)
+      return
+    }
   }
 }
