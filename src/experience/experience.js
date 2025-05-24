@@ -179,8 +179,8 @@ export default class Experience {
 
   update = () => {
     this.camera.update()
-    this.renderer.update()
     this.pointer.update()
+    this.renderer.update()
 
     this.grid?.update()
   }
