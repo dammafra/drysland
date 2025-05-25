@@ -17,7 +17,7 @@ export default class GridConfig {
     this.settings = this.experience.settings
 
     this.selectionStrategy = 1 // DFS, see `applySelectionStrategy` below
-    this.minRadius = 1
+    this.minRadius = 2
     this.maxRadius = 8
     this.minCoverage = 0.6
     this.maxCoverage = 0.9
@@ -39,7 +39,7 @@ export default class GridConfig {
     const lerp = (min, max, t) => min + (max - min) * t
     const t = n / this.difficultyScale
 
-    const radius = Math.round(Math.min(this.maxRadius, lerp(this.minRadius, this.maxRadius, t)))
+    const radius = !n ? 1 : Math.round(Math.min(this.maxRadius, lerp(this.minRadius, this.maxRadius, t))) //prettier-ignore
     const coverage = Math.min(this.maxCoverage, lerp(this.minCoverage, this.maxCoverage, t))
     const extraLinks = Math.min(this.maxExtraLinks, lerp(this.minExtraLinks, this.maxExtraLinks, t))
 

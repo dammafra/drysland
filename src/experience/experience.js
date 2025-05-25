@@ -102,7 +102,6 @@ export default class Experience {
       await PokiSDK.commercialBreak(() => this.soundControls.hide())
       this.nextLevel()
     })
-    UI.backButton.onClick(this.setExplorationMode.bind(this))
   }
 
   async start() {
@@ -132,7 +131,7 @@ export default class Experience {
 
   levelStart() {
     UI.nextButton.hide()
-    this.setExplorationMode()
+    this.setGameMode()
   }
 
   levelComplete() {
@@ -157,7 +156,6 @@ export default class Experience {
     UI.menuButton.hide()
     UI.levelText.hide()
     UI.tutorialText.hide()
-    UI.backButton.hide()
     UI.nextButton.hide()
 
     this.camera.autoRotate = false
@@ -166,14 +164,11 @@ export default class Experience {
   }
 
   setGameMode(block) {
-    UI.backButton.show({ wiggle: true })
-
     this.camera.setGameControls(block)
     this.grid?.setShadows(false)
   }
 
   setExplorationMode() {
-    UI.backButton.hide()
     this.camera.setExplorationControls(this.levelParams.radius)
     this.grid?.setShadows(true)
   }

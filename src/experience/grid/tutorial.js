@@ -8,19 +8,23 @@ export default class Tutorial {
   }
 
   first() {
-    UI.tutorialText.set(`${Touch.support ? 'Touch' : 'Click'} any river tile to start`).show()
+    UI.tutorialText.set(`${Touch.support ? 'Touch' : 'Click'} and rotate one of the highlighted river tiles to start`) //prettier-ignore
+    this.grid.level === 1 && UI.tutorialText.show()
+
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = true))
   }
 
   second() {
-    UI.tutorialText
-      .set('Rotate the tiles to restore the course of the river and un-Dry the Island')
-      .show()
+    UI.tutorialText.set('Restore the course of the river by connecting the tiles all together with no loops and un-Dry the Island') //prettier-ignore
+    this.grid.level === 1 && UI.tutorialText.show()
+
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = false))
   }
 
   third() {
-    UI.tutorialText.set('Great job! Now sail to the next Drysland!').show()
+    UI.tutorialText.set('Great job! Now sail to the next Drysland!')
+    this.grid.level === 1 && UI.tutorialText.show()
+
     this.grid.riverBlocks.forEach(b => (b.material.uniforms.uTutorial.value = false))
   }
 

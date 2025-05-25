@@ -80,9 +80,7 @@ export default class Grid {
     this.init()
 
     this.experience.levelStart()
-    if (this.level === 1) {
-      this.tutorial = new Tutorial(this)
-    }
+    this.tutorial = new Tutorial(this)
 
     this.updateLinks()
     this.checkSolution()

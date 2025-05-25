@@ -157,15 +157,15 @@ export default class Camera {
 
     if (
       this.controls.polarAngle > 0.1 ||
-      block.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))
+      block?.neighbors.some(n => n && n.mesh && !this.canView(n.mesh.position))
     ) {
       this.controls.setLookAt(
-        block.mesh.position.x,
-        block.mesh.position.y + 15,
-        block.mesh.position.z,
-        block.mesh.position.x,
-        block.mesh.position.y,
-        block.mesh.position.z,
+        block?.mesh.position.x || 0,
+        (block?.mesh.position.y || 0) + 15,
+        block?.mesh.position.z || 0,
+        block?.mesh.position.x || 0,
+        block?.mesh.position.y || 0,
+        block?.mesh.position.z || 0,
         true,
       )
     }

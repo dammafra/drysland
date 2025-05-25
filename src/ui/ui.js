@@ -7,7 +7,6 @@ export default class UI {
   static creditsButton = new Button('#credits')
   static settingsButton = new Button('#settings')
 
-  static backButton = new Button('#back')
   static nextButton = new Button('#next')
 
   static menuButton = new Button('#menu')
