@@ -4,10 +4,12 @@ import DoubleTapPreventer from '@utils/double-tap-preventer'
 import Versioning from '@utils/versioning'
 import 'core-js/actual'
 
-await window.CrazyGames.SDK.init()
+;(async () => {
+  await window.CrazyGames.SDK.init()
 
-DoubleTapPreventer.init()
-Versioning.init('1.0')
+  DoubleTapPreventer.init()
+  Versioning.init('1.0')
 
-const loading = Loading.init()
-Experience.init('canvas.webgl', loading)
+  const loading = Loading.init()
+  Experience.init('canvas.webgl', loading)
+})()
