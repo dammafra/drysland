@@ -7,17 +7,17 @@ export default class State {
   }
 
   save(state) {
-    localStorage.setItem(State.#key, JSON.stringify(state))
+    window.CrazyGames.SDK.data.setItem(State.#key, JSON.stringify(state))
   }
 
   load() {
-    const state = localStorage.getItem(State.#key)
+    const state = window.CrazyGames.SDK.data.getItem(State.#key)
     if (!state) return
 
     try {
       return JSON.parse(state)
     } catch {
-      localStorage.removeItem(State.#key)
+      window.CrazyGames.SDK.data.removeItem(State.#key)
       return
     }
   }

@@ -7,7 +7,7 @@ export default class Versioning {
       return
     }
 
-    const oldVersion = localStorage.getItem(Versioning.#key)
+    const oldVersion = window.CrazyGames.SDK.data.getItem(Versioning.#key)
 
     if (
       oldVersion &&
@@ -18,6 +18,6 @@ export default class Versioning {
       onVersionChange()
     }
 
-    localStorage.setItem(Versioning.#key, version)
+    window.CrazyGames.SDK.data.setItem(Versioning.#key, version)
   }
 }

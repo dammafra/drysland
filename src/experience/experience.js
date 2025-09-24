@@ -99,8 +99,11 @@ export default class Experience {
     UI.creditsButton.onClick(() => Modal.instance.open('#credits.modal'))
     UI.menuButton.onClick(this.openMenu.bind(this))
     UI.nextButton.onClick(async () => {
-      await PokiSDK.commercialBreak(() => this.soundControls.hide())
-      this.nextLevel()
+      window.CrazyGames.SDK.ad.requestAd('midgame', {
+        adFinished: () => this.nextLevel(),
+        adError: error => this.nextLevel(),
+        adStarted: () => this.soundControls.hide(),
+      })
     })
   }
 
@@ -113,7 +116,7 @@ export default class Experience {
   }
 
   async nextLevel() {
-    PokiSDK.gameplayStart()
+    window.CrazyGames.SDK.game.gameplayStart()
 
     this.soundControls.show()
 
@@ -135,7 +138,7 @@ export default class Experience {
   }
 
   levelComplete() {
-    PokiSDK.gameplayStop()
+    window.CrazyGames.SDK.game.gameplayStop()
 
     this.soundPlayer.play('success')
     if (this.level) UI.nextButton.show({ wiggle: true })
@@ -144,7 +147,7 @@ export default class Experience {
   }
 
   openMenu() {
-    PokiSDK.gameplayStop()
+    window.CrazyGames.SDK.game.gameplayStop()
 
     this.grid?.dispose()
     delete this.grid

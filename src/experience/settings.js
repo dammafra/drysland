@@ -49,23 +49,23 @@ export default class Settings extends EventDispatcher {
 
   // persist
   ensureDefault() {
-    if (!localStorage.getItem(Settings.#key)) {
-      localStorage.setItem(Settings.#key, JSON.stringify({ graphics: 'quality' }))
+    if (!window.CrazyGames.SDK.data.getItem(Settings.#key)) {
+      window.CrazyGames.SDK.data.setItem(Settings.#key, JSON.stringify({ graphics: 'quality' }))
     }
   }
 
   load() {
     this.ensureDefault()
-    const settings = JSON.parse(localStorage.getItem(Settings.#key))
+    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(Settings.#key))
     this.settings = settings
   }
 
   save(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(localStorage.getItem(Settings.#key))
+    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(Settings.#key))
     settings[key] = value
 
-    localStorage.setItem(Settings.#key, JSON.stringify(settings))
+    window.CrazyGames.SDK.data.setItem(Settings.#key, JSON.stringify(settings))
   }
 }

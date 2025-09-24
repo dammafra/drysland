@@ -40,8 +40,8 @@ export default class SoundControls {
 
   // persist
   ensureDefault() {
-    if (!localStorage.getItem(SoundControls.#key)) {
-      localStorage.setItem(
+    if (!window.CrazyGames.SDK.data.getItem(SoundControls.#key)) {
+      window.CrazyGames.SDK.data.setItem(
         SoundControls.#key,
         JSON.stringify({ sounds: true, loop: true, ambience: true }),
       )
@@ -50,16 +50,16 @@ export default class SoundControls {
 
   load() {
     this.ensureDefault()
-    return JSON.parse(localStorage.getItem(SoundControls.#key))
+    return JSON.parse(window.CrazyGames.SDK.data.getItem(SoundControls.#key))
   }
 
   save(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(localStorage.getItem(SoundControls.#key))
+    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(SoundControls.#key))
     settings[key] = value
 
-    localStorage.setItem(SoundControls.#key, JSON.stringify(settings))
+    window.CrazyGames.SDK.data.setItem(SoundControls.#key, JSON.stringify(settings))
   }
 
   // toggle
