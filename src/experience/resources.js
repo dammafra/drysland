@@ -47,8 +47,6 @@ export default class Resources extends EventDispatcher {
   }
 
   async startLoading() {
-    window.CrazyGames.SDK.game.loadingStart()
-
     for (const source of this.sources) {
       switch (source.type) {
         case 'gltfModel':
@@ -79,7 +77,7 @@ export default class Resources extends EventDispatcher {
 
     if (this.loaded === this.toLoad) {
       this.dispatchEvent({ type: 'ready' })
-      window.CrazyGames.SDK.game.loadingStop()
+      bridge.platform.sendMessage('game_ready')
     }
   }
 }

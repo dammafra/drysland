@@ -40,37 +40,40 @@ export default class Experience {
 
     this.loading = loading
     this.settings = new Settings()
-    this.confetti = new JSConfetti()
 
-    BlocksConfig.init()
-    GridConfig.init()
-    LandscapeConfig.init()
-    OceanConfig.init()
+    this.settings.init().then(() => {
+      this.confetti = new JSConfetti()
 
-    // Setup
-    this.time = new Time()
-    this.sizes = new Sizes()
-    this.resources = new Resources(loading)
-    this.scene = new Scene()
-    this.camera = new Camera()
-    this.renderer = new Renderer()
+      BlocksConfig.init()
+      GridConfig.init()
+      LandscapeConfig.init()
+      OceanConfig.init()
 
-    this.pointer = new Pointer()
+      // Setup
+      this.time = new Time()
+      this.sizes = new Sizes()
+      this.resources = new Resources(loading)
+      this.scene = new Scene()
+      this.camera = new Camera()
+      this.renderer = new Renderer()
 
-    // Events
-    this.settings.addEventListener('change', this.applySettings)
-    this.sizes.addEventListener('resize', this.resize)
-    this.time.addEventListener('tick', this.update)
-    this.resources.addEventListener('ready', this.ready)
+      this.pointer = new Pointer()
 
-    document.addEventListener('keypress', e => {
-      if (!this.grid || e.code !== 'Space') return
-      this.grid.riverBlocks.find(b => b.material.uniforms.uHovered.value)?.onClick()
-    })
+      // Events
+      this.settings.addEventListener('change', this.applySettings)
+      this.sizes.addEventListener('resize', this.resize)
+      this.time.addEventListener('tick', this.update)
+      this.resources.addEventListener('ready', this.ready)
 
-    document.addEventListener('keydown', e => {
-      if (!this.grid || e.code !== 'Escape' || UI.menuButton.disabled) return
-      this.openMenu()
+      document.addEventListener('keypress', e => {
+        if (!this.grid || e.code !== 'Space') return
+        this.grid.riverBlocks.find(b => b.material.uniforms.uHovered.value)?.onClick()
+      })
+
+      document.addEventListener('keydown', e => {
+        if (!this.grid || e.code !== 'Escape' || UI.menuButton.disabled) return
+        this.openMenu()
+      })
     })
   }
 
@@ -98,13 +101,13 @@ export default class Experience {
     UI.startButton.onClick(this.start.bind(this))
     UI.creditsButton.onClick(() => Modal.instance.open('#credits.modal'))
     UI.menuButton.onClick(this.openMenu.bind(this))
-    UI.nextButton.onClick(async () => {
-      window.CrazyGames.SDK.ad.requestAd('midgame', {
-        adFinished: () => this.nextLevel(),
-        adError: error => this.nextLevel(),
-        adStarted: () => this.soundControls.hide(),
-      })
+
+    bridge.advertisement.on(bridge.EVENT_NAME.INTERSTITIAL_STATE_CHANGED, state => {
+      if (state === 'opened') this.soundControls.hide()
+      if (state === 'closed' || state === 'failed') this.nextLevel()
     })
+
+    UI.nextButton.onClick(() => bridge.advertisement.showInterstitial())
   }
 
   async start() {
@@ -116,7 +119,7 @@ export default class Experience {
   }
 
   async nextLevel() {
-    window.CrazyGames.SDK.game.gameplayStart()
+    bridge.platform.sendMessage('gameplay_started')
 
     this.soundControls.show()
 
@@ -138,7 +141,7 @@ export default class Experience {
   }
 
   levelComplete() {
-    window.CrazyGames.SDK.game.gameplayStop()
+    bridge.platform.sendMessage('gameplay_stopped')
 
     this.soundPlayer.play('success')
     if (this.level) UI.nextButton.show({ wiggle: true })
@@ -147,7 +150,7 @@ export default class Experience {
   }
 
   openMenu() {
-    window.CrazyGames.SDK.game.gameplayStop()
+    bridge.platform.sendMessage('gameplay_stopped')
 
     this.grid?.dispose()
     delete this.grid

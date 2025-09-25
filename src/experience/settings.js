@@ -13,8 +13,10 @@ export default class Settings extends EventDispatcher {
 
   constructor() {
     super()
+  }
 
-    this.load()
+  async init() {
+    await this.load()
     this.update()
 
     UI.settingsButton.onClick(() => {
@@ -48,24 +50,23 @@ export default class Settings extends EventDispatcher {
   }
 
   // persist
-  ensureDefault() {
-    if (!window.CrazyGames.SDK.data.getItem(Settings.#key)) {
-      window.CrazyGames.SDK.data.setItem(Settings.#key, JSON.stringify({ graphics: 'quality' }))
+  async ensureDefault() {
+    if (!(await bridge.storage.get(Settings.#key))) {
+      await bridge.storage.set(Settings.#key, { graphics: 'quality' })
     }
   }
 
-  load() {
-    this.ensureDefault()
-    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(Settings.#key))
-    this.settings = settings
+  async load() {
+    await this.ensureDefault()
+    this.settings = await bridge.storage.get(Settings.#key)
   }
 
-  save(key, value) {
+  async save(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(Settings.#key))
+    const settings = await bridge.storage.get(Settings.#key)
     settings[key] = value
 
-    window.CrazyGames.SDK.data.setItem(Settings.#key, JSON.stringify(settings))
+    await bridge.storage.set(Settings.#key, settings)
   }
 }

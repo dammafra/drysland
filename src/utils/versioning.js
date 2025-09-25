@@ -1,13 +1,13 @@
 export default class Versioning {
   static #key = 'drysland-version'
 
-  static init(version, onVersionChange) {
+  static async init(version, onVersionChange) {
     if (!version) {
       console.warn('[Versioning] missing version, skipping...')
       return
     }
 
-    const oldVersion = window.CrazyGames.SDK.data.getItem(Versioning.#key)
+    const oldVersion = await bridge.storage.get(Versioning.#key)
 
     if (
       oldVersion &&
@@ -18,6 +18,6 @@ export default class Versioning {
       onVersionChange()
     }
 
-    window.CrazyGames.SDK.data.setItem(Versioning.#key, version)
+    await bridge.storage.set(Versioning.#key, version)
   }
 }

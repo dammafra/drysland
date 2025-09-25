@@ -14,8 +14,8 @@ export default class SoundControls {
   }
 
   // ui
-  show() {
-    const settings = this.load()
+  async show() {
+    const settings = await this.load()
     this.sounds = settings.sounds
     this.loop = settings.loop
     this.ambience = settings.ambience
@@ -39,27 +39,24 @@ export default class SoundControls {
   }
 
   // persist
-  ensureDefault() {
-    if (!window.CrazyGames.SDK.data.getItem(SoundControls.#key)) {
-      window.CrazyGames.SDK.data.setItem(
-        SoundControls.#key,
-        JSON.stringify({ sounds: true, loop: true, ambience: true }),
-      )
+  async ensureDefault() {
+    if (!(await bridge.storage.get(SoundControls.#key))) {
+      await bridge.storage.set(SoundControls.#key, { sounds: true, loop: true, ambience: true })
     }
   }
 
-  load() {
-    this.ensureDefault()
-    return JSON.parse(window.CrazyGames.SDK.data.getItem(SoundControls.#key))
+  async load() {
+    await this.ensureDefault()
+    return await bridge.storage.get(SoundControls.#key)
   }
 
-  save(key, value) {
+  async save(key, value) {
     this.ensureDefault()
 
-    const settings = JSON.parse(window.CrazyGames.SDK.data.getItem(SoundControls.#key))
+    const settings = await bridge.storage.get(SoundControls.#key)
     settings[key] = value
 
-    window.CrazyGames.SDK.data.setItem(SoundControls.#key, JSON.stringify(settings))
+    await bridge.storage.set(SoundControls.#key, settings)
   }
 
   // toggle

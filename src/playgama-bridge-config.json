@@ -1,0 +1,38 @@
+{
+  "platforms": {
+    "game_distribution": {
+      "gameId": "drysland"
+    },
+    "telegram": {
+      "adsgramBlockId": "drysland"
+    },
+    "huawei": {
+      "appId": "drysland"
+    },
+    "msn": {
+      "gameId": "drysland"
+    },
+    "discord": {
+      "appId": "drysland"
+    },
+    "jio_games": {
+      "packageName": "drysland"
+    },
+    "facebook": {
+      "subscribeForNotificationsOnStart": true
+    }
+  },
+  "advertisement": {
+    "banner": {
+      "disable": true
+    },
+    "interstitial": {
+      "preloadOnStart": true
+    },
+    "rewarded": {
+      "disable": true
+    },
+    "useBuiltInErrorPopup": true
+  },
+  "sendAnalyticsEvents": true
+}
