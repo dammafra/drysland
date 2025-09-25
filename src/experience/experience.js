@@ -102,6 +102,8 @@ export default class Experience {
       await PokiSDK.commercialBreak(() => this.soundControls.hide())
       this.nextLevel()
     })
+
+    this.start()
   }
 
   async start() {
