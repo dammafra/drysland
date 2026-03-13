@@ -1,4 +1,5 @@
 import Experience from '@experience'
+import { PositionalAudio } from 'three'
 
 export default class SoundPlayer {
   constructor() {
@@ -9,6 +10,7 @@ export default class SoundPlayer {
 
     this.muted = false
     this.backgrounds = new Map()
+    this.positionalAudios = []
 
     /**
      * This code helps resume audioContext when the tab is suspended (e.g., when switching apps or locking the phone) and later resumed,
@@ -75,5 +77,45 @@ export default class SoundPlayer {
   async updateBackgoundVolume(sound, volume) {
     if (!this.backgrounds.has(sound)) return
     this.backgrounds.get(sound).gainNode.gain.value = volume
+  }
+
+  createPositionalAudio(
+    name,
+    mesh,
+    { refDistance = 5, maxDistance = 30, rolloffFactor = 2, volume = 1 } = {},
+  ) {
+    const listener = this.experience.camera.listener
+    const buffer = this.resources.items[name]
+    if (!buffer || !listener) return null
+
+    const audio = new PositionalAudio(listener)
+    audio.setBuffer(buffer)
+    audio.setLoop(true)
+    audio.setVolume(volume)
+    audio.setRefDistance(refDistance)
+    audio.setMaxDistance(maxDistance)
+    audio.setRolloffFactor(rolloffFactor)
+
+    mesh.add(audio)
+    this.positionalAudios.push(audio)
+
+    return audio
+  }
+
+  stopPositionalAudio(audio) {
+    if (!audio) return
+    if (audio.isPlaying) audio.stop()
+    audio.parent?.remove(audio)
+    this.positionalAudios = this.positionalAudios.filter(a => a !== audio)
+  }
+
+  setPositionalAudiosMuted(muted) {
+    this.positionalAudios.forEach(a => {
+      if (muted) {
+        if (a.isPlaying) a.pause()
+      } else {
+        if (!a.isPlaying) a.play()
+      }
+    })
   }
 }

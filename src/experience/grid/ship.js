@@ -10,6 +10,7 @@ export default class Ship {
   constructor(radius) {
     this.experience = Experience.instance
     this.resources = this.experience.resources
+    this.soundPlayer = this.experience.soundPlayer
     this.time = this.experience.time
     this.scene = this.experience.scene
     this.path = new Path(radius)
@@ -20,6 +21,7 @@ export default class Ship {
     this.elevationOffset = LandscapeConfig.instance.ship.models[this.name].elevationOffset
 
     this.setMesh()
+    this.setAudio()
     this.init()
   }
 
@@ -45,6 +47,16 @@ export default class Ship {
     this.scene.add(this.mesh)
   }
 
+  setAudio() {
+    const { volume, refDistance, maxDistance, rolloffFactor } = LandscapeConfig.instance.ship.audio
+    this.audio = this.soundPlayer.createPositionalAudio('sailing', this.mesh, {
+      volume,
+      refDistance,
+      maxDistance,
+      rolloffFactor,
+    })
+  }
+
   update() {
     const speed = LandscapeConfig.instance.ship.speed * 0.1
     const { position, angle } = this.path.update(speed)
@@ -56,8 +68,10 @@ export default class Ship {
   }
 
   dispose() {
+    this.soundPlayer.stopPositionalAudio(this.audio)
     dispose(this.mesh)
     this.scene.remove(this.mesh)
+    delete this.audio
     delete this.mesh
     delete this.pathPoints
     delete this.curve

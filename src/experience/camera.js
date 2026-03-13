@@ -2,6 +2,7 @@ import Experience from '@experience'
 import Grid from '@grid/grid'
 import CameraControls from 'camera-controls'
 import {
+  AudioListener,
   Box3,
   Frustum,
   MathUtils,
@@ -72,6 +73,10 @@ export default class Camera {
   setInstance() {
     this.instance = new PerspectiveCamera(50, this.sizes.aspectRatio, 0.1, 1000)
     this.instance.position.set(3, 6, 10)
+
+    this.listener = new AudioListener()
+    this.instance.add(this.listener)
+
     this.scene.add(this.instance)
   }
 

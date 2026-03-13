@@ -88,16 +88,14 @@ export default class SoundControls {
 
   playAmbience() {
     this.ambience = true
-    this.soundPlayer.playBackground('seagulls', 0)
-    this.soundPlayer.playBackground('sailing', 0)
     this.soundPlayer.playBackground('waves', 0.1)
+    this.soundPlayer.setPositionalAudiosMuted(false)
   }
 
   stopAmbience() {
     this.ambience = false
-    this.soundPlayer.stopBackground('seagulls')
-    this.soundPlayer.stopBackground('sailing')
     this.soundPlayer.stopBackground('waves')
+    this.soundPlayer.setPositionalAudiosMuted(true)
   }
 
   toggleAmbience() {

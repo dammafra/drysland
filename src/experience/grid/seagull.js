@@ -14,13 +14,14 @@ export default class Seagull {
     this.time = this.experience.time
     this.scene = this.experience.scene
     this.pointer = this.experience.pointer
-    this.soundplayer = this.experience.soundPlayer
+    this.soundPlayer = this.experience.soundPlayer
 
     this.path = new Path()
     this.offset = Random.float({ max: 2 })
 
     this.setMesh()
     this.setAnimation()
+    this.setAudio()
     this.init()
   }
 
@@ -57,11 +58,22 @@ export default class Seagull {
     action.play()
   }
 
+  setAudio() {
+    const { volume, refDistance, maxDistance, rolloffFactor } =
+      LandscapeConfig.instance.seagulls.audio
+    this.audio = this.soundPlayer.createPositionalAudio('seagulls', this.mesh, {
+      volume,
+      refDistance,
+      maxDistance,
+      rolloffFactor,
+    })
+  }
+
   onClick() {
-    const previousMuted = this.soundplayer.muted
-    this.soundplayer.setMuted(false)
-    this.soundplayer.play('1989')
-    this.soundplayer.setMuted(previousMuted)
+    const previousMuted = this.soundPlayer.muted
+    this.soundPlayer.setMuted(false)
+    this.soundPlayer.play('1989')
+    this.soundPlayer.setMuted(previousMuted)
   }
 
   update() {
@@ -76,8 +88,10 @@ export default class Seagull {
   }
 
   dispose() {
+    this.soundPlayer.stopPositionalAudio(this.audio)
     dispose(this.mesh)
     this.scene.remove(this.mesh)
+    delete this.audio
     delete this.mesh
     delete this.pathPoints
     delete this.curve

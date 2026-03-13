@@ -23,12 +23,12 @@ export default class LandscapeConfig {
   }
 
   get seagulls() {
-    const maxVolume = 1
     const speed = 0.08
+    const audio = { volume: 1, refDistance: 3, maxDistance: 25, rolloffFactor: 2 }
 
     return this.settings.isGraphicsQuality
-      ? { speed, maxVolume, min: 3, max: 6 }
-      : { speed, maxVolume, min: 1, max: 3 }
+      ? { speed, audio, min: 3, max: 6 }
+      : { speed, audio, min: 1, max: 3 }
   }
 
   constructor() {
@@ -40,8 +40,8 @@ export default class LandscapeConfig {
     this.debug = this.experience.debug
 
     this.ship = {
-      maxVolume: 0.3,
       speed: 0.05,
+      audio: { volume: 0.3, refDistance: 3, maxDistance: 25, rolloffFactor: 2 },
       models: {
         ship: { scale: 0.2, rotationOffset: 0, elevationOffset: 0.05 },
         boat: { scale: 0.005, rotationOffset: -Math.PI * 0.5, elevationOffset: 0.1 },
@@ -68,11 +68,18 @@ export default class LandscapeConfig {
       step: 0.01,
     })
 
-    folder.addBinding(this.ship, 'maxVolume', {
+    folder.addBinding(this.ship.audio, 'volume', {
       label: 'ship volume',
       min: 0,
       max: 1,
       step: 0.01,
+    })
+
+    folder.addBinding(this.ship.audio, 'refDistance', {
+      label: 'ship ref distance',
+      min: 1,
+      max: 20,
+      step: 1,
     })
 
     folder.addBinding(this.seagulls, 'speed', {
@@ -82,11 +89,18 @@ export default class LandscapeConfig {
       step: 0.01,
     })
 
-    folder.addBinding(this.seagulls, 'maxVolume', {
+    folder.addBinding(this.seagulls.audio, 'volume', {
       label: 'seagulls volume',
       min: 0,
       max: 1,
       step: 0.01,
+    })
+
+    folder.addBinding(this.seagulls.audio, 'refDistance', {
+      label: 'seagulls ref distance',
+      min: 1,
+      max: 20,
+      step: 1,
     })
   }
 }
