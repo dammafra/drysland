@@ -14,21 +14,21 @@
     "prettier": "^3.4.2",
     "vite": "^6.0.11",
     "vite-plugin-pwa": "^1.0.0",
-    "vite-plugin-restart": "^0.4.1"
+    "vite-plugin-restart": "^0.4.1",
+    "vite-plugin-glsl": "^1.4.0"
   },
   "dependencies": {
-    "@pmndrs/pointer-events": "^6.6.14",
+    "@pmndrs/pointer-events": "^6.6.29",
     "@sentry/browser": "^9.15.0",
     "@sentry/vite-plugin": "^3.3.1",
-    "@tailwindcss/vite": "^4.0.9",
+    "@tailwindcss/vite": "^4.2.1",
     "@tweakpane/plugin-essentials": "^0.2.1",
-    "camera-controls": "^2.10.0",
-    "core-js": "^3.42.0",
+    "camera-controls": "^3.1.2",
+    "core-js": "^3.48.0",
     "firebase": "^11.6.1",
-    "gsap": "^3.12.7",
-    "tailwindcss": "^4.0.9",
-    "three": "^0.175.0",
-    "tweakpane": "^4.0.5",
-    "vite-plugin-glsl": "^1.4.0"
+    "gsap": "^3.14.2",
+    "tailwindcss": "^4.2.1",
+    "three": "^0.183.2",
+    "tweakpane": "^4.0.5"
   }
 }

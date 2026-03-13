@@ -1,6 +1,5 @@
 import Experience from '@experience'
-import { EventDispatcher } from 'three'
-import { Timer } from 'three/addons/misc/Timer.js'
+import { EventDispatcher, Timer } from 'three'
 
 export default class Time extends EventDispatcher {
   constructor() {
