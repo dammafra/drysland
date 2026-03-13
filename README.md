@@ -6,7 +6,7 @@
 
 > 🥇 1st place in the [Three.js Journey Challenge 017](https://threejs-journey.com/challenges/017-island)
 
-> Try it live here 👉 [drysland.vercel.app](https://drysland.vercel.app)
+> Try it live here 👉 [drysland.dammafra.dev](https://drysland.dammafra.dev)
 
 Inspired by classic **pipe-connection games**, Drysland is a relaxing, minimalist puzzle experience where you restore the flow of a river across a parched island by rotating and reconnecting its broken segments to bring water — and life — back to the land.
 
