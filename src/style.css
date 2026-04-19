@@ -16,7 +16,7 @@
 }
 
 @utility hex {
-  @apply !aspect-square;
+  @apply flex justify-center items-center;
   mask-image: url('/hex-mask.svg');
   mask-size: cover;
   -webkit-mask-image: url('/hex-mask.svg');
@@ -81,14 +81,14 @@
 }
 
 main * {
-  @apply !my-cursor-auto;
+  @apply my-cursor-auto!;
 }
 
 main a,
 main button,
 main a *,
 main button * {
-  @apply !my-cursor-pointer;
+  @apply my-cursor-pointer!;
 }
 
 a {
@@ -109,19 +109,19 @@ main {
 }
 
 .webgl.grab {
-  @apply !my-cursor-grab;
+  @apply my-cursor-grab!;
 }
 
 .webgl.grabbing {
-  @apply !my-cursor-grabbing;
+  @apply my-cursor-grabbing!;
 }
 
 .webgl.move {
-  @apply !my-cursor-move;
+  @apply my-cursor-move!;
 }
 
 .webgl.pointer {
-  @apply !my-cursor-pointer;
+  @apply my-cursor-pointer!;
 }
 
 /* loading */
@@ -231,7 +231,7 @@ button.hex.secondary {
 }
 
 div:has(#level) {
-  @apply bg-gradient-to-b to-100% from-background to-transparent py-5 pb-8 absolute top-0 w-full text-center pointer-events-none;
+  @apply bg-linear-to-b to-100% from-background to-transparent py-5 pb-8 absolute top-0 w-full text-center pointer-events-none;
 }
 
 input[type='radio'] {
@@ -239,11 +239,11 @@ input[type='radio'] {
 }
 
 label:has(input[type='radio']) {
-  @apply flex gap-2 text-xl !my-cursor-pointer;
+  @apply flex gap-2 text-xl my-cursor-pointer!;
 }
 
 input[type='radio'] ~ .radio-mark {
-  @apply hex size-6 bg-primary inline-block relative !my-cursor-pointer;
+  @apply hex size-6 bg-primary inline-block relative my-cursor-pointer!;
 }
 
 input[type='radio'] ~ .radio-mark::before {
