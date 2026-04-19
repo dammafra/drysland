@@ -16,7 +16,7 @@
 }
 
 @utility hex {
-  @apply flex justify-center items-center;
+  @apply flex flex-col justify-center items-center;
   mask-image: url('/hex-mask.svg');
   mask-size: cover;
   -webkit-mask-image: url('/hex-mask.svg');
