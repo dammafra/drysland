@@ -1,5 +1,5 @@
 import Experience from '@experience'
-import { PCFSoftShadowMap, WebGLRenderer } from 'three'
+import { PCFShadowMap, WebGLRenderer } from 'three'
 
 export default class Renderer {
   get enableAntialias() {
@@ -28,7 +28,7 @@ export default class Renderer {
     })
 
     this.instance.shadowMap.enabled = this.enableShadows
-    this.instance.shadowMap.type = PCFSoftShadowMap
+    this.instance.shadowMap.type = PCFShadowMap
 
     this.resize()
   }
