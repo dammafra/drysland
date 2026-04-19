@@ -131,7 +131,7 @@ main {
 }
 
 .loading .spinner {
-  @apply w-28 bg-primary hex scale-0;
+  @apply size-28 bg-primary hex scale-0;
 }
 
 .loading .title {
