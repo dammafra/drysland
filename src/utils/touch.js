@@ -1,4 +1,3 @@
 export default class Touch {
-  static support =
-    'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+  static support = window.matchMedia('(any-pointer: coarse)').matches
 }
